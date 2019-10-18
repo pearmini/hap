@@ -1,0 +1,32 @@
+.card {
+    margin-bottom: 15rpx;
+    background-color: #2c61b4;
+    border-radius: 0 0 20rpx 20rpx;
+    width: 750rpx;
+    height: 250rpx;
+    box-shadow: 0 4rpx 20rpx 0 rgba(212, 217, 223, .5);
+    display: flex;
+    justify-content: center;
+    padding-top: 50rpx;
+}
+
+.avatar-text{
+	color: white !important;
+}
+
+.avatar-img{
+	border: 5rpx solid white;
+}
+
+.colum{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    margin-left: 500rpx;
+}

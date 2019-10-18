@@ -1,0 +1,11 @@
+<import src="../../towxml/entry.wxml"/>
+<view>
+    <template is="entry" data="{{...article}}"/>
+    <view class="wrapper">
+        <view class="btn-group">
+            <l-button disabled="{{read}}" bind:lintap="onConfirm" type="success" icon="favor" icon-size="25" icon-color="#fff">标为已读</l-button>
+            <l-button disabled="{{!read}}" bind:lintap="onCancel" type="error" icon="close" icon-size="25" icon-color="#fff">标为未读</l-button>
+        </view>
+    </view>
+</view>
+<l-loading show="{{loading}}" type="rotate" full-screen="{{true}}"></l-loading>

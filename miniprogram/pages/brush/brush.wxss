@@ -1,0 +1,32 @@
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.canvas-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 15rpx solid #2c61b4;
+    border-radius: 15rpx;
+}
+
+.start-btn {
+    position: absolute;
+    left: 285rpx;
+    bottom: 50rpx;
+    /*bottom: 70rpx;*/
+}
+
+.save-btn {
+    position: absolute;
+    bottom: 50rpx;
+    left: 150rpx;
+}
+
+.delete-btn {
+    position: absolute;
+    bottom: 50rpx;
+    right: 150rpx;
+}

@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+  	"l-avatar": "../../miniprogram_npm/lin-ui/avatar/index",
+  	"l-tabs": "../../miniprogram_npm/lin-ui/tabs/index",
+  	"l-tabpanel": "../../miniprogram_npm/lin-ui/tabpanel/index",
+  	"s-vis-pie": "../../componets/vis-pie/index",
+  	"s-vis-circle": "../../componets/vis-circle/index"
+  },
+  "enablePullDownRefresh": true
+}

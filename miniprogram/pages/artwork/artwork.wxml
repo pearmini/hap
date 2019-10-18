@@ -1,0 +1,45 @@
+<wxs module="string">
+var slice = function(s, length){
+    if(s.length > length){
+        return s.slice(0, length - 1) + '..';
+    }
+    return s;
+} 
+module.exports = {
+  slice: slice
+}
+</wxs>
+<view>
+    <view wx:if="{{artwork.length!==0 && !loading}}" class="col">
+        <block wx:for="{{artworks}}" wx:key="{{index}}">
+            <view class="card">
+                <view style="margin-top:20rpx;" class="{{item.rotate === true ? 'rotation' : ''}}">
+                    <image src="{{item.path}}" mode="aspectFit" ></image>
+                </view>
+                <view class="row">
+                    <view class="labels">
+                        <l-tag bind:lintap="onDetail" data-id="{{item.img[1]}}">{{string.slice(item.img[0], 5)}}</l-tag>
+                        <l-tag bind:lintap="onDetail" data-id="{{item.sample[1]}}">{{string.slice(item.sample[0], 5)}}</l-tag>
+                        <l-tag bind:lintap="onDetail" data-id="{{item.stroke[1]}}">{{string.slice(item.stroke[0], 5)}}</l-tag>
+                    </view>
+                    <view class="btns">
+                        <button open-type='share' data-path="{{item.path}}" special="{{true}}" data-rotate="{{item.rotate}}" data-index="{{index}}">
+                            <l-icon name="share" />
+                        </button>
+                        <button bind:tap="saveImageToLocal" id="{{item.path}}" special="{{true}}">
+                            <l-icon name="download" />
+                        </button>
+                        <button bind:tap="onShowDelete" data-index="{{index}}" special="{{true}}">
+                            <l-icon name="delete" />
+                        </button>
+                    </view>
+                </view>
+            </view>
+        </block>
+    </view>
+    <l-status-show wx:if="{{!loading && artworks.length==0}}" show="{{true}}" button-text="去创作" describe="还没有作品哦！"  type="data" bind:lintap="onCreate">
+    </l-status-show>
+</view>
+<l-dialog class="dialog"/>
+<l-loading show="{{loading}}" full-screen="true" />
+<l-message />

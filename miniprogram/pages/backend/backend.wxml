@@ -1,0 +1,58 @@
+<view class="col">
+    <view class="card">
+        <view class="col" style="background-color: {{cur.fileid === '#' ? '' : 'black'}}">
+            <image class="offset" src="{{cur.url}}" mode="aspectFit"></image>
+        </view>
+        <view class="line offset"></view>
+        <l-input label="关键字" placeholder="请输入关键字" bind:linchange="onKeyWordChange" value="{{cur.name}}">
+        <l-button slot="right" bind:lintap="onAddName" >确定</l-button>
+        </l-input>
+        <l-input label="新增标签" placeholder="新增加的标签" bind:linchange="onTagChange" value="{{inputTag}}">
+            <l-button slot="right" bind:lintap="onAddTag" >增加</l-button>
+        </l-input>
+        <l-input label="查询" placeholder="请输入查询关键字" bind:linchange="onKeyChange">
+            <l-button slot="right" bind:lintap="onQuery">查询</l-button>
+        </l-input>
+        <view class="line"></view>
+        <view>
+            <text class="m-title">图片介绍</text>
+            <view class="result">{{cur.intro}}</view>
+        </view>
+        <view class="line"></view>
+        <view>
+            <text class="m-title">当前介绍建筑介绍(百度百科)</text>
+            <view class="result">{{cur.info}}</view>
+        </view>
+        <view class="line"></view>
+        <view>
+            <text class="m-title">该图片的标签</text>
+            <checkbox-group class="content" bindchange="tagChangeMy" class="row">
+                <label class="content" wx:for="{{cur.labels}}" wx:key="{{index}}">
+                    <checkbox value="{{item}}" />{{item}}
+                </label>
+            </checkbox-group>
+            <l-button type="error" class="save-btn" bind:lintap="onDeleteTag" >删除标签</l-button>
+        </view>
+        <view class="line"></view>
+        <view>
+            <text class="m-title">所有标签</text>
+            <checkbox-group bindchange="tagChangeAll" class="row">
+                <label class="content" wx:for="{{tags}}" wx:key="{{index}}">
+                    <checkbox value="{{item}}" />{{item}}
+                </label>
+            </checkbox-group>
+            <l-button class="save-btn" bind:lintap="onAddTagAll">添加标签</l-button>
+        </view>
+    </view>
+    <view class="row ">
+        <l-button bindlintap="onSave" type="success">保存修改</l-button>
+        <l-button bindlintap="isDelete" type="error">删除</l-button>
+        <l-button bindlintap="onView">预览</l-button>
+    </view>
+    <view class="row btn-group">
+        <l-button bindlintap="onLeft">上一张</l-button>
+        <l-button bindlintap="onFormatLabel">更新标签</l-button>
+        <l-button bindlintap="onRight">下一张</l-button>
+    </view>
+</view>
+<l-dialog class="dialog"/>

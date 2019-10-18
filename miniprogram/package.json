@@ -1,0 +1,24 @@
+{
+  "name": "code",
+  "version": "1.0.0",
+  "description": "这是个小程序主要利用了一些上海经典建筑图片，目的在于通过这些图片把历史上一些优秀的画作和一些经典的计算机算法联系起来。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlashBaby/B2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SlashBaby/B2/issues"
+  },
+  "homepage": "https://github.com/SlashBaby/B2#readme",
+  "dependencies": {
+    "@antv/f2-canvas": "^1.0.5",
+    "lin-ui": "^0.5.13"
+  }
+}

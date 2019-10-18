@@ -1,0 +1,39 @@
+<wxs src="../../miniprogram_npm/lin-ui/filter/string.wxs" module="string" />
+<wxs module="string">
+    var slice = function(s, length){
+    if(s.length > length){
+    return s.slice(0, length - 1) + '..';
+    }
+    return s;
+    }
+    module.exports = {
+    slice: slice
+    }
+</wxs>
+<view class="container">
+    <view wx:if="{{!loading}}">
+        <s-grids data="{{labels}}" col="4" row="3" bind:tagChange="onTagChange" />
+    </view>
+    <view class="list" wx:if="{{goods.length!=0}}">
+        <l-radio-group bind:linchange="goodChange">
+            <block wx:for="{{goods}}" wx:key="{{index}}">
+                <view class="list-item">
+                    <l-radio class="list-radio left" value="{{index}}" custom="{{true}}">
+                    </l-radio>
+                    <l-card class="middle" type="primary" l-img-class="right-card" position="right" image="{{item.url}}" title="{{item.name}}" position="left" l-class="noCard">
+                        <view class="content">
+                            {{string.slice(item.intro, 15)}}
+                        </view>
+                    </l-card>
+                    <view class="right" catch:tap="showDetail" data-index="{{index}}">
+                        <l-icon name="eye" class="right-item"></l-icon>
+                    </view>
+                </view>
+            </block>
+        </l-radio-group>
+    </view>
+    <s-status-show wx:if="{{goods.length===0 && !loading}}" content="当前标签组合没有结果～" btn-show="{{false}}" imgUrl="../../images/network.png"></s-status-show>
+    <l-button class="confirm-btn" size="large" bindtap="onConfirm">确定</l-button>
+</view>
+<l-loading full-screen="{{true}}" show="{{loading}}" />
+<l-message />

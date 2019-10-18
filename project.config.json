@@ -1,0 +1,94 @@
+{
+	"miniprogramRoot": "miniprogram/",
+	"cloudfunctionRoot": "cloudfunctions/",
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"enhance": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"coverView": true,
+		"nodeModules": true,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"appid": "wxfa468967fadbc4a5",
+	"projectname": "Brush",
+	"libVersion": "2.8.0",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"compileType": "miniprogram",
+	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 1,
+			"list": [
+				{
+					"id": 1,
+					"name": "discover",
+					"pathName": "pages/discover/discover",
+					"query": "type=img",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "brush",
+					"pathName": "pages/brush/brush",
+					"query": "url=https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/assets/timg.jpeg?sign=c33cf06be1692bc25a0085a8085aae3a&t=1565844728&stroke=星月夜&sample=均匀随机",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "artwork",
+					"pathName": "pages/artwork/artwork",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "my",
+					"pathName": "pages/my/my",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "detail",
+					"pathName": "pages/detail/detail",
+					"query": "id=88ad01f4-e2a6-4641-bd83-24b11ea48157",
+					"scene": null
+				},
+				{
+					"id": 5,
+					"name": "backend",
+					"pathName": "pages/backend/backend",
+					"query": "",
+					"scene": null
+				}
+			]
+		}
+	}
+}

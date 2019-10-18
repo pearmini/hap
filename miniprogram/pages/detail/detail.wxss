@@ -1,0 +1,16 @@
+.btn-group{
+	display: flex;
+	flex: row;
+	justify-content: space-between;
+	width: 400rpx;
+	position: fixed;
+	bottom: 20rpx;
+}
+
+.wrapper{
+	display: flex;
+	justify-content: space-around;
+}
+
+@import '/towxml/style/main.wxss';
+@import '/towxml/style/theme/light.wxss';

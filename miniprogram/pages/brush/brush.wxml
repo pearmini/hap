@@ -1,0 +1,14 @@
+<view wx:if="{{!success}}">
+    <view class="canvas-wrapper">
+        <canvas canvas-id="canvas" style="width:{{canvasWidth}}rpx;height:{{canvasHeight}}rpx"></canvas>
+    </view>
+    <view class="start-btn" wx:if="{{!isRunning && !loading }}">
+        <s-cover-button type="warn" bind:tap="start" name="开始">开始</s-cover-button>
+    </view>
+    <view wx:if="{{isDone}}" class="row">
+        <s-cover-button type="success" class="save-btn" bind:tap="onSaveImage" name="保存"></s-cover-button>
+        <s-cover-button type="error" class="delete-btn" bind:tap="onCancel" name="放弃"></s-cover-button>
+    </view>
+</view>
+<l-loading show="{{loading}}" full-screen="true" />
+<l-status-show show="{{success}}" type="success" button-text="返回" bind:lintap="onCancel" describe="保存成功！"></l-status-show>

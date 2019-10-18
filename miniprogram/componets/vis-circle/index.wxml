@@ -1,0 +1,9 @@
+<view class="container" style="width:{{ width + 40}}rpx">
+    <view class="title">
+        {{title}}
+    </view>
+    <view class="content">
+        {{content}}
+    </view>
+    <ff-canvas class="circle-canvas" style="width:{{ width }}rpx; height:{{ height }}rpx" opts="{{ opts }}"></ff-canvas>
+</view>

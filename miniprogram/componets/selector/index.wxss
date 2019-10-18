@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.left-wrapper {
+    background: red;
+    width: 200rpx;
+    border-radius: 88rpx 0rpx 0rpx 88rpx;
+    height: 88rpx;
+    background-color: #2c61b4;
+    font-size:28rpx;
+}
+
+.right-wrapper {
+    background: blue;
+    width: 200rpx;
+    border-radius: 0rpx 88rpx 88rpx 0rpx;
+    height: 88rpx;
+    background-color: white;
+    font-size:28rpx;
+}
+
+.left-text {
+    margin-left: 50rpx;
+    line-height: 88rpx;
+    display: block;
+    color: white;
+}
+
+.right-text {
+    float: right;
+    margin-right: 50rpx;
+    line-height: 88rpx;
+    color: #2c61b4;
+    display: block;
+}

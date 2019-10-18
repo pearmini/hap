@@ -1,0 +1,3 @@
+<view >
+	<cover-view class="item {{type === 'warn' ? 'warn' : type === 'success' ? 'success' : 'error'}}">{{name}}</cover-view>
+</view>

@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/draw/draw",
+    "pages/discover/discover",
+    "pages/artwork/artwork",
+    "pages/brush/brush",
+    "pages/detail/detail",
+    "pages/my/my",
+    "pages/backend/backend"
+  ],
+  "window": {
+    "backgroundColor": "#2c61b4",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#2c61b4",
+    "navigationBarTitleText": "照猫画沪",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "selectedColor": "#2c61b4",
+    "color": "#8a8a8a",
+    "list": [
+      {
+        "pagePath": "pages/artwork/artwork",
+        "text": "作品",
+        "iconPath": "./images/image.png",
+        "selectedIconPath": "./images/image-s.png"
+      },
+      {
+        "pagePath": "pages/draw/draw",
+        "text": "画",
+        "iconPath": "./images/theme.png",
+        "selectedIconPath": "./images/theme-s.png"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "text": "我",
+        "iconPath": "./images/me.png",
+        "selectedIconPath": "./images/me-s.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "l-loading": "./miniprogram_npm/lin-ui/loading/index",
+    "l-message": "./miniprogram_npm/lin-ui/message/index",
+    "s-status-show": "./componets/status-show/index",
+    "l-button": "./miniprogram_npm/lin-ui/button/index",
+    "ff-canvas": "./miniprogram_npm/@antv/f2-canvas/index",
+    "l-icon": "./miniprogram_npm/lin-ui/icon/index",
+    "l-card": "./miniprogram_npm/lin-ui/card/index",
+    "l-input": "./miniprogram_npm/lin-ui/input/index",
+    "l-dialog": "./miniprogram_npm/lin-ui/dialog/index",
+    "l-loadmore": "./miniprogram_npm/lin-ui/loadmore/index"
+  },
+  "sitemapLocation": "sitemap.json"
+}

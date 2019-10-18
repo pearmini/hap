@@ -1,0 +1,8 @@
+<view class="container">
+    <view class="left-wrapper">
+        <text class="left-text">{{name}}</text>
+    </view>
+    <view class="right-wrapper">
+        <text class="right-text">{{value}}</text>
+    </view>
+</view>

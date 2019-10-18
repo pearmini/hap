@@ -1,0 +1,31 @@
+<view>
+    <view class="card">
+        <l-avatar placement="bottom" l-class-text="avatar-text" l-class="avatar-img" open-data="{{['userAvatarUrl','userNickName']}}" />
+    </view>
+    <view>
+        <l-tabs bind:linchange="changeTabs">
+            <l-tabpanel tab="阅读" key="one" slot="one">
+                <s-status-show wx:if="{{noLearns && !loading}}" content="还没有阅读过～" btn-text="去阅读" imgUrl="../../images/order.png" bind:go="onGo" btn-show="{{true}}"></s-status-show>
+                <view class="colum" wx:if="{{!noLearns && !loading}}">
+                    <s-vis-circle data="{{circleData}}" width="660" height="430" title="阅读情况" content="下面展示的是各个类型的文章中读完的占该类文章总数的百分比。"/>
+                </view>
+            </l-tabpanel>
+            <l-tabpanel tab="创造" key="two" slot="two">
+                <s-status-show wx:if="{{noWorks && !loading}}" content="还没有创造过～" btn-text="去创造" bind:go="onGo" imgUrl="../../images/cart.png" btn-show="{{true}}"></s-status-show>
+                <view class="colum" wx:if="{{!noWorks && !loading}}">
+                    <s-vis-pie wx:if="{{currentIndex === 0}}" data="{{pieDataList[0]}}" width="660" height="430" title="图片" content="下面展示的是你创造的作品中各个类型的图片所占百分比。"/>
+                    <s-vis-pie wx:if="{{currentIndex === 1}}" data="{{pieDataList[1]}}" width="660" height="430" title="绘制风格" content="下面展示的是你创造的作品中各个类型的绘制风格所占百分比。"/>
+                    <s-vis-pie wx:if="{{currentIndex === 2}}" data="{{pieDataList[2]}}" width="660" height="430" title="绘制方式" content="下面展示的是你创造的作品中各个类型的绘制方式所占百分比。"/>
+                    <view class="row">
+                        <button disabled="{{currentIndex === 0}}" bind:tap="onLeft" >
+                            <l-icon name="left" />
+                        </button>
+                        <button disabled="{{currentIndex === 2}}" bind:tap="onRight" >
+                            <l-icon name="right" />
+                        </button>
+                    </view>
+                </view>
+            </l-tabpanel>
+        </l-tabs>
+    </view>
+</view>

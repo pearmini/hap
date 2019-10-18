@@ -1,0 +1,24 @@
+<view class="container">
+    <view class="row">
+        <view class="title">标签</view>
+        <view class="content">「通过选择标签来展现感兴趣的数据」</view>
+    </view>
+    <view class="line"></view>
+    <l-grid class="grid" l-class-grid="grid-item" row-num="{{col}}" show-border="{{false}}">
+        <l-grid-item wx:for="{{currentData}}" wx:key="{{index}}" key="{{index}}" slot="{{index}}">
+            <l-checkbox bind:myTap="onTap" data-index="{{index}}" color="#61bca4" checked="{{item.checked}}"></l-checkbox>
+            <view class="text">{{item.value}}</view>
+        </l-grid-item>
+    </l-grid>
+    <view class="row">
+        <view class="btn-group" wx:if="{{hasMore}}">
+            <l-button special="{{true}}" bind:lintap="onLeft">
+                <l-icon name="left" color="white" />
+            </l-button>
+            <l-button special="{{true}}" bind:lintap="onRight">
+                <l-icon name="right" color="white" />
+            </l-button>
+        </view>
+    </view>
+</view>
+<l-message/>

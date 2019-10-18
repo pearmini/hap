@@ -1,0 +1,22 @@
+.item {
+    height: 72rpx;
+    width: 180rpx;
+    color: white;
+    border-radius: 5rpx;
+    text-align: center;
+    line-height: 72rpx;
+    font-size: 28rpx;
+    border-radius: 36rpx;
+}
+
+.success {
+    background-color: #61bca4;
+}
+
+.error {
+    background-color: #e25d6f;
+}
+
+.warn{
+    background-color: #fbe58d;
+}
