@@ -52,4 +52,3 @@ exports.main = async (event, context) => {
     }
   })
 }
-// 使用了 async await 语法
