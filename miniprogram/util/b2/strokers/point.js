@@ -1,12 +1,4 @@
-const map = (value, start, end, min, max) => {
-  if (end != value) {
-    const left = (value - start) / (end - value);
-    return (min + left * max) / (1 + left);
-  } else {
-    return max;
-  }
-}
-
+import map from "../common/map";
 const point = (ctx, data, progress) => {
   const r = map(progress, 0, 1, 10, 5);
   const single = data.single;
@@ -28,6 +20,6 @@ const point = (ctx, data, progress) => {
     ctx.arc(data.x, data.y, r * 0.6, 0, Math.PI * 2);
     ctx.fill();
   }
-}
+};
 
-export { point }
+export { point };

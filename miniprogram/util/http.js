@@ -11,18 +11,18 @@ class HTTP {
         reject(data);
         this._show_error();
       }
-    })
+    });
   }
 
-  request({ url, data = {}, method = 'GET' }) {
+  request({ url, data = {}, method = "GET" }) {
     return new Promise((resolve, reject) => {
       this._request(url, resolve, reject, data, method);
-    })
+    });
   }
 
   _show_error() {
-    console.log('some error!');
+    console.log("some error!");
   }
 }
 
-export { HTTP }
+export { HTTP };

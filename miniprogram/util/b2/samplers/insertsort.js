@@ -1,35 +1,22 @@
-const insertSort = (array) => {
+import map from "../common/map";
+const insertSort = array => {
   const res = [array.slice()];
-  for(let i = 0; i < array.length; i++){
+  for (let i = 0; i < array.length; i++) {
     let j;
-    for(j = i; j >= 0; j--){
-      if(array[i] > array[j]){
+    for (j = i; j >= 0; j--) {
+      if (array[i] > array[j]) {
         break;
       }
     }
     let t = array[i];
-    for(let m = i; m > j; m--){
+    for (let m = i; m > j; m--) {
       array[m] = array[m - 1];
     }
     array[j + 1] = t;
     res.push(array.slice());
   }
   return res;
-}
-
-const swap = (array, a, b) => {
-  const t = array[a];
-  array[a] = array[b], array[b] = t;
-}
-
-const map = (value, start, end, min, max) => {
-  if (end != value) {
-    const left = (value - start) / (end - value);
-    return (min + left * max) / (1 + left);
-  } else {
-    return max;
-  }
-}
+};
 
 const getRandomNumbers = cnt => {
   const range = cnt * cnt;
@@ -37,17 +24,17 @@ const getRandomNumbers = cnt => {
   let min = range + 1,
     max = 0;
   for (let i = 0; i < cnt; i++) {
-    const n = Math.random() * range | 0;
+    const n = (Math.random() * range) | 0;
     min = min > n ? n : min;
     max = max < n ? n : max;
-    numbers.push(n)
+    numbers.push(n);
   }
-  return { numbers, max, min }
-}
+  return { numbers, max, min };
+};
 
 const insertsort = function(width, height, pixelsData, ratio) {
   const cellsize = 5;
-  const numberCnt = width / cellsize | 0;
+  const numberCnt = (width / cellsize) | 0;
   const { numbers, max, min } = getRandomNumbers(numberCnt);
   const swaps = insertSort(numbers);
   const res = [];
@@ -65,13 +52,13 @@ const insertsort = function(width, height, pixelsData, ratio) {
         b: pixelsData[index * 4 + 2],
         a,
         single: true
-      }
+      };
       res.push(data);
     }
   }
   return {
     data: res.reverse(),
-    sampleRate: 10 * ratio | 0
+    sampleRate: (10 * ratio) | 0
   };
-}
-export { insertsort }
+};
+export { insertsort };

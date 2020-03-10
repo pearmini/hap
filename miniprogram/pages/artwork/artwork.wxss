@@ -1,45 +1,45 @@
 .btns {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: 210rpx;
-    z-index: 2;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 210rpx;
+  z-index: 2;
 }
 
 .labels {
-    width: 450rpx;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    z-index: 2;
+  width: 450rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  z-index: 2;
 }
 
 .row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .rotation {
-    transform: rotate(-90deg);
+  transform: rotate(-90deg);
 }
 
 .card {
-    margin-top: 15rpx;
-    margin-bottom: 15rpx;
-    background-color: white;
-    border-radius: 20rpx;
-    width: 680rpx;
-    box-shadow: 0 4rpx 20rpx 0 rgba(212, 217, 223, .5);
+  margin-top: 15rpx;
+  margin-bottom: 15rpx;
+  background-color: white;
+  border-radius: 20rpx;
+  width: 680rpx;
+  box-shadow: 0 4rpx 20rpx 0 rgba(212, 217, 223, 0.5);
 }
 
 .col {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .dialog {
-    z-index: 500;
+  z-index: 500;
 }

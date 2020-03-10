@@ -1,6 +1,6 @@
-import { strokerManager } from "./strokers/index.js"
-import { samplerManager } from "./samplers/index.js"
-import { promisic } from "../util.js"
+import { strokerManager } from "./strokers/index.js";
+import { samplerManager } from "./samplers/index.js";
+import { promisic } from "../util.js";
 
 class B2 {
   constructor(canvasId, sample, stroke, url) {
@@ -13,17 +13,19 @@ class B2 {
   }
 
   getCanvasInfo() {
-    return promisic(wx.getImageInfo)({ src: this.url })
-      .then(res => {
-        [this.width, this.height, this.ratio] = this.getContextSize(res.width, res.height);
-        this.path = res.path;
-        if (res.width > res.height) {
-          this.rotate = true;
-        } else {
-          this.rotate = false;
-        }
-        return this.sendCanvasInfoBack();
-      }, console.log);
+    return promisic(wx.getImageInfo)({ src: this.url }).then(res => {
+      [this.width, this.height, this.ratio] = this.getContextSize(
+        res.width,
+        res.height
+      );
+      this.path = res.path;
+      if (res.width > res.height) {
+        this.rotate = true;
+      } else {
+        this.rotate = false;
+      }
+      return this.sendCanvasInfoBack();
+    }, console.log);
   }
 
   sendCanvasInfoBack() {
@@ -33,7 +35,7 @@ class B2 {
       const canvasHeight = this.height * this.ratio;
       const rotate = this.rotate;
       resolve({ canvasWidth, canvasHeight, rotate });
-    })
+    });
   }
 
   loadingImageData() {
@@ -42,13 +44,13 @@ class B2 {
       x: 0,
       y: 0,
       width: this.width,
-      height: this.height,
+      height: this.height
     }).then(res => {
       this.pixelsData = res.data;
       return new Promise((resolve, reject) => {
         resolve();
-      })
-    })
+      });
+    });
   }
 
   drawImage() {
@@ -57,7 +59,7 @@ class B2 {
     this.ctx.save();
     if (this.rotate) {
       this.ctx.translate(this.width, 0);
-      this.ctx.rotate(90 * Math.PI / 180);
+      this.ctx.rotate((90 * Math.PI) / 180);
       width = this.height;
       height = this.width;
     }
@@ -67,14 +69,13 @@ class B2 {
       this.ctx.draw(false, res => {
         resolve(res);
       });
-    })
-
+    });
   }
 
   getContextSize(width, height) {
     const res = wx.getSystemInfoSync();
     const { windowWidth, windowHeight } = res;
-    const ratio = 375 / windowWidth * 2;
+    const ratio = (375 / windowWidth) * 2;
     const imgRatio = width > height ? width / height : height / width;
     const screenRtio = windowHeight / windowWidth;
     const scale = 0.95;
@@ -106,13 +107,18 @@ class B2 {
         width: this.width,
         height: this.height
       }
-    }
+    };
     return this.draw();
   }
 
   setup() {
     // 取样器获得点，以及确定一帧绘制的点的数量
-    const {data, sampleRate } = this.sampler(this.width, this.height, this.pixelsData, 2 / this.ratio);
+    const { data, sampleRate } = this.sampler(
+      this.width,
+      this.height,
+      this.pixelsData,
+      2 / this.ratio
+    );
     this.data = data;
     this.sampleRate = sampleRate;
     this.maxFrameCount = Math.ceil(this.data.length / this.sampleRate);
@@ -133,7 +139,7 @@ class B2 {
           resolve();
         }
       }, 30);
-    })
+    });
   }
 
   loop() {
@@ -152,44 +158,47 @@ class B2 {
     clearInterval(this.timer);
   }
 
-  getMainColor(){
+  // 获得图片的主要颜色，确定绘制图片后的背景
+  getMainColor() {
     const dist = (a, b) => {
       return Math.sqrt(
-          (a.r - b.r) * (a.r - b.r),
-          (a.g - b.g) * (a.g - b.g),
-          (a.b - b.b) * (a.b - b.b),
-          (a.a - b.a) * (a.a - b.a)
-        )
-    }
+        (a.r - b.r) * (a.r - b.r),
+        (a.g - b.g) * (a.g - b.g),
+        (a.b - b.b) * (a.b - b.b),
+        (a.a - b.a) * (a.a - b.a)
+      );
+    };
     const total = this.width * this.height;
     const set = [];
     const thres = 10;
-    for(let i = 0; i < total; i++){
+    for (let i = 0; i < total; i++) {
       const d = {
         r: this.pixelsData[i * 4],
         g: this.pixelsData[i * 4 + 1],
         b: this.pixelsData[i * 4 + 2],
         a: this.pixelsData[i * 4 + 3]
-      }
-      let min = 1000, index = 0;
-      for(let i = 0; i < set.length; i++){
+      };
+      let min = 1000,
+        index = 0;
+      for (let i = 0; i < set.length; i++) {
         const s = set[i];
         const dis = dist(s[0], d);
-        if(dis < min){
-          min = dis, index = i;
+        if (dis < min) {
+          (min = dis), (index = i);
         }
       }
-      if(min < thres){
+      if (min < thres) {
         set[index].push(d);
-      }else{
-        set.push([d])
+      } else {
+        set.push([d]);
       }
     }
 
-    let result, max = 0;
-    for(let s of set){
-      if(s.length > max){
-        result = s[0], max = s.length;
+    let result,
+      max = 0;
+    for (let s of set) {
+      if (s.length > max) {
+        (result = s[0]), (max = s.length);
       }
     }
     return `rgb(${result.r},${result.g},${result.b})`;
@@ -204,8 +213,8 @@ class B2 {
       destWidth: this.width,
       destHeight: this.height,
       canvasId: this.canvasId
-    })
+    });
   }
 }
 
-export { B2 }
+export { B2 };

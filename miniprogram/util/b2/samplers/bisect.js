@@ -1,27 +1,19 @@
+import map from "../common/map";
 const IN = 1,
   LEFT = 2,
   RIGHT = 3,
   TOP = 4,
-  BOTTOM = 5,
-  S = 6,
-  F = 7;
-const map = (value, start, end, min, max) => {
-  if (end != value) {
-    const left = (value - start) / (end - value);
-    return (min + left * max) / (1 + left);
-  } else {
-    return max;
-  }
-}
+  BOTTOM = 5;
+
 const cross = (v1, v2) => {
   return v1[0] * v2[1] - v1[1] * v2[0];
-}
+};
 
 const toLeft = (p1, p2, p) => {
   const v1 = [p2.x - p1.x, p2.y - p1.y],
     v2 = [p.x - p1.x, p.y - p1.y];
   return cross(v1, v2) >= 0 ? true : false;
-}
+};
 
 const isIn = (point, area) => {
   const { p1, p2, p3, p4 } = area;
@@ -38,8 +30,8 @@ const isIn = (point, area) => {
     return LEFT;
   }
 
-  return IN
-}
+  return IN;
+};
 
 const move = (area, type, w, h) => {
   const { p1, p2, p3, p4 } = area;
@@ -55,20 +47,20 @@ const move = (area, type, w, h) => {
       p.y -= h;
     }
   }
-}
+};
 
 const split = (area, w, h) => {
   const { p1, p2, p3, p4 } = area;
   if (w > h) {
     // split the width
-    const mid = (p1.x + p2.x) / 2 | 0;
-    area.p2.x = mid, area.p3.x = mid;
+    const mid = ((p1.x + p2.x) / 2) | 0;
+    (area.p2.x = mid), (area.p3.x = mid);
   } else {
     // split the height
-    const mid = (p1.y + p4.y) / 2 | 0;
-    area.p3.y = mid, area.p4.y = mid;
+    const mid = ((p1.y + p4.y) / 2) | 0;
+    (area.p3.y = mid), (area.p4.y = mid);
   }
-}
+};
 
 // 当只有一个格子的时候执行成功
 const done = area => {
@@ -77,13 +69,13 @@ const done = area => {
     h = p4.y - p1.y,
     thres = 100;
   return w * h < thres ? true : false;
-}
+};
 
 const fill = (area, res, width, data, flag) => {
   const { p1, p2, p3, p4 } = area;
   const w = p2.x - p1.x,
     h = p4.y - p1.y;
-  const cnt = w * h / 100;
+  const cnt = (w * h) / 100;
   const colorScale = map(flag, 0, 15, 1, 3);
   for (let i = 0; i < cnt; i++) {
     const x = (Math.random() * w + p1.x) | 0,
@@ -100,14 +92,16 @@ const fill = (area, res, width, data, flag) => {
       g: Math.min(g * colorScale, 255) | 0,
       b: Math.min(b * colorScale, 255) | 0,
       a: a
-    })
+    });
   }
-}
-
+};
 
 const bisect = function(width, height, pixelsData, ratio) {
   const res = [],
-    findPoint = { x: Math.random() * width | 0, y: Math.random() * height | 0 };
+    findPoint = {
+      x: (Math.random() * width) | 0,
+      y: (Math.random() * height) | 0
+    };
 
   let area = {
       p1: { x: 0, y: 0 },
@@ -134,7 +128,7 @@ const bisect = function(width, height, pixelsData, ratio) {
   }
   return {
     data: res.reverse(),
-    sampleRate: 20 * ratio | 0
+    sampleRate: (20 * ratio) | 0
   };
-}
-export { bisect }
+};
+export { bisect };

@@ -14,13 +14,19 @@ module.exports = {
         <block wx:for="{{artworks}}" wx:key="{{index}}">
             <view class="card">
                 <view style="margin-top:20rpx;" class="{{item.rotate === true ? 'rotation' : ''}}">
-                    <image src="{{item.path}}" mode="aspectFit" ></image>
+                    <image src="{{item.path}}" mode="aspectFit"></image>
                 </view>
                 <view class="row">
                     <view class="labels">
-                        <l-tag bind:lintap="onDetail" data-id="{{item.img[1]}}">{{string.slice(item.img[0], 5)}}</l-tag>
-                        <l-tag bind:lintap="onDetail" data-id="{{item.sample[1]}}">{{string.slice(item.sample[0], 5)}}</l-tag>
-                        <l-tag bind:lintap="onDetail" data-id="{{item.stroke[1]}}">{{string.slice(item.stroke[0], 5)}}</l-tag>
+                        <l-tag bind:lintap="onDetail" data-id="{{item.img[1]}}">
+                            {{string.slice(item.img[0], 5)}}
+                        </l-tag>
+                        <l-tag bind:lintap="onDetail" data-id="{{item.sample[1]}}">
+                            {{string.slice(item.sample[0], 5)}}
+                        </l-tag>
+                        <l-tag bind:lintap="onDetail" data-id="{{item.stroke[1]}}">
+                            {{string.slice(item.stroke[0], 5)}}
+                        </l-tag>
                     </view>
                     <view class="btns">
                         <button open-type='share' data-path="{{item.path}}" special="{{true}}" data-rotate="{{item.rotate}}" data-index="{{index}}">
@@ -37,9 +43,8 @@ module.exports = {
             </view>
         </block>
     </view>
-    <l-status-show wx:if="{{!loading && artworks.length==0}}" show="{{true}}" button-text="去创作" describe="还没有作品哦！"  type="data" bind:lintap="onCreate">
-    </l-status-show>
+    <l-status-show wx:if="{{!loading && artworks.length==0}}" show="{{true}}" button-text="去创作" describe="还没有作品哦！" type="data" bind:lintap="onCreate"></l-status-show>
 </view>
-<l-dialog class="dialog"/>
+<l-dialog class="dialog" />
 <l-loading show="{{loading}}" full-screen="true" />
 <l-message />

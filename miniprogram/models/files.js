@@ -1,5 +1,4 @@
 class FileModel {
-
   get(fileID) {
     return new Promise((resolve, reject) => {
       wx.cloud.downloadFile({
@@ -10,8 +9,8 @@ class FileModel {
         fail: error => {
           reject(error);
         }
-      })
-    })
+      });
+    });
   }
 
   delete(fileID) {
@@ -21,9 +20,8 @@ class FileModel {
         success: res => {
           resolve();
         }
-      })
+      });
     });
-
   }
 
   add(url, filename) {
@@ -35,10 +33,9 @@ class FileModel {
           resovle(res);
         },
         fail: console.error
-      })
+      });
     });
-
   }
 }
 
-export { FileModel }
+export { FileModel };

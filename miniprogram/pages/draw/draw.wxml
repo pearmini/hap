@@ -2,6 +2,8 @@
     <s-circle imgUrl="{{selectedImg === null ? defaultUrl : selectedImg.url}}" bindtap="onSelect" data-type="img"></s-circle>
     <s-selector bindtap="onSelect" data-type="stroke" name="绘画风格" value="{{selectedStroke === null ? '未选择' : selectedStroke.name}}"></s-selector>
     <s-selector bindtap="onSelect" data-type="sample" name="绘画手法" value="{{selectedSample === null ? '未选择' : selectedSample.name}}"></s-selector>
-    <l-button size="large" icon="edit" icon-size="20" icon-color="#fff" bind:tap="draw">绘制</l-button>
+    <l-button size="large" icon="edit" icon-size="20" icon-color="#fff" bind:tap="draw">
+        绘制
+    </l-button>
 </view>
-<l-message/>
+<l-message />

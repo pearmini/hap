@@ -18,12 +18,9 @@
         <l-radio-group bind:linchange="goodChange">
             <block wx:for="{{goods}}" wx:key="{{index}}">
                 <view class="list-item">
-                    <l-radio class="list-radio left" value="{{index}}" custom="{{true}}">
-                    </l-radio>
+                    <l-radio class="list-radio left" value="{{index}}" custom="{{true}}"></l-radio>
                     <l-card class="middle" type="primary" l-img-class="right-card" position="right" image="{{item.url}}" title="{{item.name}}" position="left" l-class="noCard">
-                        <view class="content">
-                            {{string.slice(item.intro, 15)}}
-                        </view>
+                        <view class="content">{{string.slice(item.intro, 15)}}</view>
                     </l-card>
                     <view class="right" catch:tap="showDetail" data-index="{{index}}">
                         <l-icon name="eye" class="right-item"></l-icon>

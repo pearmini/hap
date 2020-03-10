@@ -1,23 +1,22 @@
-import { DBModel } from "./db.js"
-import { LabelsModel } from "./labels.js"
-import { FileModel } from "./files.js"
-const fileModel = new FileModel();
+import { DBModel } from "./db.js";
 
 class GoodsModel extends DBModel {
   constructor() {
-    super()
-    this.dbname = 'goods'
+    super();
+    this.dbname = "goods";
   }
   get(type, index, labels = []) {
     const _ = this.db.command;
-    const order = type === 'img' ? '_id' : 'weight';
+    const order = type === "img" ? "_id" : "weight";
     if (labels.length === 0) {
-      return this.db.collection(this.dbname).where({
+      return this.db
+        .collection(this.dbname)
+        .where({
           type,
           valid: 1,
-          fileid: _.neq('#')
+          fileid: _.neq("#")
         })
-        .orderBy(order, 'desc')
+        .orderBy(order, "desc")
         .skip(index * 20)
         .get();
     } else {
@@ -25,44 +24,57 @@ class GoodsModel extends DBModel {
       for (let l of labels) {
         args.push(_.eq(l));
       }
-      return this.db.collection(this.dbname).where({
+      return this.db
+        .collection(this.dbname)
+        .where({
           type,
           valid: 1,
-          fileid: _.neq('#'),
+          fileid: _.neq("#"),
           labels: _.and(...args)
         })
-        .orderBy(order, 'desc')
+        .orderBy(order, "desc")
         .skip(index * 20)
         .get();
     }
   }
 
   getById(id) {
-    return this.db.collection(this.dbname).where({
-      _id: id
-    }).get()
+    return this.db
+      .collection(this.dbname)
+      .where({
+        _id: id
+      })
+      .get();
   }
 
   getVisData() {
-    const $ = this.db.command.aggregate
-    return this.db.collection(this.dbname).aggregate()
+    const $ = this.db.command.aggregate;
+    return this.db
+      .collection(this.dbname)
+      .aggregate()
       .group({
-        _id: '$type',
+        _id: "$type",
         num: $.sum(1)
       })
-      .end()
+      .end();
   }
 
   getCurrent() {
-    return this.db.collection(this.dbname).where({
-        type: 'img_index'
-      }).get()
+    return this.db
+      .collection(this.dbname)
+      .where({
+        type: "img_index"
+      })
+      .get()
       .then(res => {
         const id = res.data[0].cur;
-        return this.db.collection(this.dbname).where({
-          id
-        }).get()
-      })
+        return this.db
+          .collection(this.dbname)
+          .where({
+            id
+          })
+          .get();
+      });
   }
 
   getNext(item) {
@@ -71,16 +83,18 @@ class GoodsModel extends DBModel {
       return new Promise((resolve, reject) => {
         const res = -1;
         resolve(res);
-      })
+      });
     }
     return this.updateInfo({
-        cur: next
-      })
-      .then(res => {
-        return this.db.collection(this.dbname).where({
+      cur: next
+    }).then(res => {
+      return this.db
+        .collection(this.dbname)
+        .where({
           id: next
-        }).get();
-      });
+        })
+        .get();
+    });
   }
 
   getPrevious(item) {
@@ -89,31 +103,36 @@ class GoodsModel extends DBModel {
       return new Promise((resolve, reject) => {
         const res = -1;
         resolve(res);
-      })
+      });
     }
     return this.updateInfo({
-        cur: previous
-      })
-      .then(res => {
-        return this.db.collection(this.dbname).where({
+      cur: previous
+    }).then(res => {
+      return this.db
+        .collection(this.dbname)
+        .where({
           id: previous
-        }).get();
-      });
+        })
+        .get();
+    });
   }
 
   updateInfo(data) {
     return wx.cloud.callFunction({
-      name: 'updateInfo',
+      name: "updateInfo",
       data: {
         data
       }
-    })
+    });
   }
 
   getInfo() {
-    return this.db.collection(this.dbname).where({
-      type: "img_index"
-    }).get();
+    return this.db
+      .collection(this.dbname)
+      .where({
+        type: "img_index"
+      })
+      .get();
   }
 
   delete(item) {
@@ -121,45 +140,49 @@ class GoodsModel extends DBModel {
     const previous = item.previous;
     let cur = next === -1 ? previous : next; // 不可能全部都删没了
     return this.updateGood(previous, {
-        next
-      }) // 修改前一个元素
+      next
+    }) // 修改前一个元素
       .then(res => {
         return this.updateGood(next, {
           previous
-        }) // 修改后一个元素
-      }).then(res => {
+        }); // 修改后一个元素
+      })
+      .then(res => {
         return this.getInfo(); // 获得当前的长度
-      }).then(res => {
+      })
+      .then(res => {
         const cnt = res.data[0].cnt;
         return this.updateInfo({
           cnt: cnt - 1,
           cur: cur //更新长度
-        })
-      }).then(res => { // 标记为没有效果
+        });
+      })
+      .then(res => {
+        // 标记为没有效果
         return this.updateGood(item.id, {
           valid: 0
-        })
-      })
+        });
+      });
   }
 
   updateGood(id, data) {
     return wx.cloud.callFunction({
-      name: 'updateGood',
+      name: "updateGood",
       data: {
         id,
         data
       }
-    })
+    });
   }
 
   getInfoByKey(key) {
     return wx.cloud.callFunction({
-      name: 'getIntro',
+      name: "getIntro",
       data: {
         key
       }
-    })
+    });
   }
 }
 
-export { GoodsModel }
+export { GoodsModel };

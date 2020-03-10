@@ -1,13 +1,5 @@
-import { noise } from "../noise.js"
-
-const map = (value, start, end, min, max) => {
-  if (end != value) {
-    const left = (value - start) / (end - value);
-    return (min + left * max) / (1 + left);
-  } else {
-    return max;
-  }
-}
+import { noise } from "../noise.js";
+import map from "../common/map";
 
 const line = (ctx, data, progress) => {
   const noiseScale = 0.01,
@@ -22,7 +14,7 @@ const line = (ctx, data, progress) => {
   ctx.translate(data.x, data.y);
   const seed = noise(data.x * noiseScale, data.y * noiseScale);
   const angle = map(seed, 0, 1, -Math.PI, Math.PI);
-  ctx.rotate(angle)
+  ctx.rotate(angle);
 
   const alpha = map(data.a, 0, 255, 0, 1);
   ctx.strokeStyle = `rgba(${data.r}, ${data.g}, ${data.b}, ${alpha})`;
@@ -39,7 +31,7 @@ const line = (ctx, data, progress) => {
     r: Math.min(data.r * colorScale, 255),
     g: Math.min(data.g * colorScale, 255),
     b: Math.min(data.b * colorScale, 255)
-  }
+  };
   const alphaScale = map(Math.random(), 0, 1, 0, 0.4);
 
   ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha * alphaScale})`;
@@ -49,6 +41,6 @@ const line = (ctx, data, progress) => {
   ctx.stroke();
 
   ctx.restore();
-}
+};
 
-export { line }
+export { line };
