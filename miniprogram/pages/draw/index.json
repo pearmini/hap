@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "s-circle": "../../components/circle/index",
+    "s-selector": "../../components/selector/index"
+  }
+}

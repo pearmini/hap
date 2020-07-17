@@ -1,8 +1,10 @@
 import { ArtworksModel } from "../../models/artworks.js";
 import { FileModel } from "../../models/files.js";
 import { login } from "../../util/util.js";
+
 const artworksModel = new ArtworksModel();
 const fileModel = new FileModel();
+
 Page({
   data: {
     artworks: [],
@@ -151,7 +153,7 @@ Page({
   onDetail(e) {
     const id = e.target.dataset.id;
     wx.navigateTo({
-      url: `../detail/detail?id=${id}`
+      url: `../detail/indexl?id=${id}`
     });
   },
 

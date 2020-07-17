@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SlashBaby/B2.git"
+    "url": "git+https://github.com/pearmini/draw-cat.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SlashBaby/B2/issues"
+    "url": "https://github.com/pearmini/draw-cat.git"
   },
-  "homepage": "https://github.com/SlashBaby/B2#readme",
+  "homepage": "https://github.com/pearmini/draw-cat.git#readme",
   "dependencies": {
     "@antv/f2-canvas": "^1.0.5",
     "lin-ui": "^0.5.13"

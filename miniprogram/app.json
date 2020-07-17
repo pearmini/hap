@@ -1,12 +1,11 @@
 {
   "pages": [
-    "pages/draw/draw",
-    "pages/discover/discover",
-    "pages/artwork/artwork",
-    "pages/brush/brush",
-    "pages/detail/detail",
-    "pages/my/my",
-    "pages/backend/backend"
+    "pages/draw/index",
+    "pages/discover/index",
+    "pages/artwork/index",
+    "pages/brush/index",
+    "pages/detail/index",
+    "pages/my/index"
   ],
   "window": {
     "backgroundColor": "#2c61b4",
@@ -20,19 +19,19 @@
     "color": "#8a8a8a",
     "list": [
       {
-        "pagePath": "pages/artwork/artwork",
+        "pagePath": "pages/artwork/index",
         "text": "作品",
         "iconPath": "./images/image.png",
         "selectedIconPath": "./images/image-s.png"
       },
       {
-        "pagePath": "pages/draw/draw",
+        "pagePath": "pages/draw/index",
         "text": "画",
         "iconPath": "./images/theme.png",
         "selectedIconPath": "./images/theme-s.png"
       },
       {
-        "pagePath": "pages/my/my",
+        "pagePath": "pages/my/index",
         "text": "我",
         "iconPath": "./images/me.png",
         "selectedIconPath": "./images/me-s.png"
@@ -42,7 +41,7 @@
   "usingComponents": {
     "l-loading": "./miniprogram_npm/lin-ui/loading/index",
     "l-message": "./miniprogram_npm/lin-ui/message/index",
-    "s-status-show": "./componets/status-show/index",
+    "s-status-show": "./components/status-show/index",
     "l-button": "./miniprogram_npm/lin-ui/button/index",
     "ff-canvas": "./miniprogram_npm/@antv/f2-canvas/index",
     "l-icon": "./miniprogram_npm/lin-ui/icon/index",

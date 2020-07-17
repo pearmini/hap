@@ -35,7 +35,7 @@ Page({
   onSelect(e) {
     const type = e.target.dataset.type;
     wx.navigateTo({
-      url: `../discover/discover?type=${type}`
+      url: `../discover/index?type=${type}`
     });
   },
 
@@ -67,9 +67,10 @@ Page({
     });
 
     wx.navigateTo({
-      url: `../brush/brush`
+      url: `../brush/index`
     });
   },
+  
   onShareAppMessage(e) {
     if (e.from === "button") {
       const path = e.target.dataset.path;

@@ -1,7 +1,9 @@
 import { GoodsModel } from "../../models/goods.js";
 import { LabelsModel } from "../../models/labels.js";
+
 const goodsModel = new GoodsModel();
 const labelsModel = new LabelsModel();
+
 Page({
   data: {
     goods: [],
@@ -87,7 +89,7 @@ Page({
     const index = e.currentTarget.dataset.index;
     const id = this.data.goods[index]._id;
     wx.navigateTo({
-      url: `../detail/detail?id=${id}`
+      url: `../detail/index?id=${id}`
     });
   },
 

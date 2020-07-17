@@ -2,8 +2,10 @@ import { B2 } from "../../util/b2/index.js";
 import { formatTime, formatNumber } from "../../util/util.js";
 import { ArtworksModel } from "../../models/artworks.js";
 import { FileModel } from "../../models/files.js";
+
 const artworksModel = new ArtworksModel();
 const fileModel = new FileModel();
+
 Page({
   data: {
     isDone: false,

@@ -2,9 +2,11 @@ import { ArtworksModel } from "../../models/artworks.js";
 import { login } from "../../util/util.js";
 import { LearnModel } from "../../models/learns.js";
 import { GoodsModel } from "../../models/goods.js";
+
 const learnModel = new LearnModel();
 const artworksModel = new ArtworksModel();
 const goodsModel = new GoodsModel();
+
 Page({
   data: {
     artworks: null,

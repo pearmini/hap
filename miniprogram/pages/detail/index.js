@@ -3,9 +3,11 @@ import { login } from "../../util/util.js";
 import { FileModel } from "../../models/files.js";
 import { Towxml } from "../../towxml/main";
 import { GoodsModel } from "../../models/goods.js";
+
 const learnModel = new LearnModel();
 const fileModel = new FileModel();
 const goodsModel = new GoodsModel();
+
 Page({
   data: {
     read: false,
