@@ -1,4 +1,0 @@
-<view class="container">
-    <image class="inner-circle" src="{{imgUrl}}" mode="scaleToFill">
-    </image>
-</view>

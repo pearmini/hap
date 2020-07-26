@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "l-tag": "../../miniprogram_npm/lin-ui/tag/index",
-    "l-status-show": "../../miniprogram_npm/lin-ui/status-show/index"
-  },
-  "enablePullDownRefresh": true
-}

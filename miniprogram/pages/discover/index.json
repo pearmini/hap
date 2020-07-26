@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "s-grids": "../../components/grids/index",
-    "l-button": "../../miniprogram_npm/lin-ui/button/index",
-    "l-radio-group": "../../miniprogram_npm/lin-ui/radio-group/index",
-    "l-radio": "../../miniprogram_npm/lin-ui/radio/index"
-  }
-}

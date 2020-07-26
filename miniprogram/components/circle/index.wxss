@@ -1,9 +1,0 @@
-.inner-circle{
-	width: 410rpx;
-	height: 410rpx;
-	border-radius: 50%;
-	margin-top: 20rpx;
-	margin-left: 20rpx;
-	border:20rpx solid #2c61b4;
-	-background-color: black;
-}

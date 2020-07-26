@@ -1,5 +1,0 @@
-<view class="container">
-    <image class="top-image" src="{{imgUrl}}"></image>
-    <text>{{content}}</text>
-    <l-button catch:tap="onGo"  wx:if="{{btnShow}}">{{btnText}}</l-button>
-</view>

@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "s-cover-button": "../../components/cover-button/index",
-    "l-status-show": "../../miniprogram_npm/lin-ui/status-show/index"
-  }
-}
