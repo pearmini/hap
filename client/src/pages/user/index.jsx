@@ -4,8 +4,8 @@ import { connect } from '@tarojs/redux';
 
 import './index.scss';
 
-const Index = function() {
+const My = function() {
   return <View>hello world</View>;
 };
 
-export default connect(() => {})(Index);
+export default connect(() => {})(My);

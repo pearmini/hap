@@ -7,25 +7,34 @@ import configStore from './store';
 
 import './app.scss';
 
-// 如果需要在 h5 环境中开启 React Devtools
-// 取消以下注释：
-// if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
-//   require('nerv-devtools')
-// }
-
 const store = configStore();
 
 class App extends Component {
-  componentDidMount() {}
-
-  componentDidShow() {}
-
-  componentDidHide() {}
-
-  componentDidCatchError() {}
-
   config = {
-    pages: ['pages/index/index'],
+    pages: [
+      'pages/index/index',
+      'pages/discovery/index',
+      'pages/user/index',
+      'pages/detail/index',
+    ],
+    tabBar: {
+      color: '#333',
+      selectedColor: '#6190e8',
+      list: [
+        {
+          pagePath: 'pages/discovery/index',
+          text: '发现',
+        },
+        {
+          pagePath: 'pages/index/index',
+          text: '滤镜',
+        },
+        {
+          pagePath: 'pages/user/index',
+          text: '我的',
+        },
+      ],
+    },
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',

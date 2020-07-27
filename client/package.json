@@ -43,11 +43,15 @@
     "@tarojs/taro-tt": "2.2.6",
     "@tarojs/taro-weapp": "2.2.6",
     "babel-runtime": "^6.26.0",
-    "nervjs": "^1.5.5",
+    "dva-core": "^2.0.2",
+    "dva-loading": "^3.0.20",
     "nerv-devtools": "^1.5.5",
+    "nervjs": "^1.5.5",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "taro-parse": "^1.1.5",
+    "taro-ui": "^2.3.4"
   },
   "devDependencies": {
     "@types/react": "^16.4.8",
