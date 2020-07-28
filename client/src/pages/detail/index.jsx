@@ -11,7 +11,12 @@ function Detail({ dispatch, md, loading }) {
   } = useRouter();
 
   useEffect(() => {
-    dispatch({ type: 'detail/download', payload: { fileid } });
+    if (fileid !== 'undefined') {
+      dispatch({ type: 'detail/download', payload: { fileid } });
+    } else {
+      const imageMD = Taro.getStorageSync('image_md');
+      dispatch({ type: 'detail/setMD', payload: { md: imageMD } });
+    }
   }, [dispatch, fileid]);
 
   return (

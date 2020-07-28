@@ -6,7 +6,7 @@ import { AtSegmentedControl } from 'taro-ui';
 import './index.scss';
 
 function Discovery({ dispatch, list, loading }) {
-  const [currentType, setCurrentType] = useState(1);
+  const [currentType, setCurrentType] = useState(0);
   const names = list.map(d => d.name);
   const { data } = list.find(d => d.type === currentType);
 
@@ -32,6 +32,18 @@ function Discovery({ dispatch, list, loading }) {
           <View
             key={item}
             onClick={() => {
+              if (!item.articleFileId) {
+                Taro.setStorageSync(
+                  'image_md',
+                  `# ${item.name} \n![Alt](${
+                    item.coveryImageUrl
+                  }) \n## 标签 \n${item.labels.join(' ')} \n## 图片介绍 \n${
+                    item.info
+                  } \n## 相关介绍 \n${
+                    item.intro
+                  } \n## 数据来源 \n- 上海图书馆知识竞赛 \n- 百度百科`
+                );
+              }
               Taro.navigateTo({
                 url: `/pages/detail/index?fileid=${item.articleFileId}`,
               });
