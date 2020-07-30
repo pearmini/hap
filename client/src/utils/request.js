@@ -17,6 +17,11 @@ export default async ({ method, name, data, query, cb }) => {
       info: JSON.stringify(data),
       get: () => Taro.cloud.callFunction({ name, data }),
     },
+    request: {
+      source: `request=${name}`,
+      info: JSON.stringify(data),
+      get: () => Taro.request(data),
+    },
     rest: {
       source: `rest=${name}`,
       info: 'rest',
