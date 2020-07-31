@@ -16,6 +16,7 @@ class App extends Component {
       'pages/discovery/index',
       'pages/user/index',
       'pages/detail/index',
+      'pages/pictures/index',
     ],
     tabBar: {
       color: '#333',

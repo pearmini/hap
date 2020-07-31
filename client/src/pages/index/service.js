@@ -22,12 +22,31 @@ const processImage = ({ url }) =>
         method: 'POST',
         data: {
           image: url,
-          type:['foreground']
+          type: ['foreground'],
         },
       },
     });
   });
 
+const getFilters = () =>
+  request({
+    method: 'db',
+    name: 'getFilters',
+    query: (db, _) =>
+      db
+        .collection('items')
+        .where(
+          _.or(
+            {
+              type: 1,
+            },
+            { type: 2 }
+          )
+        )
+        .get(),
+  });
+
 export default {
   processImage,
+  getFilters,
 };
