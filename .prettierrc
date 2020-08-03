@@ -1,7 +1,9 @@
 {
-  "trailingComma": "es5",
-  "tabWidth": 2,
-  "semi": true,
   "singleQuote": true,
-  "jsxSingleQuote": true
+  "prettier.tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": false,
+  "bracesSpacing": false,
+  "spaceBeforeFunctionParen": true,
+  "semi": false
 }

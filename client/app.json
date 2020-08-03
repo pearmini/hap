@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/discovery/index",
+    "pages/my/index",
+    "pages/pictures/index",
+    "pages/detail/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "Ai Pocket",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#ff6666",
+    "backgroundColor": "#f7f7f7",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/discovery/index",
+        "text": "发现"
+      },
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/my/index",
+        "text": "个人"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "plugins": {
+    "tfjsPlugin": {
+      "version": "0.0.9",
+      "provider": "wx6afed118d9e81df9"
+    }
+  }
+}

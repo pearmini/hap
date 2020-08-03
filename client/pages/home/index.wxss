@@ -1,0 +1,22 @@
+/* pages/posnet/index.wxss */
+.camera {
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+}
+
+.canvas {
+  width: 700rpx;
+  height: 600rpx;
+  z-index: 10;
+}
+
+.result {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.prediction-result {
+  height: calc(100vh - 100vw); 
+}
