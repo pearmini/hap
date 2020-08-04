@@ -5,5 +5,5 @@
   "bracketSpacing": false,
   "bracesSpacing": false,
   "spaceBeforeFunctionParen": true,
-  "semi": false
+  "semi": true
 }

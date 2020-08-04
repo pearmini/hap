@@ -10,10 +10,9 @@
   "license": "MIT",
   "dependencies": {
     "@tensorflow-models/body-pix": "^2.0.4",
-    "@tensorflow-models/coco-ssd": "^2.0.1",
-    "@tensorflow-models/posenet": "2.2.1",
     "@tensorflow/tfjs-converter": "1.4.0",
     "@tensorflow/tfjs-core": "1.4.0",
-    "fetch-wechat": "0.0.3"
+    "fetch-wechat": "0.0.3",
+    "wux-weapp": "^3.8.6"
   }
 }

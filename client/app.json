@@ -6,10 +6,13 @@
     "pages/pictures/index",
     "pages/detail/index"
   ],
+  "usingComponents":{
+    "wux-button": "./miniprogram_npm/wux-weapp/button"
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Ai Pocket",
+    "navigationBarTitleText": "画家与骇客",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
