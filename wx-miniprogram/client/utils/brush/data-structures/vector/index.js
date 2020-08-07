@@ -18,50 +18,41 @@ export default function ({ctx, imageData, width, height, cb}) {
   }
 
   // 初始化数组
-  const initalCnt = 400;
-  const vector = new Vector(initalCnt);
+  const vector = new Vector();
+  const x = (i) => ((i % cellCol) * (imageData.width / cellCol)) | 0;
+  const y = (i) => (((i / cellCol) | 0) * (imageData.height / cellRow)) | 0;
+  const getImageData = (i) => {
+    const index = (y(i) * imageData.width + x(i)) * 4;
+    return [
+      imageData.data[index],
+      imageData.data[index + 1],
+      imageData.data[index + 2],
+      imageData.data[index + 3],
+    ];
+  };
 
   // 设置 actions
-  const actions = [
-    () => {
-      const {data, width, height} = imageData;
-      for (let i = 0; i < initalCnt; i++) {
-        const x = ((i % cellCol) * (width / cellCol)) | 0;
-        const y = (((i / cellCol) | 0) * (height / cellRow)) | 0;
-        const index = (y * width + x) * 4;
-        vector.append([
-          data[index],
-          data[index + 1],
-          data[index + 2],
-          data[index + 3],
-        ]);
-      }
-    },
-    () => {
-      vector.remove(10);
-    },
-    () => {
-      vector.remove(20);
-    }
-  ];
+  const actions = getActions();
+  console.log(actions.length);
+  let frameCount = 0;
+  const speed = 100;
 
-  let index = 0;
   draw();
+
   const timer = setInterval(() => {
-    if (index >= actions.length) {
-      clearInterval(timer);
+    ++frameCount;
+    if (frameCount >= actions.length) {
       cb();
+      clearInterval(timer);
       return;
     }
     draw();
-  }, 1000);
+  }, speed);
 
   function draw() {
-    console.log('draw')
     drawBackgournd();
-    actions[index]();
+    actions[frameCount]();
     drawVector();
-    index++;
   }
 
   function drawBackgournd() {
@@ -81,7 +72,7 @@ export default function ({ctx, imageData, width, height, cb}) {
     for (let i = 0; i < vector._capacity; i++) {
       const x = i % cellCol;
       const y = (i / cellCol) | 0;
-      ctx.strokeStyle = '#aaa';
+      ctx.strokeStyle = '#000';
       ctx.strokeRect(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
     }
 
@@ -98,5 +89,33 @@ export default function ({ctx, imageData, width, height, cb}) {
         cellHeight - 2
       );
     }
+  }
+
+  function getActions() {
+    const totalCnt = cellRow * cellCol;
+    let currentCnt = 0;
+    const actions = [];
+
+    while (currentCnt < totalCnt) {
+      // 在后面加入
+      const potentialCnt = Math.random() * 30;
+      const appendCnt = Math.min(totalCnt - vector.size(), potentialCnt);
+      currentCnt += appendCnt;
+      const appendToVector = () => {
+        const size = vector.size();
+        for (let i = 0; i < appendCnt; i++) {
+          vector.append(getImageData(size + i));
+        }
+      };
+      actions.push(appendToVector);
+
+      // // 删除
+      // const deleteArray = [];
+      // const size = vector.size();
+
+      // // 插入
+      // const insertToVector = () => {};
+    }
+    return actions;
   }
 }
