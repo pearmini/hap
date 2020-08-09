@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "scripts": {
-    "test": "jest"
-  },
+  "scripts": {},
   "author": "HunterXuan",
   "license": "MIT",
   "dependencies": {
@@ -13,11 +11,5 @@
     "@tensorflow/tfjs-converter": "1.4.0",
     "@tensorflow/tfjs-core": "1.4.0",
     "fetch-wechat": "0.0.3"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.11.1",
-    "@babel/preset-env": "^7.11.0",
-    "babel-jest": "^26.2.2",
-    "jest": "^26.2.2"
   }
 }
