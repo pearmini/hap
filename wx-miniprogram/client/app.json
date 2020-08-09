@@ -6,9 +6,7 @@
     "pages/pictures/index",
     "pages/detail/index"
   ],
-  "usingComponents":{
-    "wux-button": "./miniprogram_npm/wux-weapp/button"
-  },
+  "usingComponents": {},
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",

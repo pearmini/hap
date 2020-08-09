@@ -1,10 +1,16 @@
 <view class="page">
-  <canvas
-    id="app-canvas"
-    type="2d"
-    style="width: {{ canvasWidth }}px; height: {{ canvasHeight }}px;"
-  ></canvas>
-  <view class="button">
-    <wux-button block type="positive" bind:tap="handleDraw">开始绘制</wux-button>
-  </view>
+	<canvas
+	 id="app-canvas"
+	 type="2d"
+	 style="width: {{ canvasWidth }}px; height: {{ canvasHeight }}px;"
+	></canvas>
+	<view class="button">
+		<button
+		 block
+		 type="positive"
+		 bind:tap="handleDraw"
+		>开始绘制
+		</button>
+	</view>
 </view>
+
