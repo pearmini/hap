@@ -1,7 +1,7 @@
-import hacker from './hacker/index';
-import painter from './painter/index';
+import hackers from './hackers/index';
+import painters from './painters/index';
 
 export default {
-  hacker,
-  painter,
+  hackers,
+  painters,
 };

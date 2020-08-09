@@ -49,7 +49,7 @@ Page({
       const ctx = canvas.getContext('2d');
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const hacker = ph
-        .hacker()
+        .hackers()
         .canvas(canvas)
         .size([canvas.width / pixelRatio, canvas.height / pixelRatio])
         .imageData(imageData)
