@@ -9,7 +9,7 @@ export default function (width, height, cnt) {
   } else {
     cellWidth = width / cnt;
     cellCol = cnt;
-    cellRow = (height / width) * cellCol;
+    cellRow = Math.ceil(height / width) * cellCol;
     cellHeight = height / cellRow;
   }
 

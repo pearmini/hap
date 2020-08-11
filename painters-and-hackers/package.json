@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "node dev.js"
+    "dev": "node dev.js",
+    "build": "npx webpack"
   },
   "keywords": [],
   "author": "",

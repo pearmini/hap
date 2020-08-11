@@ -18,34 +18,33 @@ Page({
 
   onReady: async function () {
     // 绘制图片
+    // const {tempFilePaths} = await chooseImage({
+    //   count: 1,
+    //   sizeType: ['original', 'compressed'],
+    //   sourceType: ['album', 'camera'],
+    // });
+    // const imageURL = tempFilePaths[0];
+    // const {width: imageWidth, height: imageHeight, path} = await getImageInfo({
+    //   src: imageURL,
+    // });
+    // const {windowWidth} = wx.getSystemInfoSync();
+    // let width, height;
+    // const ratio = imageHeight / imageWidth;
+    // if (ratio > 1) {
+    //   height = windowWidth;
+    //   width = (height / ratio) | 0;
+    // } else {
+    //   width = windowWidth;
+    //   height = (width * ratio) | 0;
+    // }
+    // const ctx = wx.createCanvasContext(CAVANS_ID);
+    // ctx.drawImage(path, 0, 0, width, height);
+    // ctx.draw();
 
-    const {tempFilePaths} = await chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],
-      sourceType: ['album', 'camera'],
-    });
-    const imageURL = tempFilePaths[0];
-    const {width: imageWidth, height: imageHeight, path} = await getImageInfo({
-      src: imageURL,
-    });
-    const {windowWidth, pixelRatio} = wx.getSystemInfoSync();
-    let width, height;
-    const ratio = imageHeight / imageWidth;
-    if (ratio > 1) {
-      height = windowWidth;
-      width = (height / ratio) | 0;
-    } else {
-      width = windowWidth;
-      height = (width * ratio) | 0;
-    }
-    const ctx = wx.createCanvasContext(CAVANS_ID);
-    ctx.drawImage(path, 0, 0, width, height);
-    ctx.draw();
-
-    this.setData({
-      canvasWidth: width,
-      canvasHeight: height,
-    });
+    // this.setData({
+    //   canvasWidth: width,
+    //   canvasHeight: height,
+    // });
   },
 
   handleDraw: async function () {
