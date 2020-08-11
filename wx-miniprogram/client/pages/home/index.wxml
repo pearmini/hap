@@ -1,8 +1,9 @@
 <view class="page">
+	<canvas canvas-id="app-canvas" style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"></canvas>
 	<canvas
-	 id="app-canvas"
 	 type="2d"
-	 style="width: {{ canvasWidth }}px; height: {{ canvasHeight }}px;"
+	 id="app-canvas"
+	 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
 	></canvas>
 	<view class="button">
 		<button

@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "decode": "/towxml/decode",
+    "img": "/towxml/img/img"
+  }
+}
