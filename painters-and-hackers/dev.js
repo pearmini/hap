@@ -5,13 +5,13 @@ const filePath = './src';
 
 bundle();
 let lastUpdateTime = 0;
-console.log(`🔥 正在监听 ${filePath}`);
 fs.watch(filePath, {recursive: true}, (event, filename) => {
   // 防止保存一次触发两次
   const diff = Date.now() - lastUpdateTime;
   lastUpdateTime = Date.now();
   if (diff < 100) return;
 
+  // 开始编译
   console.log(`🌈 [${event}]: ${filename}`);
   bundle();
 });
