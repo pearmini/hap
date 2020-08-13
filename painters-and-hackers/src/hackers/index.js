@@ -30,6 +30,10 @@ export default function () {
     return arguments.length ? ((style = _), hacker) : style;
   };
 
+  hacker.styles = function (_) {
+    return arguments.length ? ((style = _), hacker) : styles;
+  };
+
   hacker.start = function () {
     // 配置 canvas
     const [width, height] = size;

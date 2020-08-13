@@ -5,15 +5,19 @@ export default class Queue extends Vector {
     super();
   }
 
-  push(element) {
+  enqueue(element) {
     this.append(element);
   }
 
-  pop() {
-    return this.remove(0);
+  dequeue(element){
+
   }
 
-  size() {
-    return this.size();
+  front(){
+
+  }
+  
+  pop() {
+    return this.remove(0);
   }
 }

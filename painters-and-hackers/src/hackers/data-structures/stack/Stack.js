@@ -10,12 +10,11 @@ export default class Stack extends Vector {
   }
 
   pop() {
-    const size = this.size();
-    if (size === 0) return;
-    return this.remove(size - 1);
+    return this.size() ? this.remove(this.size() - 1) : null;
   }
 
-  size() {
-    return this.size();
+  top() {
+    if (this.size() === 0) return null;
+    return this.get(this.size() - 1);
   }
 }

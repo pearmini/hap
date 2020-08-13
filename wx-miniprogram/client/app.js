@@ -1,6 +1,5 @@
 //app.js
 App({
-  onLaunch: function () {
-    //
-  }
-})
+  globalData: {},
+  towxml: require('/towxml/index'),
+});

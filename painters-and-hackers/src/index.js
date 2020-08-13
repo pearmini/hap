@@ -1,5 +1,5 @@
 import hackers from './hackers/index';
-import painters from './painters/index';
+import painters from "./painters/index"
 
 export default {
   hackers,

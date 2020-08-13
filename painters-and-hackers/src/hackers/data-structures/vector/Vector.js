@@ -18,14 +18,8 @@ export default class Vector {
     this._elem[rank] = element;
   }
 
-  append(element) {
-    this._expand();
-    this._elem[this._size] = element;
-    this._size++;
-  }
-
   insert(rank, element) {
-    if (rank >= this._size || rank < 0)
+    if (rank > this._size || rank < 0)
       throw new Error('array index out of bounds');
 
     this._expand();
@@ -49,12 +43,20 @@ export default class Vector {
     return deleteElement;
   }
 
+  append(element) {
+    this.insert(this._size, element);
+  }
+
   size() {
     return this._size;
   }
 
+  isEmpty() {
+    return this._size <= 0;
+  }
+
   toString() {
-    this._elem.toString();
+    return this._elem.join(',');
   }
 
   _expand() {

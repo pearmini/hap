@@ -1,2 +1,4 @@
-<!--pages/index.wxml-->
-<text>pages/index.wxml</text>
+<view class="container">
+	<towxml nodes="{{article}}" />
+</view>
+

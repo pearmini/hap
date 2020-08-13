@@ -1,5 +1,5 @@
 module.exports = {
-  src: './dist/painters-and-hackers.js',
+  src: './dist/painters-and-hackers.min.js',
   dist: [
     {
       name: '小程序',

@@ -9,6 +9,14 @@
 		<button
 		 block
 		 type="positive"
+		 bind:tap="handleUpload"
+		>上传照片
+		</button>
+	</view>
+	<view class="button">
+		<button
+		 block
+		 type="positive"
 		 bind:tap="handleDraw"
 		>开始绘制
 		</button>

@@ -1,7 +1,7 @@
 module.exports = {
   entry: './src/index.js',
   output: {
-    filename: 'painters-and-hackers.js',
+    filename: 'painters-and-hackers.min.js',
     path: __dirname + '/dist',
     libraryTarget: 'umd',
     globalObject: 'this',

@@ -1,1 +1,285 @@
-/* pages/discovery.wxss */
+page {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  background: #fdd401;
+  position: relative;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  width: 100%;
+  height: 80%;
+  top: 20%;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.header {
+  position: fixed;
+  padding: 0rpx 15%;
+  height: 20%;
+  width: 70%;
+  z-index: 999;
+  background: #fdd401;
+}
+
+.header-text {
+  font-weight: bold;
+  font-size: 27px;
+  color: #fff;
+}
+
+.search-container {
+  position: relative;
+  margin-top: 15rpx;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  height: 78rpx;
+  border-radius: 39rpx;
+  padding: 0 39rpx;
+  position: relative;
+  z-index: 5;
+}
+
+.search-icon {
+  position: absolute;
+}
+
+.search-circle {
+  position: absolute;
+  width: 80rpx;
+  height: 80rpx;
+  background-color: #f5b264;
+  transform: translateX(50%);
+  right: 0;
+  top: 50%;
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.count-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  height: 78rpx;
+  z-index: 5;
+  border-radius: 20rpx;
+}
+
+.count-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.count-value {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.count-name {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.body {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.big-circle {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  left: 0;
+  top: 100%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s;
+}
+
+.clip {
+  height: 200%;
+}
+
+.full {
+  height: 400%;
+}
+
+.small-circle {
+  position: absolute;
+  height: 80%;
+  background: #f5b264;
+  border-radius: 50%;
+  left: 0;
+  top: 100%;
+  transform: translate(-50%, -50%);
+}
+
+.type-wrapper {
+  width: 100%;
+  height: 90%;
+  position: absolute;
+  top: 20%;
+  z-index: 100;
+  transition: all 0.5s;
+}
+
+.type-item {
+  position: relative;
+  margin-bottom: 70rpx;
+}
+
+.type-image {
+  position: relative;
+  height: 210rpx;
+  width: 100%;
+  background: #fff;
+  border-radius: 0 105rpx 105rpx 0;
+  left: -7rpx;
+  transition: all 0.5s;
+}
+
+.show {
+  box-shadow: 7px 7px 5px rgba(0, 0, 0, 0.2);
+  opacity: 1;
+}
+
+.hide {
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0.5;
+}
+
+.long {
+  width: calc(95% + 7rpx);
+}
+
+.short {
+  width: 65rpx;
+}
+
+.type-info {
+  position: absolute;
+  color: #fff;
+  font-weight: bold;
+  left: 58rpx;
+  top: 15rpx;
+}
+
+.type-name {
+  font-size: 20px;
+  transition: all 0.5s;
+}
+
+.type-count {
+  font-size: 15px;
+  margin-left: 0.5em;
+}
+
+.uppper-circle {
+  position: absolute;
+  width: 86rpx;
+  height: 86rpx;
+  background-color: #4a4cb0;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  transform: translate(-50%, -100%);
+}
+
+.half-circle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: white;
+  height: 100rpx;
+  width: 100%;
+  z-index: 1;
+}
+
+.card-container {
+  position: relative;
+  width: 100%;
+  z-index: 100;
+  overflow-y: auto;
+  overflow-x: hidden;
+  top: 22%;
+}
+
+.card-wrapper {
+  width: 85%;
+  float: right;
+}
+
+.card {
+  position: relative;
+  height: 280rpx;
+  background: #eee;
+  border-radius: 30rpx 0 0 80rpx;
+  padding: 30rpx;
+  overflow: hidden;
+  animation: in 0.5s;
+  margin-bottom: 60rpx;
+}
+
+.card-text {
+  position: relative;
+  z-index: 5;
+  border-radius: 10rpx;
+  padding: 5rpx 10rpx;
+  overflow: hidden;
+}
+
+.card-text:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  filter: blur(20px);
+  z-index: -1;
+  margin: -50rpx;
+}
+
+.card-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+
+.card-image {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+}
+
+@keyframes in {
+  from {
+    right: -100%;
+  }
+  to {
+    right: 0;
+  }
+}
