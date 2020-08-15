@@ -21,13 +21,8 @@
 					 bindblur="handleBlur"
 					></input>
 				</view>
-				<view wx:else class="count-wrapper">
-					<!-- <block wx:for="{{countList}}">
-						<view class="count-item">
-							<text class="count-value">{{item.value}}</text>
-							<text class="count-name">{{item.name}}</text>
-						</view>
-					</block> -->
+				<view wx:else class="info-wrapper">
+					<view>这里有一些上海景点，以及绘制滤镜所涉及的艺术品和算法的介绍。</view>
 				</view>
 			</view>
 		</view>
@@ -66,7 +61,7 @@
 					/>
 					<view class="type-info" style="opacity: {{selectedType === -1 ? 1: 0}}">
 						<text class="type-name" >{{item.name}}</text>
-						<text class="type-count" >{{item.count}}</text>
+						<!-- <text class="type-count" >{{item.count}}</text> -->
 					</view>
 				</view>
 			</block>

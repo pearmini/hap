@@ -8,24 +8,20 @@ Page({
       {
         name: '景点',
         value: 0,
-        imageURL: '/assets/images/view.png',
-        count: 0,
+        imageURL: 'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/app/view.png?sign=2911bb9f9c296cea4394833a0e65342d&t=1597499275',
       },
       {
         name: '画家',
         value: 1,
-        imageURL: '/assets/images/art.png',
-        count: 0,
+        imageURL: 'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/app/art.png?sign=f3363efeaa1f6d0f45155844c6e3926e&t=1597499237',
       },
       {
         name: '骇客',
         value: 2,
-        imageURL: '/assets/images/code.png',
-        count: 0,
+        imageURL: 'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/app/code.png?sign=86e4dbdc588c19a10d0cb5696d53590a&t=1597499261',
       },
     ],
     showSearchIcon: true,
-    styles: {},
     pageHeight: 0,
     cardList: [
       {
@@ -33,11 +29,11 @@ Page({
         data: [],
       },
       {
-        index: 1,
+        index: 0,
         data: [],
       },
       {
-        index: 2,
+        index: 0,
         data: [],
       },
     ],
@@ -49,18 +45,6 @@ Page({
       pageHeight: windowHeight,
     });
   },
-
-  onReady: async function () {
-    const res = await discoveryModel.count();
-    this.setData({
-      typeList: this.data.typeList.map((d, index) => ({
-        ...d,
-        count: res[index],
-      })),
-    });
-  },
-
-  onUnload: function () {},
 
   onPullDownRefresh: function () {},
 

@@ -22,24 +22,5 @@ export default {
         data: painterStyles,
       };
     }
-  },
-  count: async function () {
-    const {list} = await request({
-      method: 'db',
-      name: 'getViewCount',
-      options: {
-        query: (db) => {
-          return db
-            .collection('views')
-            .aggregate()
-            .match({
-              type: 0,
-            })
-            .count('count')
-            .end();
-        },
-      },
-    });
-    return [list[0].count, painterStyles.length, hackerStyles.length];
-  },
+  }
 };

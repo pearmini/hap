@@ -1,0 +1,43 @@
+<view class="container">
+	<view class="header">
+		<view class='save-icon'>
+			<wux-icon type="ios-save" />
+		</view>
+	</view>
+	<view class="body">
+		<canvas
+		 canvas-id="app-canvas"
+		 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
+		 class="canvas"
+		></canvas>
+		<!-- <view class='btn-group'>
+			<wux-button type="positive">选择背景
+			</wux-button>
+			<wux-button type="positive" bind:click="handleUploadSelf">上传自拍
+			</wux-button>
+		</view> -->
+	</view>
+	<view class="footer">滤镜</view>
+</view>
+<!-- <canvas
+	 type="2d"
+	 id="app-canvas"
+	 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
+	></canvas>
+	<view class="button">
+		<button
+		 block
+		 type="positive"
+		 bind:tap="handleUpload"
+		>上传照片
+		</button>
+	</view>
+	<view class="button">
+		<button
+		 block
+		 type="positive"
+		 bind:tap="handleDraw"
+		>开始绘制
+		</button>
+	</view> -->
+

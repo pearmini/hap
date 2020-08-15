@@ -1,4 +1,48 @@
+page {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.banner-image {
+  width: 100%;
+  height: 50%;
+  position: relative;
+  border-radius: 0 0 50rpx 50rpx;
+}
+
+.body {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  font-size: 75rpx;
+  margin-top: 30rpx;
+  transition: all 0.5s;
+  font-family: 'webfont' !important;
+}
+
+.sub-title {
+  margin-top: 30rpx;
+  font-size: 30rpx;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .button {
-  width: 300rpx;
-  margin: 0 auto;
+  margin: 30rpx 30rpx 0 30rpx;
 }

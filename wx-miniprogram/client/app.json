@@ -4,9 +4,13 @@
     "pages/discovery/index",
     "pages/my/index",
     "pages/pictures/index",
-    "pages/detail/index"
+    "pages/detail/index",
+    "pages/draw/index"
   ],
-  "usingComponents": {},
+  "usingComponents": {
+    "wux-button": "./lib/wux-weapp/button/index",
+    "wux-icon": "./lib/wux-weapp/icon/index"
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",

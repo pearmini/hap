@@ -1,25 +1,34 @@
-<view class="page">
-	<canvas canvas-id="app-canvas" style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"></canvas>
-	<canvas
-	 type="2d"
-	 id="app-canvas"
-	 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
-	></canvas>
-	<view class="button">
-		<button
-		 block
-		 type="positive"
-		 bind:tap="handleUpload"
-		>上传照片
-		</button>
-	</view>
-	<view class="button">
-		<button
-		 block
-		 type="positive"
-		 bind:tap="handleDraw"
-		>开始绘制
-		</button>
+<view class="container">
+	<image
+	 class="banner-image"
+	 src="/assets/images/banner.png"
+	 mode="widthFix"
+	/>
+	<view class="body">
+		<view class="title">画家与骇客</view>
+		<view class="sub-title">上海那么大，让艺术和算法带你去看看!</view>
+		<view class="button-group">
+			<view class="button">
+				<wux-button
+				 block
+				 type="positive"
+				 bindtap="handleDraw"
+				>
+					<wux-icon type="ios-brush" size="16"></wux-icon>
+					绘制
+				</wux-button>
+			</view>
+			<view class="button">
+				<wux-button
+				 block
+				 type="positive"
+				 bindtap="handleDicovery"
+				>
+					<wux-icon type="ios-rocket" size="16"></wux-icon>
+					发现
+				</wux-button>
+			</view>
+		</view>
 	</view>
 </view>
 

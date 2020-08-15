@@ -35,8 +35,7 @@ page {
 
 .header-text {
   font-weight: bold;
-  font-size: 27px;
-  color: #fff;
+  font-size: 55rpx;
 }
 
 .search-container {
@@ -66,20 +65,22 @@ page {
   background-color: #f5b264;
   transform: translateX(50%);
   right: 0;
-  top: 50%;
+  top: -50%;
   border-radius: 50%;
-  z-index: 3;
 }
 
-.count-wrapper {
+.info-wrapper {
   position: relative;
+  background: white;
+  z-index: 10;
+  height: 110rpx;
+  border-radius: 55rpx;
+  padding: 0 30rpx;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  background-color: #fff;
-  height: 78rpx;
-  z-index: 5;
-  border-radius: 20rpx;
+  font-size: 30rpx;
 }
 
 .count-item {
@@ -153,7 +154,7 @@ page {
   position: relative;
   height: 210rpx;
   width: 100%;
-  background: #fff;
+  background: #c9c4c3;
   border-radius: 0 105rpx 105rpx 0;
   left: -7rpx;
   transition: all 0.5s;
@@ -186,12 +187,12 @@ page {
 }
 
 .type-name {
-  font-size: 20px;
+  font-size: 40rpx;
   transition: all 0.5s;
 }
 
 .type-count {
-  font-size: 15px;
+  font-size: 30rpx;
   margin-left: 0.5em;
 }
 
@@ -263,9 +264,13 @@ page {
 }
 
 .card-name {
-  font-size: 20px;
+  font-size: 40rpx;
   font-weight: bold;
   margin-right: 0.5em;
+}
+
+.card-info {
+  font-size: 30rpx;
 }
 
 .card-image {
