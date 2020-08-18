@@ -1,5 +1,6 @@
-//app.js
 App({
-  globalData: {},
+  globalData: {
+    selectedViewImagePath: '',
+  },
   towxml: require('/towxml/index'),
 });

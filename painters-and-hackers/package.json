@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "node dev.js",
+    "dev": "node scripts/dev.js",
     "build": "npx webpack"
   },
   "keywords": [],

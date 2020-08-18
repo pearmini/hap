@@ -17,26 +17,115 @@ page {
   justify-content: flex-end;
 }
 
-.save-icon{
+.save-icon {
   margin-right: 40rpx;
 }
 
 .body {
-  height: 70%;
+  height: 65%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.btn-group {
-  margin-top: 30rpx;
-  width: 50%;
+.canvas-wrapper {
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
+}
+
+.canvas {
+  transition: all 0.5s;
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  transition: all 0.5s;
+}
+
+.expand {
   justify-content: space-between;
+  flex-direction: row;
+}
+
+.close {
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 20%;
+}
+
+.button {
+  padding: 5rpx 20rpx;
+}
+
+.filter-container {
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  display: flex;
+  transition: all 0.5s;
+}
+
+.filter-image {
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.filter-label {
+  margin: 15rpx 0;
+  font-size: 25rpx;
+}
+
+.image {
+  float: left;
+  width: 120rpx;
+  height: 120rpx;
+  margin-right: 20rpx;
+  border-radius: 10rpx;
+}
+
+.segmented {
+  width: 100%;
+}
+
+.filter {
+  height: 100%;
+  width: 100%;
+}
+
+.clear {
+  margin: 0 !important;
 }
 
 .footer {
   width: 100%;
-  height: 20%;
+  height: 25%;
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  justify-content: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.full {
+  width: 80%;
+}
+
+.hide {
+  width: 0;
+  overflow: hidden;
 }

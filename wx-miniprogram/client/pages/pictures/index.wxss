@@ -1,1 +1,14 @@
-/* pages/index.wxss */
+page {
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+}
+
+.image {
+  width: 25%;
+  max-width: 25%;
+  min-width: 25%;
+}

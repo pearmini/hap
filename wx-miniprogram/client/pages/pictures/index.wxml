@@ -1,2 +1,13 @@
-<!--pages/index.wxml-->
-<text>pages/index.wxml</text>
+<view class="container">
+	<block wx:for="{{list}}" wx:key="{{item._id}}">
+		<image
+		 class="image"
+		 src="{{item.imageURL}}"
+		 style="height:{{pageWidth / 4}}px"
+		 mode="aspectFill"
+		 data-index="{{index}}"
+		 bindtap="handleClickImage"
+		/>
+	</block>
+</view>
+

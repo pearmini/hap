@@ -4,6 +4,7 @@ import grid from '../../utils/grid';
 export default {
   namspace: 'vector',
   frameRate: 30,
+  labels: ['数据结构'],
   frames(imageData, width, height) {
     const {cellRow, cellCol} = grid(width, height, 20);
     const x = (i) => ((i % cellCol) * (imageData.width / cellCol)) | 0;
@@ -25,10 +26,10 @@ export default {
       const totalCnt = cellRow * cellCol;
       const actions = [];
       let currentCnt = 0;
-      
+
       while (currentCnt < totalCnt) {
         // 在后面加入
-        const potentialCnt = Math.random() * 30 | 0;
+        const potentialCnt = (Math.random() * 30) | 0;
         const appendCnt = Math.min(totalCnt - currentCnt, potentialCnt);
         currentCnt += appendCnt;
         for (let i = 0; i < appendCnt; i++) {

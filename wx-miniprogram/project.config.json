@@ -70,6 +70,12 @@
 					"name": "pages/draw/index",
 					"pathName": "pages/draw/index",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/pictures/index",
+					"pathName": "pages/pictures/index",
+					"scene": null
 				}
 			]
 		}

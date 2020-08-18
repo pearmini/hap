@@ -10,34 +10,73 @@
 		 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
 		 class="canvas"
 		></canvas>
-		<!-- <view class='btn-group'>
-			<wux-button type="positive">选择背景
-			</wux-button>
-			<wux-button type="positive" bind:click="handleUploadSelf">上传自拍
-			</wux-button>
-		</view> -->
 	</view>
-	<view class="footer">滤镜</view>
+	<view class="footer {{view.imagePath && self.imagePath ? 'space-between' : 'center'}}">
+		<view class="btn-group {{view.imagePath && self.imagePath ? 'close' : 'expand'}}">
+			<view class="button">
+				<wux-button type="positive" bind:click="handleSelectImage">
+					<wux-icon type="ios-image" size="{{16}}"></wux-icon>
+					{{view.imagePath ? '' : '选择背景'}}
+				</wux-button>
+			</view>
+			<view class="button">
+				<wux-button type="positive" bind:click="handleUploadSelf">
+					<wux-icon type="ios-body" size="{{16}}"></wux-icon>
+					{{self.imagePath ? '' : '上传自拍'}}
+				</wux-button>
+			</view>
+		</view>
+		<view class="filter-container {{view.imagePath && self.imagePath ? 'full' : 'hide'}}">
+			<view class="segmented">
+				<wux-segmented-control
+				 theme="positive"
+				 values="{{ filterNames }}"
+				 wux-class="clear"
+				/>
+			</view>
+			<view class="filter">
+				<view class="filter-label">
+					<block wx:for="{{filters[selectedFilterType].labels}}" wx:key="item">
+						<text>{{item}}</text>
+					</block>
+				</view>
+				<view class="filter-image">
+					<block wx:for="{{filters[selectedFilterType].styles}}" wx:key="item._id">
+						<image
+						 src="{{item.imageURL}}"
+						 class="image"
+						 mode="aspectFill"
+						 bindtap="handleDraw"
+						 data-index="{{index}}"
+						/>
+					</block>
+				</view>
+			</view>
+		</view>
+
+	</view>
 </view>
 <!-- <canvas
-	 type="2d"
-	 id="app-canvas"
-	 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
-	></canvas>
-	<view class="button">
-		<button
-		 block
-		 type="positive"
-		 bind:tap="handleUpload"
-		>上传照片
-		</button>
-	</view>
-	<view class="button">
-		<button
-		 block
-		 type="positive"
-		 bind:tap="handleDraw"
-		>开始绘制
-		</button>
-	</view> -->
+	 type="
+		 2d"
+		 id="app-canvas"
+		 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
+		></canvas>
+			<view class="button">
+				<button
+				 block
+				 type="positive"
+				 bind:tap="handleUpload"
+				>上传照片
+				</button>
+			</view>
+			<view class="button">
+				<button
+				 block
+				 type="positive"
+				 bind:tap="handleDraw"
+				>开始绘制
+				</button>
+			</view>
+			-->
 

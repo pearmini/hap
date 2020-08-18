@@ -1,5 +1,7 @@
 import styles from './style';
 
+const labels = styles.reduce((total, cur) => [...total, ...cur.labels], []);
+
 export default function () {
   let size = [300, 150],
     timer = null,
@@ -8,7 +10,8 @@ export default function () {
     style = '',
     end = () => {},
     hacker = {},
-    defaultStyles = styles;
+    defaultStyles = styles,
+    defaultLabels = Array.from(new Set(labels));
 
   hacker.canvas = function (_) {
     return arguments.length ? ((canvas = _), hacker) : canvas;
@@ -32,6 +35,10 @@ export default function () {
 
   hacker.styles = function (_) {
     return arguments.length ? ((style = _), hacker) : styles;
+  };
+
+  hacker.labels = function (_) {
+    return arguments.length ? ((defaultLabels = _), hacker) : defaultLabels;
   };
 
   hacker.start = function () {
