@@ -1,18 +1,21 @@
 export default class LinkedListNode {
-  constructor(data) {
+  constructor(data, pred=null, succ=null) {
     this.data = data;
-    this.next = null;
+    this.pred = pred;
+    this.succ = succ;
   }
 
-  insertAsNext(data) {
-    const node = new LinkedListNode(data);
-    node.next = this.next;
-    this.next = node;
+  insertAsSucc(data) {
+    const x = new LinkedListNode(data, this.pred, this);
+    this.succ.pred = x;
+    this.succ.x = x;
+    return x;
   }
 
-  deleteNext() {
-    const deleteNode = this.next;
-    this.next = deleteNode.next;
-    return deleteNode.data;
+  insertAsPred(data){
+    const x = new LinkedListNode(data, this.pred, this);
+    this.pred.succ = x;
+    this.pred = x;
+    return x;
   }
 }

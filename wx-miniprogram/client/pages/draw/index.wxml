@@ -1,8 +1,8 @@
 <view class="container">
 	<view class="header">
-		<view class='save-icon'>
+		<!-- <view class='save-icon'>
 			<wux-icon type="ios-save" />
-		</view>
+		</view> -->
 	</view>
 	<view class="body">
 		<canvas

@@ -4,7 +4,8 @@ export default class LinkedList {
   constructor() {
     this.header = new LinkedListNode();
     this.trailer = new LinkedListNode();
-    this.header.next = this.trailer;
+    this.header.succ = this.trailer;
+    this.trailer.pred = this.header;
     this._size = 0;
   }
 
@@ -12,10 +13,14 @@ export default class LinkedList {
     return this.header.next;
   }
 
+  last() {
+    return this.trailer.pred;
+  }
+
   get(rank) {
     if (rank < 0 || rank >= this._size) return null;
     let node = this.first();
-    while (0 < rank--) node = node.next;
+    while (0 < rank--) node = node.succ;
     return node.data;
   }
 
@@ -23,27 +28,39 @@ export default class LinkedList {
     if (rank < 0 || rank >= this._size)
       throw new Error('list index out of bounds');
     let node = this.first();
-    while (0 < rank--) node = node.next;
+    while (0 < rank--) node = node.succ;
     node.data = data;
+  }
+
+  append(data) {
+    this._size++;
+    this.trailer.insertAsPred(data);
+  }
+
+  unshift(data) {
+    this._size++;
+    this.header.insertAsSucc(data);
   }
 
   insert(node, data) {
     node.insertAsNext(data);
+    this._size++;
   }
 
   remove(node) {
-    return node.deleteNext();
+    this._size--;
+    node.pred.succ = node.succ;
+    node.succ.pred = node.pred;
+    return node.data;
   }
 
   isEmpty() {
     return this._size <= 0;
   }
 
-  traverse(callback) {
-    let node = this.header;
-    while (node) {
-      callback(node.data);
-      node = node.next;
+  traverse(visit) {
+    for (let p = this.first(); p != this.trailer; p = p.succ) {
+      visit(p.data);
     }
   }
 
@@ -52,11 +69,11 @@ export default class LinkedList {
   }
 
   toString(callback) {
-    let value = '';
+    const list = [];
     this.traverse((data) => {
-      const nodeString = callback ? callback(data) : `${data}`;
-      value += `${nodeString},`;
+      const nodeStr = callback ? callback(data) : `${data}`;
+      list.push(nodeStr);
     });
-    return value.slice(0, value.length - 1);
+    return list.join(',');
   }
 }

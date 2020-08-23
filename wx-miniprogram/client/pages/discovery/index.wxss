@@ -6,31 +6,22 @@ page {
 .container {
   width: 100%;
   height: 100%;
-  background: #fdd401;
-  position: relative;
   overflow: hidden;
 }
 
-.background {
-  position: absolute;
+.banner-image {
   width: 100%;
-  height: 80%;
-  top: 20%;
+  height: 30%;
+  border-radius: 0 0 50rpx 50rpx;
+  position: fixed;
 }
 
 .content {
   width: 100%;
   height: 100%;
-  overflow: auto;
-}
-
-.header {
-  position: fixed;
-  padding: 0rpx 15%;
-  height: 20%;
-  width: 70%;
-  z-index: 999;
-  background: #fdd401;
+  position: relative;
+  top: 30%;
+  overflow: hidden;
 }
 
 .header-text {
@@ -99,55 +90,23 @@ page {
   color: #aaa;
 }
 
-.body {
-  height: 80%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.big-circle {
+.type-container {
   position: absolute;
-  background: white;
-  border-radius: 50%;
-  left: 0;
-  top: 100%;
-  transform: translate(-50%, -50%);
+  height: 70%;
+  top: 0%;
+  z-index: 10;
   transition: all 0.5s;
-}
-
-.clip {
-  height: 200%;
-}
-
-.full {
-  height: 400%;
-}
-
-.small-circle {
-  position: absolute;
-  height: 80%;
-  background: #f5b264;
-  border-radius: 50%;
-  left: 0;
-  top: 100%;
-  transform: translate(-50%, -50%);
 }
 
 .type-wrapper {
-  width: 100%;
-  height: 90%;
-  position: absolute;
-  top: 20%;
-  z-index: 100;
-  transition: all 0.5s;
+  height: 80%;
+
 }
 
 .type-item {
   position: relative;
-  margin-bottom: 70rpx;
+  width: 100%;
+  margin-top: 50rpx;
 }
 
 .type-image {
@@ -161,7 +120,7 @@ page {
 }
 
 .show {
-  box-shadow: 7px 7px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 7px 7px 10px rgba(0, 0, 0, 0.2);
   opacity: 1;
 }
 
@@ -207,23 +166,13 @@ page {
   transform: translate(-50%, -100%);
 }
 
-.half-circle {
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: white;
-  height: 100rpx;
-  width: 100%;
-  z-index: 1;
-}
-
 .card-container {
-  position: relative;
   width: 100%;
-  z-index: 100;
-  overflow-y: auto;
-  overflow-x: hidden;
-  top: 22%;
+  height: 100%;
+  margin-top: 25rpx;
+  position: relative;
+  z-index: 5;
+  overflow: auto;
 }
 
 .card-wrapper {

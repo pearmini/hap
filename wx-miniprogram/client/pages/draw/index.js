@@ -151,15 +151,22 @@ Page({
   handleDraw: async function (e) {
     const {index} = e.target.dataset;
     console.log(index);
-
-    // 将 canvas 变成图片上传到服务器
-    const {tempFilePath} = await canvasToTempFilePath({
+    const imageData = await canvasGetImageData({
       canvasId: CAVANS_ID,
       x: 0,
       y: 0,
-      width: this.data.canvasWidth,
-      height: this.data.canvasHeight,
+      width,
+      height,
     });
+
+    // 将 canvas 变成图片上传到服务器
+    // const {tempFilePath} = await canvasToTempFilePath({
+    //   canvasId: CAVANS_ID,
+    //   x: 0,
+    //   y: 0,
+    //   width: this.data.canvasWidth,
+    //   height: this.data.canvasHeight,
+    // });
 
     // const {imageURL} = this.data.filters[this.data.selectedFilterType].styles[
     //   index

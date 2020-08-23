@@ -1,9 +1,10 @@
-<view class="container">
-	<view class="background">
-		<view class="big-circle {{selectedType !== -1 ? 'full':'clip'}}" style="width:{{selectedType === -1 ? pageHeight * 0.8 * 2 : pageHeight * 0.8 * 4}}px;"></view>
-		<view class="small-circle" style="width:{{pageHeight * 0.8 * 0.8}}px"></view>
-	</view>
-	<view class="content">
+<view class="container" bindtap="handleClickBody">
+	<image
+	 class="banner-image"
+	 src="/assets/images/banner.png"
+	 mode="aspectFill"
+	/>
+	<!-- <view class="content">
 		<view class="header" catchtap="handleClickBody">
 			<text class="header-text">{{selectedType === - 1?
             '所有': selectedType === 0 ? '景点' : selectedType === 1 ? '画家' :'骇客'}}</text>
@@ -26,9 +27,12 @@
 				</view>
 			</view>
 		</view>
+		
+	</view> -->
+	<view class="content">
 		<view class="card-container" wx:if="{{selectedType !== -1}}">
 			<view class='card-wrapper'>
-				<block wx:for="{{cardList[selectedType].data}}" wx:key="{{item.name}}">
+				<block wx:for="{{cardList[selectedType].data}}" wx:key="name">
 					<view
 					 class="card"
 					 catchtap="handleClickCard"
@@ -47,24 +51,24 @@
 				</block>
 			</view>
 		</view>
-	</view>
-	<view class="type-container">
-		<view class="type-wrapper {{selectedType === -1 ? 'long' : 'short'}}">
-			<block wx:for="{{typeList}}" wx:key="{{item.name}}">
-				<view class="type-item">
-					<image
-					 class="type-image {{selectedType === item.value || selectedType === -1 ? 'show' : 'hide'}}"
-					 src="{{item.imageURL}}"
-					 mode="aspectFill"
-					 catchtap="handleSelectType"
-					 data-type="{{index}}"
-					/>
-					<view class="type-info" style="opacity: {{selectedType === -1 ? 1: 0}}">
-						<text class="type-name" >{{item.name}}</text>
-						<!-- <text class="type-count" >{{item.count}}</text> -->
+		<view class="type-container {{selectedType === -1 ? 'long' : 'short'}}">
+			<view class="type-wrapper">
+				<block wx:for="{{typeList}}" wx:key="name">
+					<view class="type-item">
+						<image
+						 class="type-image {{selectedType === item.value || selectedType === -1 ? 'show' : 'hide'}}"
+						 src="{{item.imageURL}}"
+						 mode="aspectFill"
+						 catchtap="handleSelectType"
+						 data-type="{{index}}"
+						/>
+						<view class="type-info" style="opacity: {{selectedType === -1 ? 1: 0}}">
+							<text class="type-name" >{{item.name}}</text>
+							<text class="type-count" >{{item.count}}</text>
+						</view>
 					</view>
-				</view>
-			</block>
+				</block>
+			</view>
 		</view>
 	</view>
 </view>

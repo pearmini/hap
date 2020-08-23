@@ -5,7 +5,7 @@ export default {
   info: '乐园里潜藏着危机？',
   imageURL:
     'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/arts/%E4%BA%BA%E9%97%B4%E4%B9%90%E5%9B%AD/2.jpg?sign=9ed58b337a3a7994a83c96bd3178d4b9&t=1596769516',
-  fileID: '',
+  fileID: 'cloud://wechatcloud-79m2p.7765-wechatcloud-79m2p-1259642785/arts/人间乐园/readme.md',
   name: '人间乐园',
   type: 1,
 };

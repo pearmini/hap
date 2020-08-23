@@ -2,7 +2,7 @@
 	<image
 	 class="banner-image"
 	 src="/assets/images/banner.png"
-	 mode="widthFix"
+	 mode="aspectFill"
 	/>
 	<view class="body">
 		<view class="title">画家与骇客</view>
@@ -24,7 +24,7 @@
 				 type="positive"
 				 bindtap="handleDicovery"
 				>
-					<wux-icon type="ios-rocket" size="16"></wux-icon>
+					<wux-icon type="ios-airplane" size="16"></wux-icon>
 					发现
 				</wux-button>
 			</view>
