@@ -1,4 +1,5 @@
 import request from '../../utils/request';
+import promisify from '../../utils/promisify';
 
 export default {
   get: async function (item) {
@@ -54,14 +55,11 @@ export default {
                 type,
                 id,
               });
-          return db
-            .collection('users')
-            .doc(userInfoId)
-            .update({
-              data: {
-                likes,
-              },
-            })
+          return db.collection('users').doc(userInfoId).update({
+            data: {
+              likes,
+            },
+          });
         },
       },
     });

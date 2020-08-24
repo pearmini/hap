@@ -1,1 +1,73 @@
-/* pages/my/index.wxss */
+page {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.banner-image {
+  width: 100%;
+  height: 40%;
+  border-radius: 0 0 50rpx 50rpx;
+  filter: brightness(0.9);
+}
+
+.header-container {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 40%;
+  left: 0;
+  top: 0;
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 0px 3px rgba(255, 255, 255, 1);
+}
+
+.count {
+  margin-top: 30rpx;
+  display: flex;
+  align-items: center;
+}
+
+.count-text {
+  color: white;
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-left: 15rpx;
+}
+
+.card {
+  width: 80%;
+  height: 300rpx;
+  overflow: hidden;
+  border-radius: 30rpx;
+  margin: 50rpx auto;
+  background-color: #ffc900;
+}
+
+.title {
+  padding: 15rpx 20rpx;
+}
+
+.image {
+  width: 100%;
+}

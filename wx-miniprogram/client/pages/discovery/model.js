@@ -31,17 +31,24 @@ export default {
 
             const conditions = [name, labels]
               .filter((d) => d.value)
-              .reduce((total, cur) => (total[cur.key] = cur.value, total), {});
+              .reduce(
+                (total, cur) => ((total[cur.key] = cur.value), total),
+                {}
+              );
 
             if (Object.keys(conditions).length) {
               return db
                 .collection('views')
                 .where(conditions)
-                .skip(index)
+                .skip(index * MAX_COUNT)
                 .limit(MAX_COUNT)
                 .get();
             } else {
-              return db.collection('views').skip(index).limit(MAX_COUNT).get();
+              return db
+                .collection('views')
+                .skip(index * MAX_COUNT)
+                .limit(MAX_COUNT)
+                .get();
             }
           },
         },

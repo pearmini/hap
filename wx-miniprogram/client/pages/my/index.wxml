@@ -1,2 +1,40 @@
-<!--pages/my/index.wxml-->
-<text>pages/my/index.wxml</text>
+<view class="container">
+	<image
+	 class="banner-image"
+	 src="https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/app/banner.png?sign=66e8244f7dd66053d22341c57d4ed903&t=1598255451"
+	 mode="aspectFill"
+	/>
+	<view class="header-container">
+		<view class="wrapper">
+			<view class="avatar">
+				<open-data type="userAvatarUrl"></open-data>
+			</view>
+			<view class='count'>
+				<wux-icon
+				 class="star"
+				 type="ios-heart"
+				 size="40"
+				 color="#886aea"
+				></wux-icon>
+				<view class="count-text">{{count}}</view>
+			</view>
+		</view>
+	</view>
+	<block wx:for="{{likes}}" wx:key="_id">
+		<view
+		 class="card"
+		 data-index="{{index}}"
+		 bindtap="handleClickCard"
+		>
+			<view class="title">{{item.name}}</view>
+			<view class="body">
+				<image
+				 src="{{item.imageURL}}"
+				 mode="aspectFill"
+				 class="image"
+				/>
+			</view>
+		</view>
+	</block>
+</view>
+
