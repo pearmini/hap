@@ -65,12 +65,14 @@ page {
   width: 130%;
   overflow: hidden;
   margin-top: 30rpx;
+  height: 60rpx;
 }
 
 .label-wrapper {
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: auto;
   white-space: nowrap;
+  height: 100%;
 }
 
 .label {
@@ -80,7 +82,6 @@ page {
   color:#fff;
   padding: 5rpx 10rpx;
   border-radius: 10rpx;
-
 }
 
 .type-container {

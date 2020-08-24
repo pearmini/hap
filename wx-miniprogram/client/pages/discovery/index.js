@@ -239,4 +239,8 @@ Page({
       wx.hideLoading();
     }
   },
+
+  handleClickLabel: async function(e){
+    console.log(e);
+  }
 });

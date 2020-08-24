@@ -6,7 +6,6 @@ const CAVANS_ID = 'app-canvas';
 const chooseImage = promisify(wx.chooseImage);
 const getImageInfo = promisify(wx.getImageInfo);
 const canvasGetImageData = promisify(wx.canvasGetImageData);
-const canvasToTempFilePath = promisify(wx.canvasToTempFilePath);
 const {windowWidth, windowHeight} = wx.getSystemInfoSync();
 
 const fetchWechat = require('fetch-wechat');
@@ -149,15 +148,45 @@ Page({
   },
 
   handleDraw: async function (e) {
-    const {index} = e.target.dataset;
-    console.log(index);
-    const imageData = await canvasGetImageData({
-      canvasId: CAVANS_ID,
-      x: 0,
-      y: 0,
-      width,
-      height,
-    });
+    try {
+      wx.showLoading({
+        title: '绘制中',
+      });
+      const {index} = e.target.dataset;
+      const {canvasWidth, canvasHeight} = this.data;
+      const contentImageData = await canvasGetImageData({
+        canvasId: CAVANS_ID,
+        x: 0,
+        y: 0,
+        width: canvasWidth,
+        height: canvasHeight,
+      });
+
+      const {imageURL} = this.data.filters[this.data.selectedFilterType].styles[
+        index
+      ];
+
+      const {
+        width: styleImageCanvasWidth,
+        height: styleImageCanvasHeight,
+      } = await this.drawImageToCanvas(imageURL, 'style');
+
+      const styleImageData = await canvasGetImageData({
+        canvasId: CAVANS_ID,
+        x: 0,
+        y: 0,
+        width: styleImageCanvasWidth,
+        height: styleImageCanvasHeight,
+      });
+
+      console.log(contentImageData, styleImageData);
+
+      // const resultImageData = await styleTransfer(contentImageData, styleImageData);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      wx.hideLoading();
+    }
 
     // 将 canvas 变成图片上传到服务器
     // const {tempFilePath} = await canvasToTempFilePath({
@@ -168,9 +197,6 @@ Page({
     //   height: this.data.canvasHeight,
     // });
 
-    // const {imageURL} = this.data.filters[this.data.selectedFilterType].styles[
-    //   index
-    // ];
     // const params = {
     //   content: tempFilePath,
     //   style: imageURL,
@@ -229,58 +255,62 @@ Page({
   },
 
   combine: async function (self, view) {
-    if (!this.classifier.ready) {
-      wx.showLoading({
-        title: '分割中...',
-      });
-      this.shouldCombine = true;
-      return;
-    }
-
-    wx.showLoading({
-      title: '合并中...',
-    });
-    const {width, height} = self;
-    this.setData(
-      {
-        canvasWidth: width,
-        canvasHeight: height,
-      },
-      () => {
-        const ctx = wx.createCanvasContext(CAVANS_ID);
-        ctx.drawImage(view.imagePath, 0, 0, width, height);
-        ctx.draw(true, async () => {
-          const backgroundData = await canvasGetImageData({
-            canvasId: CAVANS_ID,
-            x: 0,
-            y: 0,
-            width,
-            height,
-          });
-
-          const segmentation = await this.classifier.detectBodySegmentation({
-            data: this.selfImagedata.data,
-            width: this.selfImagedata.width,
-            height: this.selfImagedata.height,
-          });
-
-          const maskImageData = this.classifier.toMaskImageData(
-            segmentation,
-            backgroundData
-          );
-
-          wx.canvasPutImageData({
-            canvasId: CAVANS_ID,
-            data: maskImageData.data,
-            x: 0,
-            y: 0,
-            width: maskImageData.width,
-            height: maskImageData.height,
-          });
-          wx.hideLoading();
+    try {
+      if (!this.classifier.ready) {
+        wx.showLoading({
+          title: '分割中...',
         });
+        this.shouldCombine = true;
+        return;
       }
-    );
+
+      wx.showLoading({
+        title: '合并中...',
+      });
+      const {width, height} = self;
+      this.setData(
+        {
+          canvasWidth: width,
+          canvasHeight: height,
+        },
+        () => {
+          const ctx = wx.createCanvasContext(CAVANS_ID);
+          ctx.drawImage(view.imagePath, 0, 0, width, height);
+          ctx.draw(true, async () => {
+            const backgroundData = await canvasGetImageData({
+              canvasId: CAVANS_ID,
+              x: 0,
+              y: 0,
+              width,
+              height,
+            });
+
+            const segmentation = await this.classifier.detectBodySegmentation({
+              data: this.selfImagedata.data,
+              width: this.selfImagedata.width,
+              height: this.selfImagedata.height,
+            });
+
+            const maskImageData = this.classifier.toMaskImageData(
+              segmentation,
+              backgroundData
+            );
+
+            wx.canvasPutImageData({
+              canvasId: CAVANS_ID,
+              data: maskImageData.data,
+              x: 0,
+              y: 0,
+              width: maskImageData.width,
+              height: maskImageData.height,
+            });
+            wx.hideLoading();
+          });
+        }
+      );
+    } catch (e) {
+      console.error(e);
+    }
   },
 
   getToDrawImageSize: async function (imageURL) {

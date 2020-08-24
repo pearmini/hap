@@ -17,9 +17,9 @@
 					 bindclear="handleClear"
 					></search-bar>
 					<view class="label-container">
-						<view class="label-wrapper" style="width:{{cardList[selectedType].labels.length * 100}}px">
+						<view class="label-wrapper">
 							<block wx:for="{{cardList[selectedType].labels}}" wx:key="item">
-								<text class="label">{{item}}</text>
+								<text class="label" bindtap="handleClickLabel" data-index="{{index}}">{{item}}</text>
 							</block>
 						</view>
 					</view>
