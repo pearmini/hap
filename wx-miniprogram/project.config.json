@@ -71,12 +71,20 @@
 					"id": -1,
 					"name": "pages/draw/index",
 					"pathName": "pages/draw/index",
+					"query": "",
 					"scene": null
 				},
 				{
 					"id": -1,
 					"name": "pages/pictures/index",
 					"pathName": "pages/pictures/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/my/index",
+					"pathName": "pages/my/index",
 					"scene": null
 				}
 			]

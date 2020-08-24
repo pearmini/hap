@@ -1,12 +1,19 @@
+import homeModel from './model';
+
 Page({
-  handleDraw(){
+  onLoad: async function () {
+    const res = await homeModel.login();
+    wx.setStorageSync('openid', res.result.openid);
+    wx.setStorageSync('userInfoId', res.result.userInfoId)
+  },
+  handleDraw() {
     wx.navigateTo({
       url: '/pages/draw/index',
-    })
+    });
   },
-  handleDicovery(){
+  handleDicovery() {
     wx.switchTab({
       url: '/pages/discovery/index',
-    })
-  }
+    });
+  },
 });

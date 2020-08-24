@@ -1,2 +1,4 @@
-<!--components/star/index.wxml-->
-<text>components/star/index.wxml</text>
+<view class="container" bindtap="handleTap">
+	<wux-icon type="ios-heart" color="{{isLike ? '#886aea' : '#fff'}}"></wux-icon>
+</view>
+

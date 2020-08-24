@@ -1,1 +1,6 @@
-/* pages/index.wxss */
+.star {
+  position: fixed;
+  z-index: 100;
+  right: 60rpx;
+  bottom: 60rpx;
+}

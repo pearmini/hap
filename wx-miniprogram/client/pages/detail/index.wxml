@@ -1,4 +1,7 @@
 <view class="container">
 	<towxml nodes="{{article}}" />
+	<view class="star">
+		<star bind:click="handleLike" isLike="{{isLike}}" />
+	</view>
 </view>
 

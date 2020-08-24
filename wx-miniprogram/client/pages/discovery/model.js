@@ -14,15 +14,29 @@ export default {
         method: 'db',
         name: 'getViewData',
         options: {
-          query: (db) => {
-            if (queryText) {
+          query: (db, $, _) => {
+            const name = {
+              key: 'name',
+              value: queryText
+                ? db.RegExp({
+                    regexp: queryText,
+                  })
+                : null,
+            };
+
+            const labels = {
+              key: 'labels',
+              value: queryLabel ? _.all([queryLabel]) : null,
+            };
+
+            const conditions = [name, labels]
+              .filter((d) => d.value)
+              .reduce((total, cur) => (total[cur.key] = cur.value, total), {});
+
+            if (Object.keys(conditions).length) {
               return db
                 .collection('views')
-                .where({
-                  name: db.RegExp({
-                    regexp: queryText,
-                  }),
-                })
+                .where(conditions)
                 .skip(index)
                 .limit(MAX_COUNT)
                 .get();
@@ -36,8 +50,9 @@ export default {
       return {
         data: painterStyles
           .slice(index, MAX_COUNT)
+          .filter((d) => (queryText ? d.name.search(queryText) !== -1 : d.name))
           .filter((d) =>
-            queryText ? d.name.search(queryText) !== -1 : d.name
+            queryLabel ? d.labels.indexOf(queryLabel) !== -1 : true
           ),
       };
     }

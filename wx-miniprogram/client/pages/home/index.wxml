@@ -11,7 +11,7 @@
 			<view class="button">
 				<wux-button
 				 block
-				 type="positive"
+				 type="royal"
 				 bindtap="handleDraw"
 				>
 					<wux-icon type="ios-brush" size="16"></wux-icon>
@@ -21,7 +21,7 @@
 			<view class="button">
 				<wux-button
 				 block
-				 type="positive"
+				 type="royal"
 				 bindtap="handleDicovery"
 				>
 					<wux-icon type="ios-airplane" size="16"></wux-icon>

@@ -240,7 +240,40 @@ Page({
     }
   },
 
-  handleClickLabel: async function(e){
-    console.log(e);
-  }
+  handleClickLabel: async function (e) {
+    try {
+      const {label} = e.target.dataset;
+
+      // 取消选择该 label
+      if (this.data.queryLabel === label) {
+        this.setData({
+          queryLabel: '',
+        });
+        return;
+      }
+
+      wx.showLoading({
+        title: '查询中...',
+      });
+
+      const {selectedType, cardList, queryText} = this.data;
+      const oldType = cardList[selectedType];
+      const {data} = await discoveryModel.get(
+        selectedType,
+        0,
+        queryText,
+        label
+      );
+      oldType.data = data;
+      oldType.index += data.length;
+      this.setData({
+        cardList,
+        queryLabel: label,
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      wx.hideLoading();
+    }
+  },
 });

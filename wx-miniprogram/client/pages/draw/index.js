@@ -104,8 +104,8 @@ Page({
       canvasId: CAVANS_ID,
       x: 0,
       y: 0,
-      width,
-      height,
+      width: width | 0,
+      height: height | 0,
     });
     const self = {
       ...this.data.self,
@@ -158,8 +158,8 @@ Page({
         canvasId: CAVANS_ID,
         x: 0,
         y: 0,
-        width: canvasWidth,
-        height: canvasHeight,
+        width: canvasWidth | 0,
+        height: canvasHeight | 0,
       });
 
       const {imageURL} = this.data.filters[this.data.selectedFilterType].styles[
@@ -175,11 +175,9 @@ Page({
         canvasId: CAVANS_ID,
         x: 0,
         y: 0,
-        width: styleImageCanvasWidth,
-        height: styleImageCanvasHeight,
+        width: styleImageCanvasWidth | 0,
+        height: styleImageCanvasHeight | 0,
       });
-
-      console.log(contentImageData, styleImageData);
 
       // const resultImageData = await styleTransfer(contentImageData, styleImageData);
     } catch (e) {
@@ -187,34 +185,6 @@ Page({
     } finally {
       wx.hideLoading();
     }
-
-    // 将 canvas 变成图片上传到服务器
-    // const {tempFilePath} = await canvasToTempFilePath({
-    //   canvasId: CAVANS_ID,
-    //   x: 0,
-    //   y: 0,
-    //   width: this.data.canvasWidth,
-    //   height: this.data.canvasHeight,
-    // });
-
-    // const params = {
-    //   content: tempFilePath,
-    //   style: imageURL,
-    // };
-    // wx.request({
-    //   url: 'https://api.deepai.org/api/fast-style-transfer',
-    //   data: params,
-    //   header: {
-    //     'content-type': 'application/x-www-form-urlencoded', //修改此处即可
-    //     'Api-Key': '79c92106-c2e4-4c9e-8835-585ffb6eba46',
-    //   },
-    //   success(res) {
-    //     console.log(res.data);
-    //   },
-    //   error: console.error,
-    // });
-
-    // console.log(tempFilePath);
 
     // if (this.data.selectedFilterType === 0) {
     //   const {imageURL} = this.data.filters[this.data.selectedFilterType].styles[
@@ -281,8 +251,8 @@ Page({
               canvasId: CAVANS_ID,
               x: 0,
               y: 0,
-              width,
-              height,
+              width: width | 0,
+              height: height | 0,
             });
 
             const segmentation = await this.classifier.detectBodySegmentation({
@@ -310,6 +280,11 @@ Page({
       );
     } catch (e) {
       console.error(e);
+      wx.hideLoading();
+      wx.showToast({
+        title: '出现了一点问题～',
+        icon: 'none',
+      });
     }
   },
 

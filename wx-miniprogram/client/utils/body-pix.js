@@ -26,7 +26,7 @@ export default class Classifier {
     const tensor = tf.tidy(() => {
       const temp = tf.tensor(new Uint8Array(frame.data), [
         frame.height,
-        frame.width,
+        frame.width ,
         4,
       ]);
       const sliceOptions = {
