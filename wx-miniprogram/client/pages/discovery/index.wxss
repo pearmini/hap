@@ -6,101 +6,88 @@ page {
 .container {
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
-.banner-image {
+.banner {
   width: 100%;
   height: 30%;
   border-radius: 0 0 50rpx 50rpx;
   position: fixed;
+  z-index: 10;
+  overflow: hidden;
+  box-shadow: 0px 10px 0px 5px rgba(255, 255, 255, 1);
 }
 
-.content {
+.banner-image {
   width: 100%;
   height: 100%;
-  position: relative;
-  top: 30%;
-  overflow: hidden;
 }
 
-.header-text {
-  font-weight: bold;
-  font-size: 55rpx;
-}
-
-.search-container {
-  position: relative;
-  margin-top: 15rpx;
-}
-
-.search-wrapper {
+.banner-wrapper {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 11;
   display: flex;
-  align-items: center;
-  background-color: #fff;
-  height: 78rpx;
-  border-radius: 39rpx;
-  padding: 0 39rpx;
-  position: relative;
-  z-index: 5;
 }
 
-.search-icon {
-  position: absolute;
+.banner-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 
-.search-circle {
-  position: absolute;
-  width: 80rpx;
-  height: 80rpx;
-  background-color: #f5b264;
-  transform: translateX(50%);
-  right: 0;
-  top: -50%;
-  border-radius: 50%;
+.banner-content text {
+  margin-bottom: 10rpx;
 }
 
-.info-wrapper {
-  position: relative;
-  background: white;
-  z-index: 10;
-  height: 110rpx;
-  border-radius: 55rpx;
-  padding: 0 30rpx;
+.banner-title {
+  color: #fff;
+  font-family: 'webfont' !important;
+  font-weight: bold;
+  font-size: 100rpx;
+}
+
+.banner-search {
+  width: 60%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 30rpx;
+  margin-bottom: 50rpx;
 }
 
-.count-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.label-container {
+  width: 130%;
+  overflow: hidden;
+  margin-top: 30rpx;
 }
 
-.count-value {
-  font-size: 22px;
-  font-weight: bold;
+.label-wrapper {
+  overflow-y: auto;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
-.count-name {
-  font-size: 12px;
-  color: #aaa;
+.label {
+  font-size: 25rpx;
+  margin-left: 10rpx;
+  background:#ffc900;
+  color:#fff;
+  padding: 5rpx 10rpx;
+  border-radius: 10rpx;
+
 }
 
 .type-container {
-  position: absolute;
-  height: 70%;
-  top: 0%;
-  z-index: 10;
+  position: fixed;
+  top: 30%;
+  z-index: 5;
   transition: all 0.5s;
-}
-
-.type-wrapper {
-  height: 80%;
-
 }
 
 .type-item {
@@ -178,6 +165,9 @@ page {
 .card-wrapper {
   width: 85%;
   float: right;
+  position: relative;
+  z-index: 2;
+  /* margin-bottom: 400rpx; */
 }
 
 .card {

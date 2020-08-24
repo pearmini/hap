@@ -8,7 +8,7 @@ export default function () {
     defaultLabels = Array.from(new Set(labels));
 
   painter.styles = function (_) {
-    return arguments.length ? ((defaultStyles = _), painter) : styles;
+    return arguments.length ? ((defaultStyles = _), painter) : defaultStyles;
   };
 
   painter.labels = function (_) {

@@ -1,75 +1,70 @@
-<view class="container" bindtap="handleClickBody">
-	<image
-	 class="banner-image"
-	 src="/assets/images/banner.png"
-	 mode="aspectFill"
-	/>
-	<!-- <view class="content">
-		<view class="header" catchtap="handleClickBody">
-			<text class="header-text">{{selectedType === - 1?
-            '所有': selectedType === 0 ? '景点' : selectedType === 1 ? '画家' :'骇客'}}</text>
-			<view class="search-container">
-				<view class="search-circle"></view>
-				<view wx:if="{{selectedType !== -1}}" class="search-wrapper">
-					<icon
-					 class="search-icon"
-					 type="search"
-					 wx:if="{{showSearchIcon}}"
-					/>
-					<input
-					 class="search-input"
-					 bindfocus="handleFocus"
+<view class="container">
+	<view class="banner">
+		<image
+		 class="banner-image"
+		 src="https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/app/banner.png?sign=66e8244f7dd66053d22341c57d4ed903&t=1598255451"
+		 mode="aspectFill"
+		 style="filter: brightness({{isFocus ? 0.6 : 1}})"
+		/>
+		<view class="banner-wrapper">
+			<view class="banner-content">
+				<view wx:if="{{selectedType !== -1}}" class="banner-search">
+					<search-bar
+					 placeholder="{{selectedType === 0 ? '上海景点' : selectedType === 1 ? '画家':'黑客'}}"
 					 bindblur="handleBlur"
-					></input>
-				</view>
-				<view wx:else class="info-wrapper">
-					<view>这里有一些上海景点，以及绘制滤镜所涉及的艺术品和算法的介绍。</view>
-				</view>
-			</view>
-		</view>
-		
-	</view> -->
-	<view class="content">
-		<view class="card-container" wx:if="{{selectedType !== -1}}">
-			<view class='card-wrapper'>
-				<block wx:for="{{cardList[selectedType].data}}" wx:key="name">
-					<view
-					 class="card"
-					 catchtap="handleClickCard"
-					 data-index="{{index}}"
-					>
-						<view class='card-text'>
-							<view class='card-name'>{{item.name}}</view>
-							<view class='card-info'>{{item.info}}</view>
-						</view>
-						<image
-						 src="{{item.imageURL}}"
-						 class="card-image"
-						 mode="aspectFill"
-						/>
-					</view>
-				</block>
-			</view>
-		</view>
-		<view class="type-container {{selectedType === -1 ? 'long' : 'short'}}">
-			<view class="type-wrapper">
-				<block wx:for="{{typeList}}" wx:key="name">
-					<view class="type-item">
-						<image
-						 class="type-image {{selectedType === item.value || selectedType === -1 ? 'show' : 'hide'}}"
-						 src="{{item.imageURL}}"
-						 mode="aspectFill"
-						 catchtap="handleSelectType"
-						 data-type="{{index}}"
-						/>
-						<view class="type-info" style="opacity: {{selectedType === -1 ? 1: 0}}">
-							<text class="type-name" >{{item.name}}</text>
-							<text class="type-count" >{{item.count}}</text>
+					 bindfocus="handleFocus"
+					 bindconfirm="handleConfirm"
+					 bindclear="handleClear"
+					></search-bar>
+					<view class="label-container">
+						<view class="label-wrapper" style="width:{{cardList[selectedType].labels.length * 100}}px">
+							<block wx:for="{{cardList[selectedType].labels}}" wx:key="item">
+								<text class="label">{{item}}</text>
+							</block>
 						</view>
 					</view>
-				</block>
+				</view>
 			</view>
 		</view>
+	</view>
+	<view class='card-wrapper' style="margin-top:{{pageHeight * 0.3 + 20}}px">
+		<view class="empty" wx:if="{{cardList[selectedType].data.length === 0 && !isLoading}}">
+			没有数据
+		</view>
+		<block wx:for="{{cardList[selectedType].data}}" wx:key="name">
+			<view
+			 class="card"
+			 catchtap="handleClickCard"
+			 data-index="{{index}}"
+			>
+				<view class='card-text'>
+					<view class='card-name'>{{item.name}}</view>
+					<view class='card-info'>{{item.info}}</view>
+				</view>
+				<image
+				 src="{{item.imageURL}}"
+				 class="card-image"
+				 mode="aspectFill"
+				/>
+			</view>
+		</block>
+	</view>
+	<view class="type-container {{selectedType === -1 ? 'long' : 'short'}}">
+		<block wx:for="{{typeList}}" wx:key="name">
+			<view class="type-item">
+				<image
+				 class="type-image {{selectedType === item.value || selectedType === -1 ? 'show' : 'hide'}}"
+				 src="{{item.imageURL}}"
+				 mode="aspectFill"
+				 catchtap="handleSelectType"
+				 data-type="{{index}}"
+				/>
+				<view class="type-info" style="opacity: {{selectedType === -1 ? 1: 0}}">
+					<text class="type-name" >{{item.name}}</text>
+					<text class="type-count" >{{item.count}}</text>
+				</view>
+			</view>
+		</block>
 	</view>
 </view>
 

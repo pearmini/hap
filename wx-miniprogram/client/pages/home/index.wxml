@@ -1,7 +1,7 @@
 <view class="container">
 	<image
 	 class="banner-image"
-	 src="/assets/images/banner.png"
+	 src="https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/app/banner.png?sign=66e8244f7dd66053d22341c57d4ed903&t=1598255451"
 	 mode="aspectFill"
 	/>
 	<view class="body">

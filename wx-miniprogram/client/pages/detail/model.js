@@ -9,7 +9,7 @@ export default {
         item.info
       } \n## 相关介绍 \n${
         item.des
-      } \n## 数据来源 \n- 上海图书馆知识竞赛 \n- 百度百科`;
+      } \n## 数据来源 \n- 上海图书馆知识竞赛 ${item.isRed ? '' : '\n- 百度百科'}`;
     } else {
       const fileSystemManager = wx.getFileSystemManager();
       const readFile = promisify(fileSystemManager.readFile);

@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "search-bar":"../../components/search-bar/index"
+  },
   "navigationStyle": "custom"
 }

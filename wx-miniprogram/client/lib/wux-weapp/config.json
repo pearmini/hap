@@ -1,0 +1,10 @@
+{
+    "components": [
+        "button",
+        "icon",
+        "segmented-control",
+        "fab-button",
+        "search-bar"
+    ],
+    "themes": {}
+}

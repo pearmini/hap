@@ -7,12 +7,16 @@ const $ = db.command.aggregate;
 
 export default async function ({method, name, options}) {
   const getByMethod = {
-    fn: (options) => {},
+    fn: (options) => {
+      return wx.cloud.callFunction({
+        name: options.name,
+        data: options.data,
+      });
+    },
     db: (options) => {
       const {query} = options;
       return query(db, $);
     },
-    request: (options) => {},
     cloud: (options) => {
       const {name, ...rest} = options;
       const fn = promisify(wx.cloud[name]);
