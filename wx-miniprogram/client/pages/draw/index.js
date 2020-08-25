@@ -1,19 +1,25 @@
 import ph from '../../lib/painters-and-hackers.js';
 import promisify from '../../utils/promisify';
 import Classifier from '../../utils/body-pix';
+import UPNG from '../../lib/upng';
 
 const CAVANS_ID = 'app-canvas';
 const chooseImage = promisify(wx.chooseImage);
 const getImageInfo = promisify(wx.getImageInfo);
 const canvasGetImageData = promisify(wx.canvasGetImageData);
 const canvasPutImageData = promisify(wx.canvasPutImageData);
-const {windowWidth, windowHeight} = wx.getSystemInfoSync();
+const {
+  windowWidth,
+  windowHeight
+} = wx.getSystemInfoSync();
 
 const fetchWechat = require('fetch-wechat');
 const tf = require('@tensorflow/tfjs-core');
 const plugin = requirePlugin('tfjsPlugin');
 
 const app = getApp();
+
+
 
 Page({
   data: {
@@ -32,8 +38,7 @@ Page({
       width: 0,
       height: 0,
     },
-    filters: [
-      {
+    filters: [{
         name: '画家',
         labels: ph.painters().labels(),
         styles: ph.painters().styles(),
@@ -78,34 +83,53 @@ Page({
   },
 
   onShow: async function () {
-    const {selectedViewImagePath} = app.globalData;
+    const {
+      selectedViewImagePath
+    } = app.globalData;
     if (selectedViewImagePath) {
       app.globalData.selectedViewImagePath = '';
-      const {width, height, path} = await this.drawImageToCanvas(
+      const {
+        width,
+        height,
+        path
+      } = await this.drawImageToCanvas(
         selectedViewImagePath,
         'view'
       );
-      const {imagePath} = this.data.self;
-      const view = {width, height, imagePath: path};
+      const {
+        imagePath
+      } = this.data.self;
+      const view = {
+        width,
+        height,
+        imagePath: path
+      };
       imagePath && (await this.combine(this.data.self, view));
     }
   },
 
   handleChangeFilterType: function (e) {
-    const {key} = e.detail;
+    const {
+      key
+    } = e.detail;
     this.setData({
       selectedFilterType: key,
     });
   },
 
   handleUploadSelf: async function () {
-    const {tempFilePaths} = await chooseImage({
+    const {
+      tempFilePaths
+    } = await chooseImage({
       count: 1,
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
     });
     const selectedSelfImagePath = tempFilePaths[0];
-    const {width, height} = await this.drawImageToCanvas(
+    const {
+      width,
+      height
+    } = await this.drawImageToCanvas(
       selectedSelfImagePath,
       'self'
     );
@@ -123,7 +147,9 @@ Page({
         ...this.data.self,
         imageData,
       };
-      const {imagePath} = this.data.view;
+      const {
+        imagePath
+      } = this.data.view;
       this.selfImageData = imageData;
       imagePath && (await this.combine(self, this.data.view));
     }, 1000);
@@ -136,10 +162,13 @@ Page({
   },
 
   drawImageToCanvas: async function (imageURL, key) {
-    const {width, height, path} = await this.getToDrawImageSize(imageURL);
+    const {
+      width,
+      height,
+      path
+    } = await this.getToDrawImageSize(imageURL);
     return new Promise((resolve, reject) => {
-      this.setData(
-        {
+      this.setData({
           canvasWidth: width,
           canvasHeight: height,
           [key]: {
@@ -153,7 +182,11 @@ Page({
           const ctx = wx.createCanvasContext(CAVANS_ID);
           ctx.drawImage(path, 0, 0, width, height);
           ctx.draw(true, () => {
-            resolve({width, height, path});
+            resolve({
+              width,
+              height,
+              path
+            });
           });
         }
       );
@@ -166,15 +199,21 @@ Page({
       wx.showLoading({
         title: '绘制中',
       });
-      const {index} = e.target.dataset;
+      const {
+        index
+      } = e.target.dataset;
 
       if (this.data.selectedFilterType === 0) {
-        const {imageURL} = this.data.filters[
+        const {
+          imageURL
+        } = this.data.filters[
           this.data.selectedFilterType
         ].styles[index];
         await this.handleStyleTransfer(imageURL);
       } else {
-        const {name} = this.data.filters[this.data.selectedFilterType].styles[
+        const {
+          name
+        } = this.data.filters[this.data.selectedFilterType].styles[
           index
         ];
         await this.handleVisAnimation(name);
@@ -187,13 +226,17 @@ Page({
   },
 
   handleStyleTransfer: async function (imageURL) {
-    const {canvasWidth, canvasHeight} = this.data;
+    const {
+      canvasWidth,
+      canvasHeight
+    } = this.data;
+    let contentImageBase64, styleImageBase64;
     const contentImageData = await canvasGetImageData({
       canvasId: CAVANS_ID,
       x: 0,
       y: 0,
       width: canvasWidth | 0,
-      height: canvasHeight | 0,
+      height: canvasHeight | 0
     });
 
     const {
@@ -206,9 +249,39 @@ Page({
       x: 0,
       y: 0,
       width: styleImageCanvasWidth | 0,
-      height: styleImageCanvasHeight | 0,
+      height: styleImageCanvasHeight | 0
     });
+
+    await this.styleTransfer(contentImageData, styleImageData);
     // const resultImageData = await styleTransfer(contentImageData, styleImageData);
+  },
+
+  styleTransfer: async function (contentImageData, styleImageData) {
+    console.log(contentImageData, styleImageData);
+    let pngData = UPNG.encode([contentImageData.data.buffer], contentImageData.width, contentImageData.height);
+    let contentImageBase64 = "data:image/png;base64," + wx.arrayBufferToBase64(pngData);
+    pngData = UPNG.encode([styleImageData.data.buffer], styleImageData.width, styleImageData.height);
+    let styleImageBase64 = "data:image/png;base64," + wx.arrayBufferToBase64(pngData);
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://api.deepai.org/api/fast-style-transfer',
+        data: {
+          content: contentImageBase64,
+          style: styleImageBase64
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+          'api-key': '5159143e-01f9-4975-ae0b-b0c376ef1c64'
+        },
+        method: "POST",
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err)
+        }
+      })
+    })
   },
 
   handleVisAnimation: async function (name) {
@@ -268,9 +341,11 @@ Page({
       this.setData({
         isCombining: true,
       });
-      const {width, height} = self;
-      this.setData(
-        {
+      const {
+        width,
+        height
+      } = self;
+      this.setData({
           canvasWidth: width,
           canvasHeight: height,
         },
@@ -288,13 +363,11 @@ Page({
                 height: height | 0,
               });
 
-              const segmentation = await this.classifier.detectBodySegmentation(
-                {
-                  data: this.selfImageData.data,
-                  width: this.selfImageData.width,
-                  height: this.selfImageData.height,
-                }
-              );
+              const segmentation = await this.classifier.detectBodySegmentation({
+                data: this.selfImageData.data,
+                width: this.selfImageData.width,
+                height: this.selfImageData.height,
+              });
 
               const maskImageData = this.classifier.toMaskImageData(
                 segmentation,
@@ -332,7 +405,11 @@ Page({
   },
 
   getToDrawImageSize: async function (imageURL) {
-    const {width: imageWidth, height: imageHeight, path} = await getImageInfo({
+    const {
+      width: imageWidth,
+      height: imageHeight,
+      path
+    } = await getImageInfo({
       src: imageURL,
     });
     let width, height;
@@ -344,6 +421,10 @@ Page({
       width = windowWidth;
       height = (width * ratio) | 0;
     }
-    return {width: width | 0, height: height | 0, path};
+    return {
+      width: width | 0,
+      height: height | 0,
+      path
+    };
   },
 });
