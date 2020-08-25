@@ -1,4 +1,7 @@
 <view class="container">
+	<view class="empty" wx:if="{{cardList[selectedType].data.length === 0 && !isLoading}}">
+		<empty text="没有数据"></empty>
+	</view>
 	<view class="banner">
 		<image
 		 class="banner-image"
@@ -28,9 +31,6 @@
 		</view>
 	</view>
 	<view class='card-wrapper' style="margin-top:{{pageHeight * 0.3 + 20}}px">
-		<view class="empty" wx:if="{{cardList[selectedType].data.length === 0 && !isLoading}}">
-			没有数据
-		</view>
 		<block wx:for="{{cardList[selectedType].data}}" wx:key="name">
 			<view
 			 class="card"

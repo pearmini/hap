@@ -2,9 +2,12 @@ import homeModel from './model';
 
 Page({
   onLoad: async function () {
-    const res = await homeModel.login();
-    wx.setStorageSync('openid', res.result.openid);
-    wx.setStorageSync('userInfoId', res.result.userInfoId)
+    const openid = wx.getStorageSync('openid');
+    if (!openid) {
+      const res = await homeModel.login();
+      wx.setStorageSync('openid', res.result.OPENID);
+      wx.setStorageSync('userInfoId', res.result.userInfoId);
+    }
   },
   handleDraw() {
     wx.navigateTo({

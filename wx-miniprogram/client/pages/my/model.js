@@ -1,6 +1,5 @@
 import request from '../../utils/request';
 import ph from '../../lib/painters-and-hackers';
-import {op} from '@tensorflow/tfjs-core';
 
 const painterStyles = ph.painters().styles();
 const hackerStyles = ph.hackers().styles();
@@ -21,7 +20,7 @@ export default {
             .where({
               _id: _.in(viewLikes.map((d) => d.id)),
             })
-            .skip(index * MAX_COUNT)
+            .skip(index)
             .limit(MAX_COUNT)
             .get(),
       },

@@ -22,7 +22,7 @@ page {
 }
 
 .body {
-  height: 65%;
+  height: 70%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -57,7 +57,8 @@ page {
 
 .close {
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
   width: 20%;
 }
 
@@ -67,30 +68,22 @@ page {
 
 .filter-container {
   height: 100%;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   display: flex;
   transition: all 0.5s;
 }
 
-.filter-image {
-  width: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.filter-label {
-  margin: 15rpx 0;
-  font-size: 25rpx;
-}
 
 .image {
-  float: left;
   width: 120rpx;
   height: 120rpx;
   margin-right: 20rpx;
   border-radius: 10rpx;
+  display: inline-block;
+  line-height: 120rpx;
+  vertical-align: middle;
 }
 
 .segmented {
@@ -98,8 +91,10 @@ page {
 }
 
 .filter {
-  height: 100%;
   width: 100%;
+  margin-top: 10rpx;
+  white-space: nowrap;
+  overflow: auto;
 }
 
 .clear {
@@ -108,7 +103,7 @@ page {
 
 .footer {
   width: 100%;
-  height: 25%;
+  height: 20%;
   display: flex;
   align-items: center;
 }

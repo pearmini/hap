@@ -1,5 +1,7 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "empty": "../../components/empty/index"
+  },
   "navigationStyle": "custom",
   "enablePullDownRefresh": true
 }

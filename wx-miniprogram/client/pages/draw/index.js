@@ -6,6 +6,7 @@ const CAVANS_ID = 'app-canvas';
 const chooseImage = promisify(wx.chooseImage);
 const getImageInfo = promisify(wx.getImageInfo);
 const canvasGetImageData = promisify(wx.canvasGetImageData);
+const canvasPutImageData = promisify(wx.canvasPutImageData);
 const {windowWidth, windowHeight} = wx.getSystemInfoSync();
 
 const fetchWechat = require('fetch-wechat');
@@ -19,6 +20,8 @@ Page({
     canvasWidth: windowWidth,
     canvasHeight: windowWidth * 0.618,
     isDrawing: false,
+    isDone: false,
+    isCombining: false,
     self: {
       imagePath: '',
       width: 0,
@@ -84,8 +87,15 @@ Page({
       );
       const {imagePath} = this.data.self;
       const view = {width, height, imagePath: path};
-      imagePath && this.combine(this.data.self, view);
+      imagePath && (await this.combine(this.data.self, view));
     }
+  },
+
+  handleChangeFilterType: function (e) {
+    const {key} = e.detail;
+    this.setData({
+      selectedFilterType: key,
+    });
   },
 
   handleUploadSelf: async function () {
@@ -100,20 +110,23 @@ Page({
       'self'
     );
 
-    const imageData = await canvasGetImageData({
-      canvasId: CAVANS_ID,
-      x: 0,
-      y: 0,
-      width: width | 0,
-      height: height | 0,
-    });
-    const self = {
-      ...this.data.self,
-      imageData,
-    };
-    const {imagePath} = this.data.view;
-    imagePath && this.combine(self, this.data.view);
-    this.selfImagedata = imageData;
+    // 这里需要一点延迟在获得 ImageData
+    setTimeout(async () => {
+      const imageData = await canvasGetImageData({
+        canvasId: CAVANS_ID,
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+      });
+      const self = {
+        ...this.data.self,
+        imageData,
+      };
+      const {imagePath} = this.data.view;
+      this.selfImageData = imageData;
+      imagePath && (await this.combine(self, this.data.view));
+    }, 1000);
   },
 
   handleSelectImage: function () {
@@ -149,42 +162,57 @@ Page({
 
   handleDraw: async function (e) {
     try {
+      if (this.data.isDrawing || this.data.isCombining) return;
       wx.showLoading({
         title: '绘制中',
       });
       const {index} = e.target.dataset;
-      const {canvasWidth, canvasHeight} = this.data;
-      const contentImageData = await canvasGetImageData({
-        canvasId: CAVANS_ID,
-        x: 0,
-        y: 0,
-        width: canvasWidth | 0,
-        height: canvasHeight | 0,
-      });
 
-      const {imageURL} = this.data.filters[this.data.selectedFilterType].styles[
-        index
-      ];
-
-      const {
-        width: styleImageCanvasWidth,
-        height: styleImageCanvasHeight,
-      } = await this.drawImageToCanvas(imageURL, 'style');
-
-      const styleImageData = await canvasGetImageData({
-        canvasId: CAVANS_ID,
-        x: 0,
-        y: 0,
-        width: styleImageCanvasWidth | 0,
-        height: styleImageCanvasHeight | 0,
-      });
-
-      // const resultImageData = await styleTransfer(contentImageData, styleImageData);
+      if (this.data.selectedFilterType === 0) {
+        const {imageURL} = this.data.filters[
+          this.data.selectedFilterType
+        ].styles[index];
+        await this.handleStyleTransfer(imageURL);
+      } else {
+        const {name} = this.data.filters[this.data.selectedFilterType].styles[
+          index
+        ];
+        await this.handleVisAnimation(name);
+      }
     } catch (e) {
       console.error(e);
     } finally {
       wx.hideLoading();
     }
+  },
+
+  handleStyleTransfer: async function (imageURL) {
+    const {canvasWidth, canvasHeight} = this.data;
+    const contentImageData = await canvasGetImageData({
+      canvasId: CAVANS_ID,
+      x: 0,
+      y: 0,
+      width: canvasWidth | 0,
+      height: canvasHeight | 0,
+    });
+
+    const {
+      width: styleImageCanvasWidth,
+      height: styleImageCanvasHeight,
+    } = await this.drawImageToCanvas(imageURL, 'style');
+
+    const styleImageData = await canvasGetImageData({
+      canvasId: CAVANS_ID,
+      x: 0,
+      y: 0,
+      width: styleImageCanvasWidth | 0,
+      height: styleImageCanvasHeight | 0,
+    });
+    // const resultImageData = await styleTransfer(contentImageData, styleImageData);
+  },
+
+  handleVisAnimation: async function (name) {
+    console.log(name);
 
     // if (this.data.selectedFilterType === 0) {
     //   const {imageURL} = this.data.filters[this.data.selectedFilterType].styles[
@@ -228,7 +256,7 @@ Page({
     try {
       if (!this.classifier.ready) {
         wx.showLoading({
-          title: '分割中...',
+          title: '合并中...',
         });
         this.shouldCombine = true;
         return;
@@ -237,6 +265,9 @@ Page({
       wx.showLoading({
         title: '合并中...',
       });
+      this.setData({
+        isCombining: true,
+      });
       const {width, height} = self;
       this.setData(
         {
@@ -244,38 +275,47 @@ Page({
           canvasHeight: height,
         },
         () => {
-          const ctx = wx.createCanvasContext(CAVANS_ID);
-          ctx.drawImage(view.imagePath, 0, 0, width, height);
-          ctx.draw(true, async () => {
-            const backgroundData = await canvasGetImageData({
-              canvasId: CAVANS_ID,
-              x: 0,
-              y: 0,
-              width: width | 0,
-              height: height | 0,
-            });
+          // 需要设置一点延迟否者获得的 ImageData 有问题
+          setTimeout(async () => {
+            const ctx = wx.createCanvasContext(CAVANS_ID);
+            ctx.drawImage(view.imagePath, 0, 0, width, height);
+            ctx.draw(true, async () => {
+              const backgroundData = await canvasGetImageData({
+                canvasId: CAVANS_ID,
+                x: 0,
+                y: 0,
+                width: width | 0,
+                height: height | 0,
+              });
 
-            const segmentation = await this.classifier.detectBodySegmentation({
-              data: this.selfImagedata.data,
-              width: this.selfImagedata.width,
-              height: this.selfImagedata.height,
-            });
+              const segmentation = await this.classifier.detectBodySegmentation(
+                {
+                  data: this.selfImageData.data,
+                  width: this.selfImageData.width,
+                  height: this.selfImageData.height,
+                }
+              );
 
-            const maskImageData = this.classifier.toMaskImageData(
-              segmentation,
-              backgroundData
-            );
+              const maskImageData = this.classifier.toMaskImageData(
+                segmentation,
+                backgroundData
+              );
 
-            wx.canvasPutImageData({
-              canvasId: CAVANS_ID,
-              data: maskImageData.data,
-              x: 0,
-              y: 0,
-              width: maskImageData.width,
-              height: maskImageData.height,
+              await canvasPutImageData({
+                canvasId: CAVANS_ID,
+                data: maskImageData.data,
+                x: 0,
+                y: 0,
+                width: maskImageData.width,
+                height: maskImageData.height,
+              });
+
+              wx.hideLoading();
+              this.setData({
+                isCombining: false,
+              });
             });
-            wx.hideLoading();
-          });
+          }, 1000);
         }
       );
     } catch (e) {
@@ -284,6 +324,9 @@ Page({
       wx.showToast({
         title: '出现了一点问题～',
         icon: 'none',
+      });
+      this.setData({
+        isCombining: false,
       });
     }
   },
@@ -301,6 +344,6 @@ Page({
       width = windowWidth;
       height = (width * ratio) | 0;
     }
-    return {width, height, path};
+    return {width: width | 0, height: height | 0, path};
   },
 });

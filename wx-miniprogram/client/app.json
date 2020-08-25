@@ -18,22 +18,28 @@
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "color": "#999",
-    "selectedColor": "#ff6666",
+    "color": "#333",
+    "selectedColor": "#886aea",
     "backgroundColor": "#f7f7f7",
     "borderStyle": "black",
     "list": [
       {
         "pagePath": "pages/discovery/index",
-        "text": "发现"
+        "text": "发现",
+        "iconPath": "./assets/icons/gift.png",
+        "selectedIconPath": "./assets/icons/gift-fill.png"
       },
       {
         "pagePath": "pages/home/index",
-        "text": "首页"
+        "text": "首页",
+        "iconPath": "./assets/icons/home.png",
+        "selectedIconPath": "./assets/icons/home-fill.png"
       },
       {
         "pagePath": "pages/my/index",
-        "text": "个人"
+        "text": "喜欢",
+        "iconPath": "./assets/icons/heart.png",
+        "selectedIconPath": "./assets/icons/heart-fill.png"
       }
     ]
   },

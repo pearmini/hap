@@ -60,7 +60,7 @@ Page({
   onReachBottom: async function () {
     try {
       wx.showLoading({
-        title: '加载中',
+        title: '加载中...',
       });
       this.setData({
         isLoading: true,
@@ -114,44 +114,32 @@ Page({
   },
 
   handleSelectType: async function (e) {
-    try {
-      const {type} = e.target.dataset;
-      this.setData({
-        selectedType: type,
-      });
-
-      wx.pageScrollTo({
-        scrollTop: this.scrollDistance[this.data.selectedType],
-      });
-
-      // 如果有数据就不获取
-      const {cardList} = this.data;
-      const oldType = cardList[type];
-      if (oldType.data.length !== 0) return;
-
-      // 否者就获取
-      this.setData({
-        isLoading: true,
-      });
-      wx.showLoading({
-        title: '加载中...',
-      });
-      const {data} = await discoveryModel.get(type);
-      const {result: labels} = await discoveryModel.getLabels(type);
-      oldType.data = [...oldType.data, ...data];
-      oldType.index += data.length;
-      oldType.labels = labels;
-      this.setData({
-        cardList,
-      });
-    } catch (e) {
-      console.error(e);
-    } finally {
-      wx.hideLoading();
-      this.setData({
-        isLoading: false,
-      });
-    }
+    const {type} = e.target.dataset;
+    this.setData({
+      selectedType: type,
+    });
+    const {cardList} = this.data;
+    const oldType = cardList[type];
+    this.setData({
+      isLoading: true,
+    });
+    wx.showLoading({
+      title: '加载中...',
+    });
+    const {data} = await discoveryModel.get(type, 0, '', '');
+    const {result: labels} = await discoveryModel.getLabels(type);
+    oldType.data = data;
+    oldType.index = data.length;
+    oldType.labels = labels;
+    this.setData({
+      cardList,
+    });
+    wx.hideLoading();
+    this.setData({
+      isLoading: false,
+      queryLabel: '',
+      queryText: '',
+    });
   },
 
   handleClickBody: function () {
@@ -243,32 +231,23 @@ Page({
   handleClickLabel: async function (e) {
     try {
       const {label} = e.target.dataset;
-
-      // 取消选择该 label
-      if (this.data.queryLabel === label) {
-        this.setData({
-          queryLabel: '',
-        });
-        return;
-      }
-
       wx.showLoading({
         title: '查询中...',
       });
-
+      const queryLabel = this.data.queryLabel === label ? '' : label;
       const {selectedType, cardList, queryText} = this.data;
       const oldType = cardList[selectedType];
       const {data} = await discoveryModel.get(
         selectedType,
         0,
         queryText,
-        label
+        queryLabel
       );
       oldType.data = data;
       oldType.index += data.length;
       this.setData({
         cardList,
-        queryLabel: label,
+        queryLabel,
       });
     } catch (e) {
       console.error(e);

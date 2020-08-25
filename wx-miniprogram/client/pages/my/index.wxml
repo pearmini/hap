@@ -6,35 +6,43 @@
 	/>
 	<view class="header-container">
 		<view class="wrapper">
-			<view class="avatar">
-				<open-data type="userAvatarUrl"></open-data>
-			</view>
-			<view class='count'>
-				<wux-icon
-				 class="star"
-				 type="ios-heart"
-				 size="40"
-				 color="#886aea"
-				></wux-icon>
-				<view class="count-text">{{count}}</view>
+			<view class="middle">
+				<view class="avatar">
+					<open-data type="userAvatarUrl"></open-data>
+				</view>
+				<view class='count'>
+					<wux-icon
+					 class="star"
+					 type="ios-heart"
+					 size="40"
+					 color="#886aea"
+					></wux-icon>
+					<view class="count-text">{{count}}</view>
+				</view>
 			</view>
 		</view>
 	</view>
-	<block wx:for="{{likes}}" wx:key="_id">
-		<view
-		 class="card"
-		 data-index="{{index}}"
-		 bindtap="handleClickCard"
-		>
-			<view class="title">{{item.name}}</view>
-			<view class="body">
+	<view wx:if="{{likes.length !== 0}}">
+		<block wx:for="{{likes}}" wx:key="_id">
+			<view
+			 class="card"
+			 catchtap="handleClickCard"
+			 data-index="{{index}}"
+			>
+				<view class='card-text'>
+					<view class='card-name'>{{item.name}}</view>
+					<view class='card-info'>{{item.info}}</view>
+				</view>
 				<image
 				 src="{{item.imageURL}}"
+				 class="card-image"
 				 mode="aspectFill"
-				 class="image"
 				/>
 			</view>
-		</view>
-	</block>
+		</block>
+	</view>
+	<view class="empty" wx:else>
+		<empty text="没有喜欢的"></empty>
+	</view>
 </view>
 

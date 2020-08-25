@@ -40,15 +40,11 @@ export default {
               return db
                 .collection('views')
                 .where(conditions)
-                .skip(index * MAX_COUNT)
+                .skip(index)
                 .limit(MAX_COUNT)
                 .get();
             } else {
-              return db
-                .collection('views')
-                .skip(index * MAX_COUNT)
-                .limit(MAX_COUNT)
-                .get();
+              return db.collection('views').skip(index).limit(MAX_COUNT).get();
             }
           },
         },
@@ -56,6 +52,15 @@ export default {
     } else if (type === 1) {
       return {
         data: painterStyles
+          .slice(index, MAX_COUNT)
+          .filter((d) => (queryText ? d.name.search(queryText) !== -1 : d.name))
+          .filter((d) =>
+            queryLabel ? d.labels.indexOf(queryLabel) !== -1 : true
+          ),
+      };
+    } else {
+      return {
+        data: hackerStyles
           .slice(index, MAX_COUNT)
           .filter((d) => (queryText ? d.name.search(queryText) !== -1 : d.name))
           .filter((d) =>

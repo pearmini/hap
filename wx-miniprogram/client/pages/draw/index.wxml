@@ -1,8 +1,8 @@
 <view class="container">
 	<view class="header">
-		<!-- <view class='save-icon'>
-			<wux-icon type="ios-save" />
-		</view> -->
+		<view class='save-icon' wx:if="{{isDone}}">
+			<wux-icon type="ios-save" color="#886aea" />
+		</view>
 	</view>
 	<view class="body">
 		<canvas
@@ -11,16 +11,16 @@
 		 class="canvas"
 		></canvas>
 	</view>
-	<view class="footer {{view.imagePath && self.imagePath ? 'space-between' : 'center'}}">
+	<view class="footer {{view.imagePath && self.imagePath ? 'space-between' : 'center'}}" style="background:{{view.imagePath && self.imagePath ? '#eee' : '#fff'}}">
 		<view class="btn-group {{view.imagePath && self.imagePath ? 'close' : 'expand'}}">
 			<view class="button">
-				<wux-button type="positive" bind:click="handleSelectImage">
+				<wux-button type="royal" bind:click="handleSelectImage">
 					<wux-icon type="ios-image" size="{{16}}"></wux-icon>
 					{{view.imagePath ? '' : '选择背景'}}
 				</wux-button>
 			</view>
 			<view class="button">
-				<wux-button type="positive" bind:click="handleUploadSelf">
+				<wux-button type="royal" bind:click="handleUploadSelf">
 					<wux-icon type="ios-body" size="{{16}}"></wux-icon>
 					{{self.imagePath ? '' : '上传自拍'}}
 				</wux-button>
@@ -29,31 +29,24 @@
 		<view class="filter-container {{view.imagePath && self.imagePath ? 'full' : 'hide'}}">
 			<view class="segmented">
 				<wux-segmented-control
-				 theme="positive"
+				 theme="royal"
 				 values="{{ filterNames }}"
 				 wux-class="clear"
+				 bind:change="handleChangeFilterType"
 				/>
 			</view>
 			<view class="filter">
-				<view class="filter-label">
-					<block wx:for="{{filters[selectedFilterType].labels}}" wx:key="item">
-						<text>{{item}}</text>
-					</block>
-				</view>
-				<view class="filter-image">
-					<block wx:for="{{filters[selectedFilterType].styles}}" wx:key="item._id">
-						<image
-						 src="{{item.imageURL}}"
-						 class="image"
-						 mode="aspectFill"
-						 bindtap="handleDraw"
-						 data-index="{{index}}"
-						/>
-					</block>
-				</view>
+				<block wx:for="{{filters[selectedFilterType].styles}}" wx:key="item._id">
+					<image
+					 src="{{item.imageURL}}"
+					 class="image"
+					 mode="aspectFill"
+					 bindtap="handleDraw"
+					 data-index="{{index}}"
+					/>
+				</block>
 			</view>
 		</view>
-
 	</view>
 </view>
 <!-- <canvas

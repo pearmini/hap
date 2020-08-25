@@ -25,6 +25,14 @@ page {
   top: 0;
 }
 
+.empty {
+  width: 100%;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .wrapper {
   display: flex;
   width: 100%;
@@ -32,6 +40,10 @@ page {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.middle {
+  position: relative;
 }
 
 .avatar {
@@ -43,7 +55,8 @@ page {
 }
 
 .count {
-  margin-top: 30rpx;
+  position: absolute;
+  bottom: -90rpx;
   display: flex;
   align-items: center;
 }
@@ -52,22 +65,53 @@ page {
   color: white;
   font-size: 40rpx;
   font-weight: bold;
-  margin-left: 15rpx;
+  margin-left: 30rpx;
 }
 
 .card {
-  width: 80%;
-  height: 300rpx;
-  overflow: hidden;
+  position: relative;
+  height: 400rpx;
+  background: #eee;
   border-radius: 30rpx;
+  overflow: hidden;
   margin: 50rpx auto;
-  background-color: #ffc900;
+  width: 90%;
 }
 
-.title {
-  padding: 15rpx 20rpx;
+.card-text {
+  position: relative;
+  z-index: 5;
+  border-radius: 10rpx;
+  padding: 10rpx 30rpx;
+  overflow: hidden;
 }
 
-.image {
+.card-text:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  filter: blur(20px);
+  z-index: -1;
+  margin: -50rpx;
+}
+
+.card-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+
+.card-info {
+  font-size: 30rpx;
+}
+
+.card-image {
+  position: absolute;
   width: 100%;
+  left: 0;
+  top: 0;
 }

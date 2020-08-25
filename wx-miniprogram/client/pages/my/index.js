@@ -19,7 +19,7 @@ Page({
       views,
       arts,
       codes,
-      likes:[...views, ...arts, ...codes]
+      likes: [...views, ...arts, ...codes],
     });
   },
 
@@ -32,11 +32,12 @@ Page({
       views,
       arts,
       codes,
-      likes:[...views, ...arts, ...codes]
+      likes: [...views, ...arts, ...codes],
     });
   },
 
   onReachBottom: async function () {
+    if (this.data.likes.length === 0) return;
     const {views, arts, codes} = await this.loadData(this.data.index);
     if (views.length === 0) {
       wx.showToast({
@@ -46,7 +47,7 @@ Page({
     } else {
       this.setData({
         views: [...this.data.views, ...views],
-        likes:[...this.data.views, , ...arts, ...codes, ...views],
+        likes: [...this.data.views, , ...arts, ...codes, ...views],
         index: this.data.index + views.length,
       });
     }
@@ -60,7 +61,7 @@ Page({
     return {views, arts, codes, count: userInfo.likes.length};
   },
 
-  handleClickCard: function(e){
+  handleClickCard: function (e) {
     const {index} = e.currentTarget.dataset;
     const data = this.data.likes[index];
     const app = getApp();
@@ -68,5 +69,5 @@ Page({
     wx.navigateTo({
       url: '/pages/detail/index',
     });
-  }
+  },
 });
