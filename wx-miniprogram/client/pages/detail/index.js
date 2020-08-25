@@ -37,7 +37,7 @@ Page({
     } catch (e) {
       console.error(e);
       wx.showToast({
-        title: '出了点问题',
+        title: '该内容还在准备中...',
         icon: 'none',
       });
     } finally {

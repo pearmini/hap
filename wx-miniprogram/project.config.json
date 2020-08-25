@@ -6,7 +6,7 @@
 	"miniprogramRoot": "client/",
 	"cloudfunctionRoot": "server/cloudfunctions/",
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"enhance": true,
 		"postcss": true,
@@ -15,6 +15,8 @@
 		"coverView": true,
 		"nodeModules": true,
 		"autoAudits": false,
+		"showShadowRootInWxmlPanel": true,
+		"scopeDataCheck": false,
 		"uglifyFileName": false,
 		"checkInvalidKey": true,
 		"checkSiteMap": true,
@@ -27,7 +29,7 @@
 	},
 	"compileType": "miniprogram",
 	"projectname": "painters-and-hackers",
-	"libVersion": "2.12.0",
+	"libVersion": "2.12.1",
 	"appid": "wxfa468967fadbc4a5",
 	"debugOptions": {
 		"hidedInDevtools": []

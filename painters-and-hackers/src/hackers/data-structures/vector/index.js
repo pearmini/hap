@@ -2,11 +2,12 @@ import Vector from './Vector';
 import grid from '../../utils/grid';
 
 export default {
-  name: 'vector',
+  name: 'Vector',
   frameRate: 30,
   labels: ['数据结构'],
+  info: '演出中安排座位的学问',
   imageURL:
-    'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/app/banner.png?sign=df6e5de082dcbd8203b895b838b322db&t=1598350170',
+    'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Vector/Aug-25-2020%2020-55-24.gif?sign=c78bce8d6385d62e1e76cff0b4ee9c4b&t=1598360167',
   frames(imageData, width, height) {
     const {cellRow, cellCol} = grid(width, height, 20);
     const x = (i) => ((i % cellCol) * (imageData.width / cellCol)) | 0;

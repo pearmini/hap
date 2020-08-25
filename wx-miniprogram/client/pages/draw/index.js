@@ -12,8 +12,6 @@ const canvasPutImageData = promisify(wx.canvasPutImageData);
 const canvasToTempFilePath = promisify(wx.canvasToTempFilePath);
 const {windowWidth, windowHeight} = wx.getSystemInfoSync();
 const saveImageToPhotosAlbum = promisify(wx.saveImageToPhotosAlbum);
-const fs = wx.getFileSystemManager();
-const writeFile = promisify(fs.writeFile);
 
 const fetchWechat = require('fetch-wechat');
 const tf = require('@tensorflow/tfjs-core');
@@ -254,44 +252,52 @@ Page({
   },
 
   handleStyleTransfer: async function (imageURL) {
-    wx.showLoading({
-      title: '转换中',
-    });
-    const {canvasWidth, canvasHeight} = this.data;
-    const contentImageData = await canvasGetImageData({
-      canvasId: CAVANS_ID,
-      x: 0,
-      y: 0,
-      width: canvasWidth | 0,
-      height: canvasHeight | 0,
-    });
+    try {
+      wx.showLoading({
+        title: '转换中',
+      });
+      const {canvasWidth, canvasHeight} = this.data;
+      const contentImageData = await canvasGetImageData({
+        canvasId: CAVANS_ID,
+        x: 0,
+        y: 0,
+        width: canvasWidth | 0,
+        height: canvasHeight | 0,
+      });
 
-    const {
-      width: styleImageCanvasWidth,
-      height: styleImageCanvasHeight,
-    } = await this.drawImageToCanvas(imageURL, 'style');
+      const {
+        width: styleImageCanvasWidth,
+        height: styleImageCanvasHeight,
+      } = await this.drawImageToCanvas(imageURL, 'style');
 
-    const styleImageData = await canvasGetImageData({
-      canvasId: CAVANS_ID,
-      x: 0,
-      y: 0,
-      width: styleImageCanvasWidth | 0,
-      height: styleImageCanvasHeight | 0,
-    });
+      const styleImageData = await canvasGetImageData({
+        canvasId: CAVANS_ID,
+        x: 0,
+        y: 0,
+        width: styleImageCanvasWidth | 0,
+        height: styleImageCanvasHeight | 0,
+      });
 
-    const {output_url} = await this.styleTransfer(
-      contentImageData,
-      styleImageData
-    );
-    await this.drawImageToCanvas(output_url, 'transer');
-    this.setData(
-      {
-        isDone: true,
-      },
-      () => {
-        wx.hideLoading();
-      }
-    );
+      const {output_url} = await this.styleTransfer(
+        contentImageData,
+        styleImageData
+      );
+      await this.drawImageToCanvas(output_url, 'transer');
+      this.setData(
+        {
+          isDone: true,
+        },
+        () => {
+          wx.hideLoading();
+        }
+      );
+    } catch (e) {
+      wx.showToast({
+        title: '出了点问题',
+        icon: 'none',
+      });
+      wx.hideLoading();
+    }
   },
 
   styleTransfer: async function (contentImageData, styleImageData) {
@@ -332,6 +338,13 @@ Page({
   },
 
   handleVisAnimation: async function (name, contentImageData) {
+    if (name !== 'Vector') {
+      wx.showToast({
+        title: '暂时不支持，敬请期待～',
+        icon: 'none',
+      });
+      return;
+    }
     this.setData(
       {
         isHacker: true,
