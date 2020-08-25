@@ -150,17 +150,6 @@ page {
   margin-left: 0.5em;
 }
 
-.uppper-circle {
-  position: absolute;
-  width: 86rpx;
-  height: 86rpx;
-  background-color: #4a4cb0;
-  left: 0;
-  top: 0;
-  border-radius: 50%;
-  transform: translate(-50%, -100%);
-}
-
 .card-container {
   width: 100%;
   height: 100%;

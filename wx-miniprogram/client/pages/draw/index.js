@@ -1,6 +1,7 @@
 import ph from '../../lib/painters-and-hackers.js';
 import promisify from '../../utils/promisify';
 import Classifier from '../../utils/body-pix';
+import getCanvas from '../../utils/getCanvas';
 
 const CAVANS_ID = 'app-canvas';
 const chooseImage = promisify(wx.chooseImage);
@@ -8,6 +9,9 @@ const getImageInfo = promisify(wx.getImageInfo);
 const canvasGetImageData = promisify(wx.canvasGetImageData);
 const canvasPutImageData = promisify(wx.canvasPutImageData);
 const {windowWidth, windowHeight} = wx.getSystemInfoSync();
+const saveImageToPhotosAlbum = promisify(wx.saveImageToPhotosAlbum);
+const fs = wx.getFileSystemManager();
+const writeFile = promisify(fs.writeFile);
 
 const fetchWechat = require('fetch-wechat');
 const tf = require('@tensorflow/tfjs-core');
@@ -22,6 +26,7 @@ Page({
     isDrawing: false,
     isDone: false,
     isCombining: false,
+    isHacker: false,
     self: {
       imagePath: '',
       width: 0,
@@ -99,40 +104,83 @@ Page({
   },
 
   handleUploadSelf: async function () {
-    const {tempFilePaths} = await chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],
-      sourceType: ['album', 'camera'],
-    });
-    const selectedSelfImagePath = tempFilePaths[0];
-    const {width, height} = await this.drawImageToCanvas(
-      selectedSelfImagePath,
-      'self'
-    );
+    this.setData(
+      {
+        isDone: false,
+        isHacker: false,
+      },
+      async () => {
+        const {tempFilePaths} = await chooseImage({
+          count: 1,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera'],
+        });
+        const selectedSelfImagePath = tempFilePaths[0];
+        const {width, height} = await this.drawImageToCanvas(
+          selectedSelfImagePath,
+          'self'
+        );
 
-    // 这里需要一点延迟在获得 ImageData
-    setTimeout(async () => {
-      const imageData = await canvasGetImageData({
-        canvasId: CAVANS_ID,
-        x: 0,
-        y: 0,
-        width: width,
-        height: height,
-      });
-      const self = {
-        ...this.data.self,
-        imageData,
-      };
-      const {imagePath} = this.data.view;
-      this.selfImageData = imageData;
-      imagePath && (await this.combine(self, this.data.view));
-    }, 1000);
+        // 这里需要一点延迟在获得 ImageData
+        setTimeout(async () => {
+          const imageData = await canvasGetImageData({
+            canvasId: CAVANS_ID,
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+          });
+          const self = {
+            ...this.data.self,
+            imageData,
+          };
+          const {imagePath} = this.data.view;
+          this.selfImageData = imageData;
+          imagePath && (await this.combine(self, this.data.view));
+        }, 1000);
+      }
+    );
   },
 
   handleSelectImage: function () {
-    wx.navigateTo({
-      url: '/pages/pictures/index',
-    });
+    this.setData(
+      {
+        isDone: false,
+        isHacker: false,
+      },
+      () => {
+        wx.navigateTo({
+          url: '/pages/pictures/index',
+        });
+      }
+    );
+  },
+
+  handleSave: async function () {
+    try {
+      if (this.data.isHacker) {
+        const canvas = await getCanvas('#' + CAVANS_ID);
+        const dataURL = canvas.toDataURL();
+        await writeFile({
+          filePath: wx.env.USER_DATA_PATH + '/test.png',
+          data: dataURL.slice(22),
+          encoding: 'base64',
+        });
+        await saveImageToPhotosAlbum({
+          filePath: wx.env.USER_DATA_PATH + '/test.png',
+        });
+        wx.showToast({
+          title: '保存成功',
+        });
+      } else {
+      }
+    } catch (e) {
+      console.error(e);
+      wx.showToast({
+        title: '保存失败',
+        icon: 'none',
+      });
+    }
   },
 
   drawImageToCanvas: async function (imageURL, key) {
@@ -167,17 +215,25 @@ Page({
         title: '绘制中',
       });
       const {index} = e.target.dataset;
+      const {canvasWidth, canvasHeight} = this.data;
+      const contentImageData = await canvasGetImageData({
+        canvasId: CAVANS_ID,
+        x: 0,
+        y: 0,
+        width: canvasWidth | 0,
+        height: canvasHeight | 0,
+      });
 
       if (this.data.selectedFilterType === 0) {
         const {imageURL} = this.data.filters[
           this.data.selectedFilterType
         ].styles[index];
-        await this.handleStyleTransfer(imageURL);
+        await this.handleStyleTransfer(imageURL, contentImageData);
       } else {
         const {name} = this.data.filters[this.data.selectedFilterType].styles[
           index
         ];
-        await this.handleVisAnimation(name);
+        await this.handleVisAnimation(name, contentImageData);
       }
     } catch (e) {
       console.error(e);
@@ -186,16 +242,7 @@ Page({
     }
   },
 
-  handleStyleTransfer: async function (imageURL) {
-    const {canvasWidth, canvasHeight} = this.data;
-    const contentImageData = await canvasGetImageData({
-      canvasId: CAVANS_ID,
-      x: 0,
-      y: 0,
-      width: canvasWidth | 0,
-      height: canvasHeight | 0,
-    });
-
+  handleStyleTransfer: async function (imageURL, contentImageData) {
     const {
       width: styleImageCanvasWidth,
       height: styleImageCanvasHeight,
@@ -211,45 +258,36 @@ Page({
     // const resultImageData = await styleTransfer(contentImageData, styleImageData);
   },
 
-  handleVisAnimation: async function (name) {
-    console.log(name);
-
-    // if (this.data.selectedFilterType === 0) {
-    //   const {imageURL} = this.data.filters[this.data.selectedFilterType].styles[
-    //     index
-    //   ];
-    //   console.log(filter);
-    // }
-    // if (this.data.isDrawing) return;
-    // const imageData = await canvasGetImageData({
-    //   canvasId: CAVANS_ID,
-    //   x: 0,
-    //   y: 0,
-    //   width: this.data.canvasWidth,
-    //   height: this.data.canvasHeight,
-    // });
-    // const canvas = await getCanvas('#app-canvas');
-    // const {pixelRatio} = wx.getSystemInfoSync();
-    // canvas.width = this.data.canvasWidth * pixelRatio;
-    // canvas.height = this.data.canvasHeight * pixelRatio;
-    // const ctx = canvas.getContext('2d');
-    // ctx.scale(pixelRatio, pixelRatio);
-    // const hacker = ph
-    //   .hackers()
-    //   .canvas(canvas)
-    //   .size([this.data.canvasWidth, this.data.canvasHeight])
-    //   .imageData(imageData)
-    //   .style('vector')
-    //   .end(() => {
-    //     this.setData({
-    //       isDrawing: false,
-    //     });
-    //   });
-
-    // hacker.start();
-    // this.setData({
-    //   isDrawing: true,
-    // });
+  handleVisAnimation: async function (name, contentImageData) {
+    this.setData(
+      {
+        isHacker: true,
+      },
+      async () => {
+        const canvas = await getCanvas('#' + CAVANS_ID);
+        const {pixelRatio} = wx.getSystemInfoSync();
+        canvas.width = this.data.canvasWidth * pixelRatio;
+        canvas.height = this.data.canvasHeight * pixelRatio;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(pixelRatio, pixelRatio);
+        const hacker = ph
+          .hackers()
+          .canvas(canvas)
+          .size([this.data.canvasWidth, this.data.canvasHeight])
+          .imageData(contentImageData)
+          .style(name)
+          .end(() => {
+            this.setData({
+              isDrawing: false,
+              isDone: true,
+            });
+          });
+        hacker.start();
+        this.setData({
+          isDrawing: true,
+        });
+      }
+    );
   },
 
   combine: async function (self, view) {

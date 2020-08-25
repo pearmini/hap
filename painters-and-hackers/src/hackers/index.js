@@ -51,8 +51,8 @@ export default function () {
       frames: currentFrames,
       stroke: currentStroke,
       frameRate: currentFrameRate,
-      layout: currentLayout,
-    } = defaultStyles.find((d) => d.namspace === style);
+      layout: currentLayout,s
+    } = defaultStyles.find((d) => d.name=== style);
 
     // 运行的主函数
     const actions = currentFrames(imageData, width, height);

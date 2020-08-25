@@ -9,7 +9,8 @@
   ],
   "usingComponents": {
     "wux-button": "./lib/wux-weapp/button/index",
-    "wux-icon": "./lib/wux-weapp/icon/index"
+    "wux-icon": "./lib/wux-weapp/icon/index",
+    "wux-popup": "./lib/wux-weapp/popup/index"
   },
   "window": {
     "backgroundTextStyle": "light",

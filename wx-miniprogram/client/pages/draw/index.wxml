@@ -1,6 +1,10 @@
 <view class="container">
-	<view class="header">
-		<view class='save-icon' wx:if="{{isDone}}">
+	<view class="header" style="opacity:{{isDone ? 1 : 0}}">
+		<view
+		 class='save-icon'
+		 wx:if="{{isDone}}"
+		 bindtap="handleSave"
+		>
 			<wux-icon type="ios-save" color="#886aea" />
 		</view>
 	</view>
@@ -9,9 +13,20 @@
 		 canvas-id="app-canvas"
 		 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
 		 class="canvas"
+		 wx:if="{{!isHacker}}"
+		></canvas>
+		<canvas
+		 wx:else
+		 type="2d"
+		 id="app-canvas"
+		 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
 		></canvas>
 	</view>
-	<view class="footer {{view.imagePath && self.imagePath ? 'space-between' : 'center'}}" style="background:{{view.imagePath && self.imagePath ? '#eee' : '#fff'}}">
+	<view
+	 class="footer {{view.imagePath && self.imagePath ? 'space-between' : 'center'}}"
+	 style="background:{{view.imagePath && self.imagePath ? '#eee' : '#fff'}}"
+	 wx:if="{{!isDrawing}}"
+	>
 		<view class="btn-group {{view.imagePath && self.imagePath ? 'close' : 'expand'}}">
 			<view class="button">
 				<wux-button type="royal" bind:click="handleSelectImage">
@@ -36,7 +51,7 @@
 				/>
 			</view>
 			<view class="filter">
-				<block wx:for="{{filters[selectedFilterType].styles}}" wx:key="item._id">
+				<block wx:for="{{filters[selectedFilterType].styles}}" wx:key="_id">
 					<image
 					 src="{{item.imageURL}}"
 					 class="image"
@@ -49,27 +64,4 @@
 		</view>
 	</view>
 </view>
-<!-- <canvas
-	 type="
-		 2d"
-		 id="app-canvas"
-		 style="height: {{ canvasHeight }}px;width:{{ canvasWidth }}px;"
-		></canvas>
-			<view class="button">
-				<button
-				 block
-				 type="positive"
-				 bind:tap="handleUpload"
-				>上传照片
-				</button>
-			</view>
-			<view class="button">
-				<button
-				 block
-				 type="positive"
-				 bind:tap="handleDraw"
-				>开始绘制
-				</button>
-			</view>
-			-->
 

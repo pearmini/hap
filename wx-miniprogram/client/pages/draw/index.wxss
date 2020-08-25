@@ -15,6 +15,7 @@ page {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  background: #eee;
 }
 
 .save-icon {
@@ -74,7 +75,6 @@ page {
   display: flex;
   transition: all 0.5s;
 }
-
 
 .image {
   width: 120rpx;

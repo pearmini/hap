@@ -2,9 +2,11 @@ import Vector from './Vector';
 import grid from '../../utils/grid';
 
 export default {
-  namspace: 'vector',
+  name: 'vector',
   frameRate: 30,
   labels: ['数据结构'],
+  imageURL:
+    'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/app/banner.png?sign=df6e5de082dcbd8203b895b838b322db&t=1598350170',
   frames(imageData, width, height) {
     const {cellRow, cellCol} = grid(width, height, 20);
     const x = (i) => ((i % cellCol) * (imageData.width / cellCol)) | 0;

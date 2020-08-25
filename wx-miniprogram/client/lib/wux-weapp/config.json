@@ -3,8 +3,7 @@
         "button",
         "icon",
         "segmented-control",
-        "fab-button",
-        "search-bar"
+        "dialog"
     ],
     "themes": {}
 }

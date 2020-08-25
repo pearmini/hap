@@ -10,13 +10,13 @@
 		<view class="label-container">
 			<view class="label-wrapper">
 				<block wx:for="{{labels}}" wx:key="item">
-					<text class="label" bindtap="handleClickLabel" data-label="{{item}}" style="background: {{queryLabel === item ? 'red' : '#ffc900'}}">{{item}}</text>
+					<text class="label" bindtap="handleClickLabel" data-label="{{item}}" style="background: {{queryLabel === item ? 'red' : '#886aea'}}">{{item}}</text>
 				</block>
 			</view>
 		</view>
 	</view>
 	<view class="image-container">
-		<block wx:for="{{list}}" wx:key="{{item._id}}">
+		<block wx:for="{{list}}" wx:key="index">
 			<image
 			 class="image"
 			 src="{{item[0]}}"
@@ -26,6 +26,9 @@
 			 bindtap="handleClickImage"
 			/>
 		</block>
+	</view>
+	<view class="empty" wx:if="{{list.length === 0}}">
+		<empty text="没有数据～"></empty>
 	</view>
 </view>
 
