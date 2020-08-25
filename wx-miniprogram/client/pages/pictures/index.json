@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "search-bar": "../../components/search-bar/index",
+    "empty": "../../components/empty/index"
+  },
+  "navigationBarTitleText": "景点照片"
 }

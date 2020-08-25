@@ -1,16 +1,46 @@
 import request from '../../utils/request';
 
+const MAX_COUNT = 20;
+
 export default {
-  get() {
-    return request({
+  async get(index = 0, queryText = '', queryLabel = '') {
+    const {data} = await request({
       method: 'db',
       name: 'getViewImages',
       options: {
-        query: (db) => {
-          return db.collection('views').get();
+        query: (db, $, _) => {
+          const name = {
+            key: 'name',
+            value: queryText
+              ? db.RegExp({
+                  regexp: queryText,
+                })
+              : null,
+          };
+
+          const labels = {
+            key: 'labels',
+            value: queryLabel ? _.all([queryLabel]) : null,
+          };
+
+          const conditions = [name, labels]
+            .filter((d) => d.value)
+            .reduce((total, cur) => ((total[cur.key] = cur.value), total), {});
+
+          if (Object.keys(conditions).length) {
+            return db
+              .collection('views')
+              .where(conditions)
+              .skip(index)
+              .limit(MAX_COUNT)
+              .get();
+          } else {
+            return db.collection('views').skip(index).limit(MAX_COUNT).get();
+          }
         },
       },
     });
+    return data.reduce((total, cur) => [...total, ...cur.images], []);
   },
 
   downloadImage(fileId) {
@@ -19,8 +49,18 @@ export default {
       name: 'downloadImage',
       options: {
         name: 'downloadFile',
-        fileID:
-          'cloud://wechatcloud-79m2p.7765-wechatcloud-79m2p-1259642785/imgs/20181024174733HMwKNRLCwv3KOjEP9NLFJdVXvFb6ZJ.jpeg',
+        fileID: fileId,
+      },
+    });
+  },
+
+  getLabels: function () {
+    return request({
+      method: 'fn',
+      name: 'getLabels',
+      options: {
+        name: 'getLabels',
+        data: {},
       },
     });
   },

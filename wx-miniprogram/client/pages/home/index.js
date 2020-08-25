@@ -1,4 +1,5 @@
 import homeModel from './model';
+import uploadImage from '../../utils/uploadImage';
 
 Page({
   onLoad: async function () {
@@ -18,5 +19,13 @@ Page({
     wx.switchTab({
       url: '/pages/discovery/index',
     });
+  },
+
+  handleUpload: async function () {
+    wx.showLoading({
+      title: '上传中...',
+    });
+    await uploadImage();
+    wx.hideLoading();
   },
 });

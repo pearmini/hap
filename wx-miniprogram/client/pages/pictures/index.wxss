@@ -1,14 +1,54 @@
 page {
-  height: 100%;
+  width: 100%;
 }
 
 .container {
   width: 100%;
-  display: flex;
+  height: 100%;
 }
 
 .image {
-  width: 25%;
-  max-width: 25%;
-  min-width: 25%;
+  float: left;
+  width: 33.3%;
+}
+
+.header {
+  position: fixed;
+  background: #eee;
+  width: 100%;
+  height: 180rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top:0;
+}
+
+.image-container{
+  margin-top: 180rpx;
+}
+
+.search-wrapper{
+  width: 90%;
+}
+
+.label-container {
+  width: 90%;
+  overflow: hidden;
+}
+
+.label-wrapper {
+  overflow-y: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
+  height: 100%;
+  margin-top:10rpx;
+}
+
+.label {
+  font-size: 25rpx;
+  margin-left: 10rpx;
+  color: #fff;
+  padding: 5rpx 10rpx;
+  border-radius: 10rpx;
 }
