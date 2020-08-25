@@ -2,12 +2,14 @@ import ph from '../../lib/painters-and-hackers.js';
 import promisify from '../../utils/promisify';
 import Classifier from '../../utils/body-pix';
 import getCanvas from '../../utils/getCanvas';
+import UPNG from '../../lib/upng';
 
 const CAVANS_ID = 'app-canvas';
 const chooseImage = promisify(wx.chooseImage);
 const getImageInfo = promisify(wx.getImageInfo);
 const canvasGetImageData = promisify(wx.canvasGetImageData);
 const canvasPutImageData = promisify(wx.canvasPutImageData);
+const canvasToTempFilePath = promisify(wx.canvasToTempFilePath);
 const {windowWidth, windowHeight} = wx.getSystemInfoSync();
 const saveImageToPhotosAlbum = promisify(wx.saveImageToPhotosAlbum);
 const fs = wx.getFileSystemManager();
@@ -91,7 +93,11 @@ Page({
         'view'
       );
       const {imagePath} = this.data.self;
-      const view = {width, height, imagePath: path};
+      const view = {
+        width,
+        height,
+        imagePath: path,
+      };
       imagePath && (await this.combine(this.data.self, view));
     }
   },
@@ -158,22 +164,36 @@ Page({
 
   handleSave: async function () {
     try {
+      const {canvasWidth, canvasHeight} = this.data;
+      const commonOptions = {
+        x: 0,
+        y: 0,
+        width: canvasWidth,
+        height: canvasHeight,
+        destWidth: canvasWidth,
+        destHeight: canvasHeight,
+      };
+      let options;
       if (this.data.isHacker) {
         const canvas = await getCanvas('#' + CAVANS_ID);
-        const dataURL = canvas.toDataURL();
-        await writeFile({
-          filePath: wx.env.USER_DATA_PATH + '/test.png',
-          data: dataURL.slice(22),
-          encoding: 'base64',
-        });
-        await saveImageToPhotosAlbum({
-          filePath: wx.env.USER_DATA_PATH + '/test.png',
-        });
-        wx.showToast({
-          title: '保存成功',
-        });
+        options = {
+          canvas,
+        };
       } else {
+        options = {
+          canvasId: CAVANS_ID,
+        };
       }
+      const {tempFilePath} = await canvasToTempFilePath({
+        ...options,
+        ...commonOptions,
+      });
+      await saveImageToPhotosAlbum({
+        filePath: tempFilePath,
+      });
+      wx.showToast({
+        title: '保存成功',
+      });
     } catch (e) {
       console.error(e);
       wx.showToast({
@@ -201,7 +221,11 @@ Page({
           const ctx = wx.createCanvasContext(CAVANS_ID);
           ctx.drawImage(path, 0, 0, width, height);
           ctx.draw(true, () => {
-            resolve({width, height, path});
+            resolve({
+              width,
+              height,
+              path,
+            });
           });
         }
       );
@@ -211,38 +235,37 @@ Page({
   handleDraw: async function (e) {
     try {
       if (this.data.isDrawing || this.data.isCombining) return;
-      wx.showLoading({
-        title: '绘制中',
-      });
       const {index} = e.target.dataset;
       const {canvasWidth, canvasHeight} = this.data;
-      const contentImageData = await canvasGetImageData({
-        canvasId: CAVANS_ID,
-        x: 0,
-        y: 0,
-        width: canvasWidth | 0,
-        height: canvasHeight | 0,
-      });
-
       if (this.data.selectedFilterType === 0) {
         const {imageURL} = this.data.filters[
           this.data.selectedFilterType
         ].styles[index];
-        await this.handleStyleTransfer(imageURL, contentImageData);
+        await this.handleStyleTransfer(imageURL, this.contentImageData);
       } else {
         const {name} = this.data.filters[this.data.selectedFilterType].styles[
           index
         ];
-        await this.handleVisAnimation(name, contentImageData);
+        await this.handleVisAnimation(name, this.contentImageData);
       }
     } catch (e) {
       console.error(e);
-    } finally {
-      wx.hideLoading();
     }
   },
 
-  handleStyleTransfer: async function (imageURL, contentImageData) {
+  handleStyleTransfer: async function (imageURL) {
+    wx.showLoading({
+      title: '转换中',
+    });
+    const {canvasWidth, canvasHeight} = this.data;
+    const contentImageData = await canvasGetImageData({
+      canvasId: CAVANS_ID,
+      x: 0,
+      y: 0,
+      width: canvasWidth | 0,
+      height: canvasHeight | 0,
+    });
+
     const {
       width: styleImageCanvasWidth,
       height: styleImageCanvasHeight,
@@ -255,7 +278,57 @@ Page({
       width: styleImageCanvasWidth | 0,
       height: styleImageCanvasHeight | 0,
     });
-    // const resultImageData = await styleTransfer(contentImageData, styleImageData);
+
+    const {output_url} = await this.styleTransfer(
+      contentImageData,
+      styleImageData
+    );
+    await this.drawImageToCanvas(output_url, 'transer');
+    this.setData(
+      {
+        isDone: true,
+      },
+      () => {
+        wx.hideLoading();
+      }
+    );
+  },
+
+  styleTransfer: async function (contentImageData, styleImageData) {
+    let pngData = UPNG.encode(
+      [contentImageData.data.buffer],
+      contentImageData.width,
+      contentImageData.height
+    );
+    let contentImageBase64 =
+      'data:image/png;base64,' + wx.arrayBufferToBase64(pngData);
+    pngData = UPNG.encode(
+      [styleImageData.data.buffer],
+      styleImageData.width,
+      styleImageData.height
+    );
+    let styleImageBase64 =
+      'data:image/png;base64,' + wx.arrayBufferToBase64(pngData);
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: 'https://api.deepai.org/api/fast-style-transfer',
+        data: {
+          content: contentImageBase64,
+          style: styleImageBase64,
+        },
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+          'api-key': '5159143e-01f9-4975-ae0b-b0c376ef1c64',
+        },
+        method: 'POST',
+        success: function (res) {
+          resolve(res.data);
+        },
+        fail: function (err) {
+          reject(err);
+        },
+      });
+    });
   },
 
   handleVisAnimation: async function (name, contentImageData) {
@@ -334,18 +407,19 @@ Page({
                 }
               );
 
-              const maskImageData = this.classifier.toMaskImageData(
+              const contentImageData = this.classifier.toMaskImageData(
                 segmentation,
                 backgroundData
               );
 
+              this.contentImageData = contentImageData;
               await canvasPutImageData({
                 canvasId: CAVANS_ID,
-                data: maskImageData.data,
+                data: contentImageData.data,
                 x: 0,
                 y: 0,
-                width: maskImageData.width,
-                height: maskImageData.height,
+                width: contentImageData.width,
+                height: contentImageData.height,
               });
 
               wx.hideLoading();
@@ -382,6 +456,10 @@ Page({
       width = windowWidth;
       height = (width * ratio) | 0;
     }
-    return {width: width | 0, height: height | 0, path};
+    return {
+      width: width | 0,
+      height: height | 0,
+      path,
+    };
   },
 });
