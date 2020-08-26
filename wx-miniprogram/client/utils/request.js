@@ -25,14 +25,10 @@ export default async function ({method, name, options}) {
         return fn({...rest});
       },
     };
-    wx.showLoading({
-      title: options.loadingTitle || '加载中...',
-    });
     console.log(`[request: ${method}(${name})]`, options);
     const get = getByMethod[method];
     const res = await get(options);
-    console.log(`[response: ${method}]`, res);
-    wx.hideLoading();
+    console.log(`[response: ${method}(${name})]`, res);
     return res;
   } catch (e) {
     console.error(e);
@@ -40,7 +36,5 @@ export default async function ({method, name, options}) {
       title: '出现了未知错误！',
       icon: 'none',
     });
-  } finally {
-    wx.hideLoading();
-  }
+  } 
 }

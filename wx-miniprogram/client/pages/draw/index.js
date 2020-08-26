@@ -2,7 +2,7 @@ import ph from '../../lib/painters-and-hackers.js';
 import promisify from '../../utils/promisify';
 import Classifier from '../../utils/body-pix';
 import getCanvas from '../../utils/getCanvas';
-import UPNG from '../../lib/upng';
+import drawModel from './model';
 
 const CAVANS_ID = 'app-canvas';
 const chooseImage = promisify(wx.chooseImage);
@@ -233,13 +233,31 @@ Page({
   handleDraw: async function (e) {
     try {
       if (this.data.isDrawing || this.data.isCombining) return;
+      this.setData({
+        isDrawing: true,
+      });
       const {index} = e.target.dataset;
-      const {canvasWidth, canvasHeight} = this.data;
       if (this.data.selectedFilterType === 0) {
+        wx.showLoading({
+          title: '等待时间较长～',
+        });
         const {imageURL} = this.data.filters[
           this.data.selectedFilterType
         ].styles[index];
-        await this.handleStyleTransfer(imageURL, this.contentImageData);
+        const openid = wx.getStorageSync('openid');
+        const {path} = await getImageInfo({
+          src: imageURL,
+        });
+        const resultImagePath = await drawModel.styleTransfer(
+          this.contentImagePath,
+          path,
+          openid
+        );
+        await this.drawImageToCanvas(resultImagePath, 'transer');
+        wx.hideLoading();
+        this.setData({
+          isDrawing: false,
+        });
       } else {
         const {name} = this.data.filters[this.data.selectedFilterType].styles[
           index
@@ -248,93 +266,15 @@ Page({
       }
     } catch (e) {
       console.error(e);
-    }
-  },
-
-  handleStyleTransfer: async function (imageURL) {
-    try {
-      wx.showLoading({
-        title: '转换中',
-      });
-      const {canvasWidth, canvasHeight} = this.data;
-      const contentImageData = await canvasGetImageData({
-        canvasId: CAVANS_ID,
-        x: 0,
-        y: 0,
-        width: canvasWidth | 0,
-        height: canvasHeight | 0,
-      });
-
-      const {
-        width: styleImageCanvasWidth,
-        height: styleImageCanvasHeight,
-      } = await this.drawImageToCanvas(imageURL, 'style');
-
-      const styleImageData = await canvasGetImageData({
-        canvasId: CAVANS_ID,
-        x: 0,
-        y: 0,
-        width: styleImageCanvasWidth | 0,
-        height: styleImageCanvasHeight | 0,
-      });
-
-      const {output_url} = await this.styleTransfer(
-        contentImageData,
-        styleImageData
-      );
-      await this.drawImageToCanvas(output_url, 'transer');
-      this.setData(
-        {
-          isDone: true,
-        },
-        () => {
-          wx.hideLoading();
-        }
-      );
-    } catch (e) {
+      wx.hideLoading();
       wx.showToast({
-        title: '出了点问题',
+        title: '出了点问题~',
         icon: 'none',
       });
-      wx.hideLoading();
-    }
-  },
-
-  styleTransfer: async function (contentImageData, styleImageData) {
-    let pngData = UPNG.encode(
-      [contentImageData.data.buffer],
-      contentImageData.width,
-      contentImageData.height
-    );
-    let contentImageBase64 =
-      'data:image/png;base64,' + wx.arrayBufferToBase64(pngData);
-    pngData = UPNG.encode(
-      [styleImageData.data.buffer],
-      styleImageData.width,
-      styleImageData.height
-    );
-    let styleImageBase64 =
-      'data:image/png;base64,' + wx.arrayBufferToBase64(pngData);
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: 'https://api.deepai.org/api/fast-style-transfer',
-        data: {
-          content: contentImageBase64,
-          style: styleImageBase64,
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded',
-          'api-key': '5159143e-01f9-4975-ae0b-b0c376ef1c64',
-        },
-        method: 'POST',
-        success: function (res) {
-          resolve(res.data);
-        },
-        fail: function (err) {
-          reject(err);
-        },
+      this.setData({
+        isDrawing: false,
       });
-    });
+    }
   },
 
   handleVisAnimation: async function (name, contentImageData) {
@@ -369,9 +309,6 @@ Page({
             });
           });
         hacker.start();
-        this.setData({
-          isDrawing: true,
-        });
       }
     );
   },
@@ -426,6 +363,7 @@ Page({
               );
 
               this.contentImageData = contentImageData;
+
               await canvasPutImageData({
                 canvasId: CAVANS_ID,
                 data: contentImageData.data,
@@ -434,6 +372,18 @@ Page({
                 width: contentImageData.width,
                 height: contentImageData.height,
               });
+
+              const {tempFilePath} = await canvasToTempFilePath({
+                x: 0,
+                y: 0,
+                width,
+                height,
+                destWidth: width,
+                destHeight: height,
+                canvasId: CAVANS_ID,
+              });
+
+              this.contentImagePath = tempFilePath;
 
               wx.hideLoading();
               this.setData({

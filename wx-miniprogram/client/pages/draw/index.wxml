@@ -25,7 +25,7 @@
 	<view
 	 class="footer {{view.imagePath && self.imagePath ? 'space-between' : 'center'}}"
 	 style="background:{{view.imagePath && self.imagePath ? '#eee' : '#fff'}}"
-	 wx:if="{{!isDrawing}}"
+	 wx:if="{{!isDrawing && !isCombining}}"
 	>
 		<view class="btn-group {{view.imagePath && self.imagePath ? 'close' : 'expand'}}">
 			<view class="button">

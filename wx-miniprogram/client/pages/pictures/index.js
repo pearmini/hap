@@ -47,12 +47,16 @@ Page({
 
   handleClickImage: async function (e) {
     if (this.data.isBack) return;
+    wx.showLoading({
+      title: '下载图片中...',
+    });
     this.setData({
       isBack: true,
     });
     const {index} = e.target.dataset;
     const [, imageFileId] = this.data.list[index];
     const {tempFilePath} = await picturesModel.downloadImage(imageFileId);
+    wx.hideLoading();
     app.globalData.selectedViewImagePath = tempFilePath;
     wx.navigateBack();
   },
