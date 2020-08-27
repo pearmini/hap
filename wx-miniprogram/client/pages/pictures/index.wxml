@@ -27,7 +27,7 @@
 			/>
 		</block>
 	</view>
-	<view class="empty" wx:if="{{list.length === 0}}">
+	<view class="empty" wx:if="{{list.length === 0 && !isLoading}}">
 		<empty text="没有数据～"></empty>
 	</view>
 </view>

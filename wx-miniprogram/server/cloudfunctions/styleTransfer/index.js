@@ -8,12 +8,13 @@ cloud.init();
 
 function downloadImage(output_url, OPENID) {
   return new Promise((resolve) => {
-    const localPath = `/tmp/${OPENID}_${Date.now()}.png`;
+    const timestamp = Date.now() % 100;
+    const localPath = `/tmp/${OPENID}_${timestamp}.png`;
     const writeStream = fs.createWriteStream(localPath);
     writeStream.on('finish', async function () {
       const fileStream = fs.createReadStream(localPath);
       const {fileID} = await cloud.uploadFile({
-        cloudPath: `tempImages/${OPENID}/result.png`,
+        cloudPath: `tempImages/${OPENID}_${timestamp}/result.png`,
         fileContent: fileStream,
       });
       resolve(fileID);
@@ -35,5 +36,6 @@ exports.main = async (event, context) => {
   const fileID = await downloadImage(output_url, OPENID);
   return {
     fileID,
+    output_url,
   };
 };

@@ -40,7 +40,10 @@ export default {
         },
       },
     });
-    return data.reduce((total, cur) => [...total, ...cur.images], []);
+    return data.reduce((total, cur) => {
+      const images = cur.images.map((d) => [...d, cur]);
+      return [...total, ...images];
+    }, []);
   },
 
   downloadImage(fileId) {

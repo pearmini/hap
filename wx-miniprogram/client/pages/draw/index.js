@@ -27,6 +27,8 @@ Page({
     isDone: false,
     isCombining: false,
     isHacker: false,
+    selectedViewItem: null,
+    selectedFilterItem: null,
     self: {
       imagePath: '',
       width: 0,
@@ -83,7 +85,12 @@ Page({
   },
 
   onShow: async function () {
-    const {selectedViewImagePath} = app.globalData;
+    if (!app.globalData.isBackFromPictures) return;
+    app.globalData.isBackFromPictures = false;
+    const {selectedViewImagePath, selectedItem} = app.globalData;
+    this.setData({
+      selectedViewItem: selectedItem,
+    });
     if (selectedViewImagePath) {
       app.globalData.selectedViewImagePath = '';
       const {width, height, path} = await this.drawImageToCanvas(
@@ -233,17 +240,30 @@ Page({
   handleDraw: async function (e) {
     try {
       if (this.data.isDrawing || this.data.isCombining) return;
+
+      const {index} = e.target.dataset;
+      const selectedFilterItem = this.data.filters[this.data.selectedFilterType]
+        .styles[index];
       this.setData({
         isDrawing: true,
+        selectedFilterItem,
       });
-      const {index} = e.target.dataset;
+
       if (this.data.selectedFilterType === 0) {
-        wx.showLoading({
-          title: '等待时间较长～',
+        wx.showToast({
+          title: '转化时间可能较长，请耐心等待～',
+          icon: 'none',
+          duration: 2000,
         });
-        const {imageURL} = this.data.filters[
-          this.data.selectedFilterType
-        ].styles[index];
+
+        setTimeout(() => {
+          wx.hideToast();
+          wx.showLoading({
+            title: '转换中...',
+          });
+        }, 2000);
+
+        const {imageURL} = selectedFilterItem;
         const openid = wx.getStorageSync('openid');
         const {path} = await getImageInfo({
           src: imageURL,
@@ -257,11 +277,10 @@ Page({
         wx.hideLoading();
         this.setData({
           isDrawing: false,
+          isDone: true,
         });
       } else {
-        const {name} = this.data.filters[this.data.selectedFilterType].styles[
-          index
-        ];
+        const {name} = selectedFilterItem;
         await this.handleVisAnimation(name, this.contentImageData);
       }
     } catch (e) {
@@ -311,6 +330,20 @@ Page({
         hacker.start();
       }
     );
+  },
+
+  handleViewDetail: function () {
+    app.globalData.selectedItem = this.data.selectedViewItem;
+    wx.navigateTo({
+      url: '/pages/detail/index',
+    });
+  },
+
+  handleFilterDetail: function () {
+    app.globalData.selectedItem = this.data.selectedFilterItem;
+    wx.navigateTo({
+      url: '/pages/detail/index',
+    });
   },
 
   combine: async function (self, view) {

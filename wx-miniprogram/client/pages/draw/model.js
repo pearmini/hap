@@ -9,12 +9,13 @@ export default {
   async styleTransfer(contentImagePath, styleImagePath, openID) {
     // 上传图片
     const base = `tempImages/${openID}`;
+    const timestamp = Date.now() % 100;
     const {fileID: contentImageFileID} = await uploadFile({
-      cloudPath: `${base}/content.png`,
+      cloudPath: `${base}/content_${timestamp}.png`,
       filePath: contentImagePath,
     });
     const {fileID: styleImageFileID} = await uploadFile({
-      cloudPath: `${base}/style.png`,
+      cloudPath: `${base}/style_${timestamp}.png`,
       filePath: styleImagePath,
     });
 

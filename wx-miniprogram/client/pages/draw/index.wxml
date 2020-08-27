@@ -1,5 +1,30 @@
+<wxs module="String">
+	function slice(string){
+	return string.length > 5 ? string.substring(0, 5) + '...' : string
+	}
+	module.exports = {
+	slice:slice
+	}
+</wxs>
+
 <view class="container">
-	<view class="header" style="opacity:{{isDone ? 1 : 0}}">
+	<view class="header" style="opacity:{{(selectedViewItem || selectedFilterItem) && !isDrawing && !isCombining ? 1 : 0}}">
+		<view class="header-btn-group">
+			<view class="header-left-btn">
+				<wux-button
+				 type="royal"
+				 wx:if="{{selectedViewItem}}"
+				 bind:click="handleViewDetail"
+				>{{String.slice(selectedViewItem.name)}}
+				</wux-button>
+			</view>
+			<wux-button
+			 type="royal"
+			 wx:if="{{selectedFilterItem}}"
+			 bind:click="handleFilterDetail"
+			>{{String.slice(selectedFilterItem.name)}}
+			</wux-button>
+		</view>
 		<view
 		 class='save-icon'
 		 wx:if="{{isDone}}"
@@ -27,7 +52,13 @@
 	 style="background:{{view.imagePath && self.imagePath ? '#eee' : '#fff'}}"
 	 wx:if="{{!isDrawing && !isCombining}}"
 	>
+		<!-- <view
+	 class="footer {{!view.imagePath ||!self.imagePath ? 'space-between' : 'center'}}"
+	 style="background:{{view.imagePath && self.imagePath ? '#eee' : '#fff'}}"
+	 wx:if="{{!isDrawing && !isCombining}}"
+	> -->
 		<view class="btn-group {{view.imagePath && self.imagePath ? 'close' : 'expand'}}">
+			<!-- <view class="btn-group {{!view.imagePath || !self.imagePath ? 'close' : 'expand'}}"> -->
 			<view class="button">
 				<wux-button type="royal" bind:click="handleSelectImage">
 					<wux-icon type="ios-image" size="{{16}}"></wux-icon>
@@ -41,6 +72,7 @@
 				</wux-button>
 			</view>
 		</view>
+		<!-- <view class="filter-container {{!view.imagePath || !self.imagePath ? 'full' : 'hide'}}"> -->
 		<view class="filter-container {{view.imagePath && self.imagePath ? 'full' : 'hide'}}">
 			<view class="segmented">
 				<wux-segmented-control
@@ -52,13 +84,16 @@
 			</view>
 			<view class="filter">
 				<block wx:for="{{filters[selectedFilterType].styles}}" wx:key="_id">
-					<image
-					 src="{{item.imageURL}}"
-					 class="image"
-					 mode="aspectFill"
-					 bindtap="handleDraw"
-					 data-index="{{index}}"
-					/>
+					<view class="image-container">
+						<image
+						 src="{{item.imageURL}}"
+						 class="image"
+						 mode="aspectFill"
+						 bindtap="handleDraw"
+						 data-index="{{index}}"
+						/>
+						<text class="image-title">{{String.slice(item.name)}}</text>
+					</view>
 				</block>
 			</view>
 		</view>

@@ -8,9 +8,16 @@ Page({
     codes: [],
     likes: [],
     index: 0,
+    isLoading: false,
   },
 
   onLoad: async function (options) {
+    wx.showLoading({
+      title: '加载中...',
+    });
+    this.setData({
+      isLoading: true,
+    });
     const index = 0;
     const {views, arts, codes, count} = await this.loadData(index);
     this.setData({
@@ -20,7 +27,9 @@ Page({
       arts,
       codes,
       likes: [...views, ...arts, ...codes],
+      isLoading: false,
     });
+    wx.hideLoading();
   },
 
   onPullDownRefresh: async function () {

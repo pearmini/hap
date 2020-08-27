@@ -10,9 +10,16 @@ Page({
     labels: [],
     queryLabel: '',
     queryText: '',
+    isLoading: false,
   },
 
   onLoad: async function (options) {
+    wx.showLoading({
+      title: '下载中...',
+    });
+    this.setData({
+      isLoading: true,
+    });
     const data = await picturesModel.get();
     const {result} = await picturesModel.getLabels();
     const {windowWidth} = wx.getSystemInfoSync();
@@ -22,7 +29,9 @@ Page({
       pageWidth: windowWidth,
       index: this.data.index + data.length,
       labels: result,
+      isLoading: false,
     });
+    wx.hideLoading();
   },
 
   onReachBottom: async function () {
@@ -54,10 +63,12 @@ Page({
       isBack: true,
     });
     const {index} = e.target.dataset;
-    const [, imageFileId] = this.data.list[index];
+    const [, imageFileId, item] = this.data.list[index];
     const {tempFilePath} = await picturesModel.downloadImage(imageFileId);
     wx.hideLoading();
     app.globalData.selectedViewImagePath = tempFilePath;
+    app.globalData.selectedItem = item;
+    app.globalData.isBackFromPictures = true;
     wx.navigateBack();
   },
 
