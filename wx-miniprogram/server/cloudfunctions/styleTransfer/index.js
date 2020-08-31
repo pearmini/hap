@@ -1,4 +1,3 @@
-// 云函数入口文件
 const cloud = require('wx-server-sdk');
 const request = require('request');
 const fs = require('fs');
@@ -14,16 +13,15 @@ function downloadImage(output_url, OPENID) {
     writeStream.on('finish', async function () {
       const fileStream = fs.createReadStream(localPath);
       const {fileID} = await cloud.uploadFile({
-        cloudPath: `tempImages/${OPENID}_${timestamp}/result.png`,
+        cloudPath: `tempImages/${OPENID}/result_${timestamp}.png`,
         fileContent: fileStream,
       });
       resolve(fileID);
     });
-
     request(output_url).pipe(writeStream);
   });
 }
-// 云函数入口函数
+
 exports.main = async (event, context) => {
   const {OPENID} = cloud.getWXContext();
   const {styleImageURL, contentImageURL} = event;

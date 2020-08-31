@@ -39,11 +39,9 @@ describe('Stack', () => {
 
   it('should check if stack is empty', () => {
     const stack = new Stack();
-
     expect(stack.isEmpty()).toBe(true);
 
     stack.push(1);
-
     expect(stack.isEmpty()).toBe(false);
   });
 });

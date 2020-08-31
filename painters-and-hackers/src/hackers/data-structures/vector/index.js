@@ -1,134 +1,121 @@
 import Vector from './Vector';
-import grid from '../../utils/grid';
+import {grid, getImageData, random} from '../../utils/index';
+
+const ADD = 0;
+const REMOVE = 1;
+const INSERT = 2;
+const END = 3;
 
 export default {
-  name: 'Vector',
-  frameRate: 30,
+  name: '向量',
+  nameE: 'Vector',
+  frameRate: 10,
   labels: ['数据结构'],
-  info: '演出中安排座位的学问',
+  info: '看露天电影的时候如何更加优雅地安排座位？',
+  fileID: 'cloud://wechatcloud-79m2p.7765-wechatcloud-79m2p-1259642785/algorithms/data-structures/vector/readme.md',
+  type: 2,
   imageURL:
-    'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Vector/Aug-25-2020%2020-55-24.gif?sign=c78bce8d6385d62e1e76cff0b4ee9c4b&t=1598360167',
-  frames(imageData, width, height) {
+    'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/data-structures/vector/3.png?sign=9de7df125e4385110c1fcb122f031aaf&t=1598836449',
+  setup: function (ctx, width, height) {
     const {cellRow, cellCol} = grid(width, height, 20);
-    const x = (i) => ((i % cellCol) * (imageData.width / cellCol)) | 0;
-    const y = (i) => (((i / cellCol) | 0) * (imageData.height / cellRow)) | 0;
-    const getImageData = (i) => {
-      const index = (y(i) * imageData.width + x(i)) * 4;
-      return [
-        imageData.data[index],
-        imageData.data[index + 1],
-        imageData.data[index + 2],
-        imageData.data[index + 3],
-      ];
-    };
-    const vector = new Vector();
-    const actions = getActions();
-    return actions;
-
-    function getActions() {
-      const totalCnt = cellRow * cellCol;
-      const actions = [];
-      let currentCnt = 0;
-
-      while (currentCnt < totalCnt) {
-        // 在后面加入
-        const potentialCnt = (Math.random() * 30) | 0;
-        const appendCnt = Math.min(totalCnt - currentCnt, potentialCnt);
-        currentCnt += appendCnt;
-        for (let i = 0; i < appendCnt; i++) {
-          const appendToVector = () => {
-            const size = vector.size();
-            vector.append(getImageData(size));
-            return vector;
-          };
-          actions.push(appendToVector);
-        }
-      }
-      return actions;
+    const vectorList = [];
+    for (let i = 0; i < cellRow; i++) {
+      vectorList.push({
+        vector: new Vector(),
+        state: ADD,
+        appendSize: random(1, cellCol / 3) | 0,
+        removeSize: 0,
+        insertList: [],
+      });
+    }
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, width, height);
+    return vectorList;
+  },
+  update: function (vectorList, width, height) {
+    const {cellCol} = grid(width, height, 20);
+    const isEnd = vectorList.every((d) => d.state === END);
+    if (isEnd) return true;
+    for (let i = 0; i < vectorList.length; i++) {
+      const o = vectorList[i];
+      const {vector, state} = o;
+      const actionByState = {
+        [ADD]: function () {
+          const value = vector.size();
+          vector.append(value);
+          o.appendSize--;
+          if (o.appendSize === 0) {
+            if (vector.size() >= cellCol) {
+              o.state = END;
+            } else {
+              const range = [1 / 3, 2 / 3];
+              o.state = REMOVE;
+              o.removeSize =
+                random(vector.size() * range[0], vector.size() * range[1]) | 0;
+            }
+          }
+        },
+        [REMOVE]: function () {
+          if (o.removeSize <= 0) {
+            o.state = INSERT;
+          } else {
+            const removeIndex = random(0, vector.size()) | 0;
+            const value = vector.remove(removeIndex);
+            o.removeSize--;
+            o.insertList.push({
+              removeIndex,
+              value,
+            });
+          }
+        },
+        [INSERT]: function () {
+          if (o.insertList.length === 0) {
+            o.state = ADD;
+            o.appendSize = random(1, cellCol - vector.size()) | 0;
+          } else {
+            const {value, removeIndex} = o.insertList.pop();
+            vector.insert(removeIndex, value);
+          }
+        },
+        [END]: function () {},
+      };
+      const action = actionByState[state];
+      action();
     }
   },
-  layout(vector, width, height) {
-    const {cellRow, cellCol, cellHeight, cellWidth} = grid(width, height, 20);
+  draw: function (ctx, width, height, vectorList, imageData) {
+    const {cellRow, cellCol, cellWidth, cellHeight} = grid(width, height, 20);
 
-    // 背景
-    const background = [
-      {
-        x: 0,
-        y: 0,
-        width,
-        height,
-        color: '#fff',
-      },
-    ];
+    ctx.clearRect(0, 0, width, height);
 
-    // 格子
-    const grids = [];
+    // draw grids
     for (let j = 0; j < cellRow; j++) {
       for (let i = 0; i < cellCol; i++) {
-        grids.push({
-          x: i * cellWidth,
-          y: j * cellHeight,
-          width: cellWidth,
-          height: cellHeight,
-          color: '#eee',
-        });
+        ctx.strokeStyle = '#eee';
+        ctx.strokeRect(i * cellWidth, j * cellHeight, cellWidth, cellHeight);
       }
     }
 
-    // 绘制数组容量
-    const capacities = [];
-    for (let i = 0; i < vector._capacity; i++) {
-      const x = i % cellCol;
-      const y = (i / cellCol) | 0;
-      capacities.push({
-        x: x * cellWidth,
-        y: y * cellHeight,
-        width: cellWidth,
-        height: cellHeight,
-        color: '#000',
-      });
-    }
+    // draw array
+    for (let i = 0; i < vectorList.length; i++) {
+      const {vector} = vectorList[i];
 
-    // 绘制数组元素
-    const elements = [];
-    for (let i = 0; i < vector.size(); i++) {
-      const x = i % cellCol;
-      const y = (i / cellCol) | 0;
-      const [r, g, b, a] = vector.get(i);
-      const v = (r * 0.299 + g * 0.587 + b * 0.114) | 0;
-      elements.push({
-        x: x * cellWidth + 1,
-        y: y * cellHeight + 1,
-        width: cellWidth - 2,
-        height: cellHeight - 2,
-        // color: `rgba(${v}, ${v}, ${v}, ${a})`,
-        color: `rgba(${r}, ${g}, ${b}, ${a})`,
-      });
-    }
+      // draw capacity
+      for (let j = 0; j < vector._capacity; j++) {
+        ctx.strokeStyle = '#000';
+        ctx.strokeRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+      }
 
-    return {
-      background,
-      grids,
-      capacities,
-      elements,
-    };
-  },
-  stroke: {
-    background(ctx, d) {
-      ctx.fillStyle = d.color;
-      ctx.fillRect(d.x, d.y, d.width, d.height);
-    },
-    grids(ctx, d) {
-      ctx.strokeStyle = d.color;
-      ctx.strokeRect(d.x, d.y, d.width, d.height);
-    },
-    capacities(ctx, d) {
-      ctx.strokeStyle = d.color;
-      ctx.strokeRect(d.x, d.y, d.width, d.height);
-    },
-    elements(ctx, d) {
-      ctx.fillStyle = d.color;
-      ctx.fillRect(d.x, d.y, d.width, d.height);
-    },
+      // draw size
+      for (let j = 0; j < vector.size(); j++) {
+        const index = i * cellCol + vector.get(j);
+        const [r, g, b, a] = getImageData(imageData, cellRow, cellCol, index);
+        const style = `rgba(${r}, ${g}, ${b}, ${a})`;
+        ctx.fillStyle = style;
+        ctx.strokeStyle = style;
+        ctx.strokeRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+        ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+      }
+    }
   },
 };

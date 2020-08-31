@@ -1,4 +1,4 @@
-import styles from './style';
+import styles from './styles';
 
 const labels = styles.reduce((total, cur) => [...total, ...cur.labels], []);
 
@@ -42,42 +42,27 @@ export default function () {
   };
 
   hacker.start = function () {
-    // 配置 canvas
     const [width, height] = size;
     const ctx = canvas.getContext('2d');
+    const {setup, update, draw, frameRate = 30} = defaultStyles.find(
+      (d) => d.name === style
+    );
 
-    // 获得可视化需要的参数
-    const {
-      frames: currentFrames,
-      stroke: currentStroke,
-      frameRate: currentFrameRate,
-      layout: currentLayout,s
-    } = defaultStyles.find((d) => d.name=== style);
-
-    // 运行的主函数
-    const actions = currentFrames(imageData, width, height);
-    let currentFrameIndex = 0;
     if (timer) clearInterval(timer);
-    setInterval(step, 1000 / currentFrameRate);
+    const data = setup(ctx, width, height);
     step();
-
+    timer = setInterval(step, 1000 / frameRate);
     return hacker;
+    
 
     function step() {
-      if (currentFrameIndex >= actions.length) {
+      const isEnd = update(data, width, height);
+      draw(ctx, width, height, data, imageData);
+      if (isEnd) {
         clearInterval(timer);
         end();
         return;
       }
-      const action = actions[currentFrameIndex++];
-      const data = action();
-      const layout = currentLayout(data, width, height);
-      Object.keys(layout).forEach((key) => {
-        const stroke = currentStroke[key];
-        const data = layout[key];
-        if (!stroke) return;
-        data.forEach((d) => stroke(ctx, d));
-      });
     }
   };
 

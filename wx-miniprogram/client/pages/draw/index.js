@@ -297,7 +297,7 @@ Page({
   },
 
   handleVisAnimation: async function (name, contentImageData) {
-    if (name !== 'Vector') {
+    if (name !== '向量') {
       wx.showToast({
         title: '暂时不支持，敬请期待～',
         icon: 'none',
