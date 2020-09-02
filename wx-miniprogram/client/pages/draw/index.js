@@ -297,13 +297,13 @@ Page({
   },
 
   handleVisAnimation: async function (name, contentImageData) {
-    if (name !== '向量') {
-      wx.showToast({
-        title: '暂时不支持，敬请期待～',
-        icon: 'none',
-      });
-      return;
-    }
+    // if (name !== '向量') {
+    //   wx.showToast({
+    //     title: '暂时不支持，敬请期待～',
+    //     icon: 'none',
+    //   });
+    //   return;
+    // }
     this.setData(
       {
         isHacker: true,

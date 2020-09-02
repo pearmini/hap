@@ -6,4 +6,4 @@ import insertSort from './sorting/insertion-sort/index';
 import mergeSort from './sorting/merge-sort/index';
 import binarySearch from './decrease-and-conquer/binary-search/index';
 
-export default [vector, bfs, dfs, prim, insertSort, mergeSort, binarySearch];
+export default [vector, binarySearch, insertSort, mergeSort, bfs, dfs, prim];

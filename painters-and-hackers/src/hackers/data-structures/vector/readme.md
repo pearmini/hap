@@ -2,11 +2,13 @@
 
 看露天电影的时候如何更加优雅地安排座位？
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/data-structures/vector/1.png?sign=06beac5270e14334f3ef72001c37273a&t=1598836400)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/data-structures/vector/3.png?sign=9de7df125e4385110c1fcb122f031aaf&t=1598836449)
 
 ## 引言
 
 露天电影是旧时代一种常见的娱乐方式。小明为了找回童年的记忆，所以准备在广场上举办一场露天电影，但是却在安排座位的时候遇见了困难。
+
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/data-structures/vector/1.png?sign=06beac5270e14334f3ef72001c37273a&t=1598836400)
 
 因为有如下的限制：
 

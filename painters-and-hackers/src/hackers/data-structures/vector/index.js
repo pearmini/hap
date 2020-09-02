@@ -12,11 +12,12 @@ export default {
   frameRate: 10,
   labels: ['数据结构'],
   info: '看露天电影的时候如何更加优雅地安排座位？',
-  fileID: 'cloud://wechatcloud-79m2p.7765-wechatcloud-79m2p-1259642785/algorithms/data-structures/vector/readme.md',
+  fileID:
+    'cloud://wechatcloud-79m2p.7765-wechatcloud-79m2p-1259642785/algorithms/data-structures/vector/readme.md',
   type: 2,
   imageURL:
     'https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/data-structures/vector/3.png?sign=9de7df125e4385110c1fcb122f031aaf&t=1598836449',
-  setup: function (ctx, width, height) {
+  setup({ctx, width, height}) {
     const {cellRow, cellCol} = grid(width, height, 20);
     const vectorList = [];
     for (let i = 0; i < cellRow; i++) {
@@ -32,7 +33,7 @@ export default {
     ctx.fillRect(0, 0, width, height);
     return vectorList;
   },
-  update: function (vectorList, width, height) {
+  update({data: vectorList, width, height}) {
     const {cellCol} = grid(width, height, 20);
     const isEnd = vectorList.every((d) => d.state === END);
     if (isEnd) return true;
@@ -83,7 +84,7 @@ export default {
       action();
     }
   },
-  draw: function (ctx, width, height, vectorList, imageData) {
+  draw({ctx, width, height, data: vectorList, imageData}) {
     const {cellRow, cellCol, cellWidth, cellHeight} = grid(width, height, 20);
 
     ctx.clearRect(0, 0, width, height);

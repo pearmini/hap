@@ -11,6 +11,7 @@ export default function () {
     end = () => {},
     hacker = {},
     defaultStyles = styles,
+    frameCount = 0,
     defaultLabels = Array.from(new Set(labels));
 
   hacker.canvas = function (_) {
@@ -49,15 +50,16 @@ export default function () {
     );
 
     if (timer) clearInterval(timer);
-    const data = setup(ctx, width, height);
+    frameCount = 0;
+    const data = setup({ctx, width, height, frameCount, imageData});
     step();
     timer = setInterval(step, 1000 / frameRate);
     return hacker;
-    
 
     function step() {
-      const isEnd = update(data, width, height);
-      draw(ctx, width, height, data, imageData);
+      const isEnd = update({data, width, height, frameCount, imageData});
+      draw({ctx, width, height, data, imageData, frameCount});
+      frameCount++;
       if (isEnd) {
         clearInterval(timer);
         end();
