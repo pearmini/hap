@@ -297,13 +297,13 @@ Page({
   },
 
   handleVisAnimation: async function (name, contentImageData) {
-    // if (name !== '向量') {
-    //   wx.showToast({
-    //     title: '暂时不支持，敬请期待～',
-    //     icon: 'none',
-    //   });
-    //   return;
-    // }
+    if (name !== '向量' && name !== '二分搜索') {
+      wx.showToast({
+        title: '暂时不支持，敬请期待～',
+        icon: 'none',
+      });
+      return;
+    }
     this.setData(
       {
         isHacker: true,
@@ -314,6 +314,7 @@ Page({
         canvas.width = this.data.canvasWidth * pixelRatio;
         canvas.height = this.data.canvasHeight * pixelRatio;
         const ctx = canvas.getContext('2d');
+        ctx.save();
         ctx.scale(pixelRatio, pixelRatio);
         const hacker = ph
           .hackers()
@@ -322,6 +323,7 @@ Page({
           .imageData(contentImageData)
           .style(name)
           .end(() => {
+            ctx.restore();
             this.setData({
               isDrawing: false,
               isDone: true,

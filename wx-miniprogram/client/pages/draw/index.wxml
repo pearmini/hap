@@ -52,13 +52,7 @@
 	 style="background:{{view.imagePath && self.imagePath ? '#eee' : '#fff'}}"
 	 wx:if="{{!isDrawing && !isCombining}}"
 	>
-		<!-- <view
-	 class="footer {{!view.imagePath ||!self.imagePath ? 'space-between' : 'center'}}"
-	 style="background:{{view.imagePath && self.imagePath ? '#eee' : '#fff'}}"
-	 wx:if="{{!isDrawing && !isCombining}}"
-	> -->
 		<view class="btn-group {{view.imagePath && self.imagePath ? 'close' : 'expand'}}">
-			<!-- <view class="btn-group {{!view.imagePath || !self.imagePath ? 'close' : 'expand'}}"> -->
 			<view class="button">
 				<wux-button type="royal" bind:click="handleSelectImage">
 					<wux-icon type="ios-image" size="{{16}}"></wux-icon>
@@ -72,7 +66,6 @@
 				</wux-button>
 			</view>
 		</view>
-		<!-- <view class="filter-container {{!view.imagePath || !self.imagePath ? 'full' : 'hide'}}"> -->
 		<view class="filter-container {{view.imagePath && self.imagePath ? 'full' : 'hide'}}">
 			<view class="segmented">
 				<wux-segmented-control
@@ -80,6 +73,8 @@
 				 values="{{ filterNames }}"
 				 wux-class="clear"
 				 bind:change="handleChangeFilterType"
+				 controlled="{{true}}"
+				 current="{{selectedFilterType}}"
 				/>
 			</view>
 			<view class="filter">

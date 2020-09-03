@@ -1,4 +1,4 @@
-import {bisectLeft} from './binarySearch';
+import {bisectLeft, bisectCenter} from './binarySearch';
 import {grid, getImageData, random, range, colorArray} from '../../utils/index';
 
 export default {
@@ -21,10 +21,11 @@ export default {
     const yRanges = [];
     const stepX = (lo, hi) => xRanges.push([lo, hi]);
     const stepY = (lo, hi) => yRanges.push([lo, hi]);
-    bisectLeft(range(0, cellCol), x, {
+    
+    bisectCenter(range(0, cellCol), x, {
       step: stepX,
     });
-    bisectLeft(range(0, cellRow), y, {
+    bisectCenter(range(0, cellRow), y, {
       step: stepY,
     });
 
@@ -36,8 +37,8 @@ export default {
       yIndex: 0,
       areaX: 0,
       areaY: 0,
-      areaWidth: cellCol + 1,
-      areaHeight: cellRow + 1,
+      areaWidth: cellCol,
+      areaHeight: cellRow,
     };
   },
   update({data, width, height, frameCount}) {
@@ -48,17 +49,20 @@ export default {
     )
       return true;
 
-    if (data.xIndex < data.xRanges.length && frameCount % 2 !== flag) {
+    const isXEnd = data.xIndex >= data.xRanges.length;
+    const isYEnd = data.yIndex >= data.yRanges.length;
+
+    if (!isXEnd && (frameCount % 2 !== flag || isYEnd)) {
       const [lo, hi] = data.xRanges[data.xIndex];
       data.areaX = lo;
-      data.areaWidth = hi - lo + 1;
+      data.areaWidth = hi - lo;
       data.xIndex++;
     }
 
-    if (data.yIndex < data.yRanges.length && frameCount % 2 === flag) {
+    if (!isYEnd && (frameCount % 2 === flag || isXEnd)) {
       const [lo, hi] = data.yRanges[data.yIndex];
       data.areaY = lo;
-      data.areaHeight = hi - lo + 1;
+      data.areaHeight = hi - lo;
       data.yIndex++;
     }
 
