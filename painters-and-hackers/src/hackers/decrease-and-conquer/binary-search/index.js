@@ -1,4 +1,4 @@
-import {bisectLeft, bisectCenter} from './binarySearch';
+import {bisectCenter} from './binarySearch';
 import {grid, getImageData, random, range, colorArray} from '../../utils/index';
 
 export default {
@@ -21,7 +21,7 @@ export default {
     const yRanges = [];
     const stepX = (lo, hi) => xRanges.push([lo, hi]);
     const stepY = (lo, hi) => yRanges.push([lo, hi]);
-    
+
     bisectCenter(range(0, cellCol), x, {
       step: stepX,
     });

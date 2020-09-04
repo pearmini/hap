@@ -1,4 +1,4 @@
-export default class Vector {
+class Vector {
   constructor(capacity) {
     this._DEFAULT_CAPACITY = 10;
     this._size = 0;
@@ -81,3 +81,5 @@ export default class Vector {
     this._elem = newElem;
   }
 }
+
+export default Vector;

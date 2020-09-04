@@ -297,7 +297,12 @@ Page({
   },
 
   handleVisAnimation: async function (name, contentImageData) {
-    if (name !== '向量' && name !== '二分搜索') {
+    if (
+      name !== '向量' &&
+      name !== '二分搜索' &&
+      name !== '插入排序' &&
+      name !== '归并排序'
+    ) {
       wx.showToast({
         title: '暂时不支持，敬请期待～',
         icon: 'none',

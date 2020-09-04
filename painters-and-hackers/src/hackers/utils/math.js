@@ -13,4 +13,10 @@ function range(lo, hi) {
   }
   return a;
 }
-export {random, range};
+
+function map(value, lo, hi, left, right) {
+  const t = (value - lo) / (hi - lo);
+  return left * (1 - t) + t * right;
+}
+
+export {random, range, map};
