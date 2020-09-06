@@ -18,7 +18,7 @@
 
 ![process](./screenshots/process.png)
 
-《画家与骇客》给用户提供了两个平台享受这个有意思的服务：[小程序](./wx-miniprogram/readme.md)和[在线网页](./web/readme.md)（在线网页目前还在开发中)。
+《画家与骇客》给用户提供了两个平台享受这个有意思的服务：[小程序](./wx-miniprogram)和[在线网页](./web)（在线网页目前还在开发中)。
 
 ![qrcode](./screenshots/qrcode.jpg)
   
@@ -27,8 +27,13 @@
 - **人像分割**：使用了 [Tensorflow.js/body-pix](https://github.com/tensorflow/tfjs-models/tree/master/body-pix)。
 - **风格迁移**：
   - 使用 [DeepAi 提供的 API](https://deepai.org/machine-learning-model/fast-style-transfer)。
-  - 支持风格迁移的艺术品具体查看[这里](./painters-and-hackers/readme.md)。
-- **数据结构和算法可视化**：首先实现该数据结构和算法，然后测试，测试成功之后进行可视化。具体的数据结构和算法的实现和介绍请见[这里](./painters-and-hackers/readme.md)。
+  - 支持风格迁移的艺术品具体查看[这里](./painters-and-hackers)。
+- **数据结构和算法可视化**：首先实现该数据结构和算法，然后测试，测试成功之后进行可视化。具体的数据结构和算法的实现和介绍请见[这里](./painters-and-hackers)。
+
+## 存在问题
+
+- body-pix 的效果不是很理想。
+- style-transfer 过程太慢。
   
 ## 未来工作
 
