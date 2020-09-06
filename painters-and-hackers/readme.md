@@ -55,7 +55,7 @@ hacker.start();
 - 数据结构
   - [向量](./src/hackers/data-structures/vector)
 - 减而治之
-  - [二分搜索](./src/hackers/decrease-and-conquer/binary-search)
+  - [二分查找](./src/hackers/decrease-and-conquer/binary-search)
 - 排序
   - [插入排序](./src/hackers/sorting/insertion-sort)
   - [归并排序](./src/hackers/sorting/merge-sort)
