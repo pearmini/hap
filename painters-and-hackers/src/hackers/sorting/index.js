@@ -6,8 +6,8 @@ export const configSetup = (sortMethod) => {
     const array = d3.shuffle(d3.range(40));
     const arrays = [array];
     const step = (a) => arrays.push(a);
-    sortMethod(array, {step});
-
+    const b = sortMethod(array, {step});
+    arrays.push(b);
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, width, height);
     return arrays;
@@ -37,7 +37,7 @@ export const draw = ({ctx, width, height, imageData, data, frameCount}) => {
     const y0 = map(preArrayIndex, 0, m, 0, height) | 0;
     const x = map(i, 0, n, 0, width) | 0;
     const y = map(currentArrayIndex, 0, m, 0, height) | 0;
-    const index = currentArrayIndex * n + i;
+    const index = (currentArrayIndex - 1) * n + i;
     const [r, g, b] = getImageData(imageData, m, n, index);
     const v = map(current, 0, n - 1, 0.2, 1);
 

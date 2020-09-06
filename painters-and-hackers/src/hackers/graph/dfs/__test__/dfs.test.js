@@ -1,9 +1,10 @@
-import graph from '../../index';
+import {getTestGraph} from '../../index';
 import dfs from '../dfs';
 
 describe('Graph', () => {
   it('should do dfs operation', () => {
     const vertices = [];
+    const graph = getTestGraph();
     const step = (v, state) => {
       if (state === 1) {
         vertices.push({

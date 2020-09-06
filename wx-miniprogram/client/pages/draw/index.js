@@ -118,7 +118,6 @@ Page({
     this.setData(
       {
         isDone: false,
-        isHacker: false,
       },
       async () => {
         const {tempFilePaths} = await chooseImage({
@@ -126,29 +125,36 @@ Page({
           sizeType: ['original', 'compressed'],
           sourceType: ['album', 'camera'],
         });
-        const selectedSelfImagePath = tempFilePaths[0];
-        const {width, height} = await this.drawImageToCanvas(
-          selectedSelfImagePath,
-          'self'
-        );
+        this.setData(
+          {
+            isHacker: false,
+          },
+          async () => {
+            const selectedSelfImagePath = tempFilePaths[0];
+            const {width, height} = await this.drawImageToCanvas(
+              selectedSelfImagePath,
+              'self'
+            );
 
-        // 这里需要一点延迟在获得 ImageData
-        setTimeout(async () => {
-          const imageData = await canvasGetImageData({
-            canvasId: CAVANS_ID,
-            x: 0,
-            y: 0,
-            width: width,
-            height: height,
-          });
-          const self = {
-            ...this.data.self,
-            imageData,
-          };
-          const {imagePath} = this.data.view;
-          this.selfImageData = imageData;
-          imagePath && (await this.combine(self, this.data.view));
-        }, 1000);
+            // 这里需要一点延迟在获得 ImageData
+            setTimeout(async () => {
+              const imageData = await canvasGetImageData({
+                canvasId: CAVANS_ID,
+                x: 0,
+                y: 0,
+                width: width,
+                height: height,
+              });
+              const self = {
+                ...this.data.self,
+                imageData,
+              };
+              const {imagePath} = this.data.view;
+              this.selfImageData = imageData;
+              imagePath && (await this.combine(self, this.data.view));
+            }, 1000);
+          }
+        );
       }
     );
   },
@@ -297,18 +303,6 @@ Page({
   },
 
   handleVisAnimation: async function (name, contentImageData) {
-    if (
-      name !== '向量' &&
-      name !== '二分搜索' &&
-      name !== '插入排序' &&
-      name !== '归并排序'
-    ) {
-      wx.showToast({
-        title: '暂时不支持，敬请期待～',
-        icon: 'none',
-      });
-      return;
-    }
     this.setData(
       {
         isHacker: true,

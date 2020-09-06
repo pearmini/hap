@@ -2,7 +2,10 @@
 
 “穷国王”如何修建铁路？
 
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/10.png?sign=9493d4e329f0576909fc6ee21fb391ad&t=1599378239)
+
 ## 引言
+
 现在A王国的国王遇见一个很棘手的问题。
 
 他希望在A国的城市间修建铁路，使得任意两个城市之间都可以通过铁路直接到达。
@@ -17,7 +20,7 @@
 
 图论就是研究图的，在计算机中图是由点和连接点的边（弧）构成的集合。比如A王国由a, b, c, d, e, f, g, h, i九个城市构成，那么用图来表示就是如下图。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/1.png?sign=59daed4c5367ba60574cd141f4029a76&t=1566215678)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/1.png?sign=105df167392a293ebdbf91dbd499e126&t=1599378266)
 
 加权图就是图中的每一条边都有一个权重，A王国这张图上每一条边的权重代表：边所连接两个城市间修建铁路的成本。比如在上图中连接a, b边的权重为4，说明在城市a和城市b修建一条铁路的成本为4。
 
@@ -39,38 +42,38 @@ Prim算法将图中所有的点分成两类：第一类是已经在最小生成�
 
 我们首先把点a加入第一类点。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/1.png?sign=59daed4c5367ba60574cd141f4029a76&t=1566215678)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/1.png?sign=105df167392a293ebdbf91dbd499e126&t=1599378266)
 
 当前第二类点和第一类点相连的是b、h，因为a、b间的权重是4，a、h间的权重是8，所以把b加入第一类点。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/2.png?sign=5d420faa98e048be307689745efdec37&t=1566215700)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/2.png?sign=34c61cdac70b860e40ae3a988f36dc1a&t=1599378281)
 
 当前第二类点和第一类点相连的是h、c，因为a、h间的权重是8，b、h间的权重是11，b、c间的权重是8，所以把c加入第一类点。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/3.png?sign=3bc764ff73e5849907898d4161bff6bb&t=1566216255)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/3.png?sign=4fcb940d591f18d12e4c19b9900ee46e&t=1599378289)
 
 当前第二类点和第一类点相连的是h、i、d、f，因为c、i间的权重最小为2，所以把i加入第一类点。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/4.png?sign=505cfaf8b2e35039c50889086bad41b4&t=1566216268)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/4.png?sign=8d55f5a9e0a08d38c5181804eb52bbe7&t=1599378299)
 
 就一直这样持续下去，最后一张图就是最后的结果。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/5.png?sign=42854cf3be5459c8d3a9d532c1e53ee1&t=1566215722)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/5.png?sign=24b82fbb2e48e59d9d2aad20ee0b03c9&t=1599378322)
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/6.png?sign=f51a84cc6358ebcf9af54db85325da9b&t=1566215729)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/6.png?sign=86e6246fd47d28ac3e2f710c982b29c1&t=1599378333)
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/7.png?sign=9b7c1f3fdfa1dce99f3fbbfbe7068202&t=1566216278)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/7.png?sign=d8a688466a9cd44974cb0bdd219850eb&t=1599378344)
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/8.png?sign=c9df79d6c8b9eef186e85823705db1b7&t=1566215743)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/8.png?sign=1ac2b74660429850efb337c5fb5b070b&t=1599378354)
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/9.png?sign=dd714bc4d66dc4ec1b51b3e2ee3ac075&t=1566216290)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/9.png?sign=689ee6566dbb1e456a3a11fab2401b3a&t=1599378361)
 
 ## 可视化
 
 可视化这个算法的思路也非常的简单，我们首先将图片分成一个个的小格子，格子间由边相连，然后给这些边一些随机的权重。
-这之后随机选择一个格子作为起始点，然后用Prim算法将格子一个一个加入最小生成树，同时对加入的格子染色（染的颜色由图片决定，染的风格由绘画风格确定）。下面就是用“印象 日出”绘制的效果。
+这之后随机选择一个格子作为起始点，然后用Prim算法将格子一个一个加入最小生成树，同时对加入的格子染色（染的颜色由图片决定）。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/Prim/example.gif?sign=f6566399287bf7fd64e5727872ca6da0&t=1566215758)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/prim/1.gif?sign=c3149074a85f840faeb036bd93b453e8&t=1599378019)
 
 ## 参考资料
 

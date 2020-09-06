@@ -2,6 +2,8 @@
 
 我就要一条路走到黑!
 
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/dfs/1.png?sign=f73ac70f70855072871a19374cab6dfb&t=1599377818)
+
 ## 引言
 
 之前一个女教师的辞职信火遍网络“这个世界这么大，我想去看看”，但去看世界之前我们不如先去周游一下中国的大好河山。
@@ -13,7 +15,7 @@ DFS（Depth First Search），深度优先搜索算法，是计算机图论中�
 
 图论就是研究图的，在计算机中图是由点和连接点的边（弧）构成的集合。如果把中国的城市都看做一个点，城市之间的道路看成边，那么中国地图就是一张大的图，如下图所示（一部分）。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/BFS/%E5%9B%BE%E7%89%87%E5%9B%9B.png?sign=e946958747762be5eb8074ac9d4c29c3&t=1566018018)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/dfs/2.png?sign=f38cc2601e58e9825243082933f3519b&t=1599377931)
 
 而遍历的意思就是把图中的点都访问一次，也就是把中国地图上的所有城市都旅游一次。
 
@@ -23,15 +25,15 @@ DFS的核心就是一条路走到黑，当这条路走到底，没有路了之�
 
 比如我们从北京出发，先去呼和浩特，发现没有路了，就回到北京，发现石家庄可以去，就去石家庄。旅游完了石家庄，就去太原，之后发现又没有路了，就回到石家庄，然后去郑州...按照这种策略旅游，最后得到下面这张图。图中的数字是旅游的顺序。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/DFS/%E5%9B%BE%E7%89%87%E5%85%AD.png?sign=16a1045141fc06cfaa38a08c583c82d8&t=1566019729)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/dfs/3.png?sign=391c986966a05a96fab0f9d5c42f4074&t=1599377942)
 
 可以发现，我们是选择一个方向一直走，然后没有路了，再回过头，选择一个可以走的方向继续走。
 
 ## 可视化
 
-可视化这个算法的思路也非常的简单，我们首先将图片分成一个个的小格子，随机选择一个格子作为起始点，然后用DFS策略访问所有的格子，每访问到一个格子就对该格子染色（染的颜色由图片决定，染的风格由绘画风格确定）。下面就是用“印象 日出”绘制的效果，可以看到染色一条“路”一条“路”的染的。
+可视化这个算法的思路也非常的简单，我们首先将图片分成一个个的小格子，随机选择一个格子作为起始点，然后用DFS策略访问所有的格子，每访问到一个格子就对该格子染色（染的颜色由图片决定，染的风格由绘画风格确定）。下面，可以看到染色一条“路”一条“路”的染的。
 
-![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/DFS/example.gif?sign=f2ad8a03c9f252acc7b3a6b049f27f4f&t=1566019907)
+![alt text](https://7765-wechatcloud-79m2p-1259642785.tcb.qcloud.la/algorithms/graph/dfs/1.gif?sign=32c2369be493c79fe7e4c16d89455756&t=1599377828)
 
 ## 参考资料
 

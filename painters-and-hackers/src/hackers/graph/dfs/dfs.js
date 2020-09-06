@@ -10,9 +10,10 @@ function dfs(graph, s, options = {}) {
   function DFS(v) {
     status.set(v, DISCOVERED);
     step && step(v, DISCOVERED);
-    for (let u = graph.firstNbr(v); u; u = graph.nextNbr(v, u)) {
+    for (let u = graph.firstNbr(v); u !== null; u = graph.nextNbr(v, u)) {
       if (status.get(u) === UNDISCOVERED) DFS(u);
       status.set(v, VISITED);
+      step && step(v, VISITED);
     }
   }
 }

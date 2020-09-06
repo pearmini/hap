@@ -1,9 +1,10 @@
-import graph from '../../index';
+import {getTestGraph} from '../../index';
 import prim from '../prim';
 
 describe('Graph', () => {
   it('should do prim operation', () => {
     const vertices = [];
+    const graph = getTestGraph();
     const step = (v) => {
       vertices.push(v);
     };

@@ -12,8 +12,8 @@ function bfs(graph, v, options = {}) {
   step && step(v, DISCOVERED);
 
   while (queue.length) {
-    const v = queue.shift();
-    for (let u = graph.firstNbr(v); u; u = graph.nextNbr(v, u)) {
+    const v = queue.shift();  
+    for (let u = graph.firstNbr(v); u !== null; u = graph.nextNbr(v, u)) {
       if (status.get(u) === UNDISCOVERED) {
         status.set(u, DISCOVERED);
         queue.push(u);

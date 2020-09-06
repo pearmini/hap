@@ -8,7 +8,7 @@ function mergeSort(a, options = {}) {
 
   for (let m = 1; m < n; m <<= 1) {
     for (let i = 0; i < n; i += m << 1) {
-      merge(i, Math.min(n, i + m), Math.min(n, (i + m) << 1));
+      merge(i, Math.min(n, i + m), Math.min(n, i + (m << 1)));
     }
     step && step([...b0]);
     [b0, b1] = [b1, b0];
@@ -20,6 +20,8 @@ function mergeSort(a, options = {}) {
     }
   }
 
+  step && step([...b0]);
+  
   return b0;
 }
 
