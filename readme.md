@@ -27,8 +27,8 @@
 - **人像分割**：使用了 [Tensorflow.js/body-pix](https://github.com/tensorflow/tfjs-models/tree/master/body-pix)。
 - **风格迁移**：
   - 使用 [DeepAi 提供的 API](https://deepai.org/machine-learning-model/fast-style-transfer)。
-  - 支持风格迁移的艺术品具体查看[这里](./painters-and-hackers)。
-- **数据结构和算法可视化**：首先实现该数据结构和算法，然后测试，测试成功之后进行可视化。具体的数据结构和算法的实现和介绍请见[这里](./painters-and-hackers)。
+  - 支持风格迁移的艺术品具体查看[这里](./sdk)。
+- **数据结构和算法可视化**：首先实现该数据结构和算法，然后测试，测试成功之后进行可视化。具体的数据结构和算法的实现和介绍请见[这里](./sdk)。
 
 ## 存在问题
 
