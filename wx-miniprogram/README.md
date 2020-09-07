@@ -12,6 +12,16 @@
 
 ![interface](./screenshots/interface.png)
 
+## 说明
+
+目前是用 tensorflow.js 的 body-pix 进行人像分割，为了适配 Android 端，需要修改构建后 `miniprogram_npm/@tensorflow-models/body-pix/index.js` 中 **1146** 行中的 `function getInputSize()` 如下：
+
+```js
+function getInputSize(input) {
+    return [input.shape[0], input.shape[1]];
+}
+```
+
 ## 技术栈
 
 原生小程序 + 小程序云开发
