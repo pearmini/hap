@@ -4,6 +4,7 @@ import promisify from '../../utils/promisify';
 const uploadFile = promisify(wx.cloud.uploadFile);
 const downloadFile = promisify(wx.cloud.downloadFile);
 const getTempFileURL = promisify(wx.cloud.getTempFileURL);
+const readFile = promisify(wx.getFileSystemManager().readFile);
 
 export default {
   async styleTransfer(contentImagePath, styleImagePath, openID) {
@@ -42,5 +43,18 @@ export default {
     });
 
     return tempFilePath;
+  },
+  async checkImage(path) {
+    const {data} = await readFile({filePath: path});
+    return request({
+      method: 'fn',
+      name: 'checkImage',
+      options: {
+        name: 'checkImage',
+        data: {
+          buffer: data,
+        },
+      },
+    });
   },
 };

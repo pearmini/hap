@@ -115,46 +115,62 @@ Page({
   },
 
   handleUploadSelf: async function () {
+    const {tempFiles} = await chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album', 'camera'],
+    });
+
+    const img = tempFiles[0];
+    if (img.size > 1024 * 1024) {
+      wx.showToast({
+        title: '图片不能超过1M！',
+        icon: 'none',
+      });
+      return;
+    }
+    wx.showLoading({
+      title: '校验图片中...',
+    });
+    const {
+      result: {errCode},
+    } = await drawModel.checkImage(img.path);
+
+    wx.hideLoading();
+    if (errCode !== 0) {
+      wx.showToast({title: '上传的图片不符合规定！', icon: 'none'});
+      return;
+    }
+
     this.setData(
       {
+        isHacker: false,
         isDone: false,
       },
       async () => {
-        const {tempFilePaths} = await chooseImage({
-          count: 1,
-          sizeType: ['original', 'compressed'],
-          sourceType: ['album', 'camera'],
-        });
-        this.setData(
-          {
-            isHacker: false,
-          },
-          async () => {
-            const selectedSelfImagePath = tempFilePaths[0];
-            const {width, height} = await this.drawImageToCanvas(
-              selectedSelfImagePath,
-              'self'
-            );
-
-            // 这里需要一点延迟在获得 ImageData
-            setTimeout(async () => {
-              const imageData = await canvasGetImageData({
-                canvasId: CAVANS_ID,
-                x: 0,
-                y: 0,
-                width: width,
-                height: height,
-              });
-              const self = {
-                ...this.data.self,
-                imageData,
-              };
-              const {imagePath} = this.data.view;
-              this.selfImageData = imageData;
-              imagePath && (await this.combine(self, this.data.view));
-            }, 1000);
-          }
+        const selectedSelfImagePath = img.path;
+        const {width, height} = await this.drawImageToCanvas(
+          selectedSelfImagePath,
+          'self'
         );
+
+        // 这里需要一点延迟在获得 ImageData
+        setTimeout(async () => {
+          const imageData = await canvasGetImageData({
+            canvasId: CAVANS_ID,
+            x: 0,
+            y: 0,
+            width: width,
+            height: height,
+          });
+          const self = {
+            ...this.data.self,
+            imageData,
+          };
+          const {imagePath} = this.data.view;
+          this.selfImageData = imageData;
+          imagePath && (await this.combine(self, this.data.view));
+        }, 1000);
       }
     );
   },
