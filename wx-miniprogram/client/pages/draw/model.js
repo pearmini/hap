@@ -44,15 +44,24 @@ export default {
 
     return tempFilePath;
   },
-  async checkImage(path) {
-    const {data} = await readFile({filePath: path});
+  async checkImage(path, openID) {
+    const base = `tempImages/${openID}`;
+    const timestamp = Date.now() % 100;
+    const {fileID} = await uploadFile({
+      cloudPath: `${base}/self_${timestamp}.png`,
+      filePath: path,
+    });
+    const {fileList} = await getTempFileURL({
+      fileList: [fileID],
+    });
     return request({
       method: 'fn',
       name: 'checkImage',
       options: {
         name: 'checkImage',
         data: {
-          buffer: data,
+          url: fileList[0].tempFileURL,
+          openID,
         },
       },
     });

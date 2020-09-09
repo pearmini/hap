@@ -122,6 +122,7 @@ Page({
     });
 
     const img = tempFiles[0];
+
     if (img.size > 1024 * 1024) {
       wx.showToast({
         title: '图片不能超过1M！',
@@ -132,9 +133,10 @@ Page({
     wx.showLoading({
       title: '校验图片中...',
     });
+    const openid = wx.getStorageSync('openid');
     const {
       result: {errCode},
-    } = await drawModel.checkImage(img.path);
+    } = await drawModel.checkImage(img.path, openid);
 
     wx.hideLoading();
     if (errCode !== 0) {

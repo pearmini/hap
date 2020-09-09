@@ -5,6 +5,7 @@ wx.cloud.init();
 const db = wx.cloud.database();
 const $ = db.command.aggregate;
 const _ = db.command;
+const request = promisify(wx.request);
 
 export default async function ({method, name, options}) {
   try {
@@ -36,5 +37,5 @@ export default async function ({method, name, options}) {
       title: '出现了未知错误！',
       icon: 'none',
     });
-  } 
+  }
 }

@@ -42,6 +42,7 @@ async function getImageFileId(url) {
     .get();
   return data[0].fileId;
 }
+
 // 云函数入口函数
 exports.main = async () => {
   const views = await getAllViews();
