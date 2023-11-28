@@ -1,6 +1,5 @@
 import bear from "./assets/bear.png";
 import styled from "styled-components";
-import "./App.css";
 
 const Main = styled.main`
   width: 100%;
