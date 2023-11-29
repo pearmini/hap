@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import bear from "./assets/bear.png";
 import styled from "styled-components";
 
@@ -52,7 +53,35 @@ const Sider = styled.aside`
   padding: 1.8rem 1rem;
 `;
 
+const Avatar = styled.img`
+  margin-right: 4rem;
+`;
+
+function context2d(canvas, width, height, dpr = 2) {
+  const context = canvas.getContext("2d");
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+  context.scale(dpr, dpr);
+  return context;
+}
+
 function App() {
+  const canvasRef = useRef(null);
+  const imageRef = useRef(null);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = bear;
+    image.onload = () => {
+      const { clientWidth: width, clientHeight: height } = imageRef.current;
+      const context = context2d(canvasRef.current, width, height);
+      context.fillStyle = "orange";
+      context.fillRect(0, 0, width, height);
+    };
+  });
+
   return (
     <Main>
       <Playground>
@@ -60,7 +89,8 @@ function App() {
           <HeaderTitle>Hap</HeaderTitle>
         </Header>
         <Content>
-          <img src={bear} width={300} />
+          <Avatar ref={imageRef} src={bear} width={300} />
+          <canvas ref={canvasRef} />
         </Content>
         <Footer>Made by MiniPear</Footer>
       </Playground>
