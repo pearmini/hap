@@ -13,6 +13,10 @@ function context2d(width, height, dpr = null) {
 export function loadImageData(image, width, height) {
   const context = context2d(width, height, 1);
   context.drawImage(image, 0, 0, width, height);
+  return getImageData(context, width, height);
+}
+
+export function getImageData(context, width, height) {
   const imageData = context.getImageData(0, 0, width, height).data;
   return imageData;
 }

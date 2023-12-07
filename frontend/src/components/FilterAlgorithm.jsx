@@ -11,7 +11,11 @@ const Preview = styled.div`
 
 const ButtonContainer = styled.div``;
 
-export function FilterAlgorithm({ imageData, onFinish = () => {} }) {
+export function FilterAlgorithm({
+  imageData,
+  options = {},
+  onFinish = () => {},
+}) {
   const previewRef = useRef(null);
   const clear = useRef(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(
@@ -26,7 +30,7 @@ export function FilterAlgorithm({ imageData, onFinish = () => {} }) {
   function renderAlgorithm(image, name) {
     if (clear.current) clear.current();
     const { render } = algorithms.find((d) => d.name === name);
-    const app = render(image, {});
+    const app = render(image, options);
     const node = app.node();
     if (!(node instanceof HTMLElement)) return;
     const preview = previewRef.current;

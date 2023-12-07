@@ -7,20 +7,30 @@ import {
   vec,
   vecDist,
   mapAttrs,
+  scaleLinear,
 } from "@charming-art/charming";
 
-function color(imageData, index) {
-  const r = imageData[index * 4];
-  const g = imageData[index * 4 + 1];
-  const b = imageData[index * 4 + 2];
-  const a = imageData[index * 4 + 3];
-  return [r, g, b, a];
+function useColor(imageData, width, height) {
+  const { data, width: imageWidth, height: imageHeight } = imageData;
+  const scaleX = scaleLinear([0, width], [0, imageWidth]);
+  const scaleY = scaleLinear([0, height], [0, imageHeight]);
+  return (x0, y0) => {
+    const x = Math.round(scaleX(x0));
+    const y = Math.round(scaleY(y0));
+    const i = x + y * imageWidth;
+    const r = data[i * 4];
+    const g = data[i * 4 + 1];
+    const b = data[i * 4 + 2];
+    const a = data[i * 4 + 3];
+    return [r, g, b, a];
+  };
 }
 
 export function randomUniform(
-  { data: imageData, width, height },
-  { size = 10, opacity = 0.7 }
+  imageData,
+  { width, height, size = 10, opacity = 0.7 }
 ) {
+  const color = useColor(imageData, width, height);
   const cols = (width / size) | 0;
   const rows = (height / size) | 0;
   const point = range(cols * rows).map(() => [
@@ -39,8 +49,7 @@ export function randomUniform(
       y: (d) => d[1],
       r: (d) => vecDist(vec(width / 2, height / 2), vec(d[0], d[1])),
       fill: ([x, y]) => {
-        const i = x + y * width;
-        const [r, g, b, a] = color(imageData, i);
+        const [r, g, b, a] = color(x, y);
         return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
       },
       fillOpacity: opacity,
