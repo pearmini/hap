@@ -10,7 +10,7 @@ import {
   scaleLinear,
 } from "@charming-art/charming";
 
-function useColor(imageData, width, height) {
+function createColor(imageData, width, height) {
   const { data, width: imageWidth, height: imageHeight } = imageData;
   const scaleX = scaleLinear([0, width], [0, imageWidth]);
   const scaleY = scaleLinear([0, height], [0, imageHeight]);
@@ -26,17 +26,11 @@ function useColor(imageData, width, height) {
   };
 }
 
-export function randomUniform(
-  imageData,
-  { width, height, size = 10, opacity = 0.7 }
-) {
-  const color = useColor(imageData, width, height);
+export function randomUniform(imageData, { width, height, size = 10, opacity = 0.7 }) {
+  const color = createColor(imageData, width, height);
   const cols = (width / size) | 0;
   const rows = (height / size) | 0;
-  const point = range(cols * rows).map(() => [
-    random(width) | 0,
-    random(height) | 0,
-  ]);
+  const point = range(cols * rows).map(() => [random(width) | 0, random(height) | 0]);
 
   const app = createApp({ width, height });
 
