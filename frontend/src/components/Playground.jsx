@@ -47,11 +47,7 @@ export function Playground() {
   return (
     <Flex justify="center" gap="2.5rem">
       <Avatar ref={imageRef} src={src} />
-      <FilterAlgorithm
-        imageData={imageData}
-        onFinish={onAlgorithmFinish}
-        options={{ width, height }}
-      />
+      <FilterAlgorithm imageData={imageData} onFinish={onAlgorithmFinish} options={{ width, height }} />
       <FilterStyle imageData={imageData2} options={{ width, height }} />
     </Flex>
   );

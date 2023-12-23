@@ -11,21 +11,15 @@ const Preview = styled.div`
 
 const ButtonContainer = styled.div``;
 
-export function FilterAlgorithm({
-  imageData,
-  options = {},
-  onFinish = () => {},
-}) {
+export function FilterAlgorithm({ imageData, options = {}, onFinish = () => {} }) {
   const previewRef = useRef(null);
   const clear = useRef(null);
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState(
-    algorithms[defaultIndex].name
-  );
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithms[defaultIndex].name);
 
   useEffect(() => {
     if (!imageData) return;
     renderAlgorithm(imageData, selectedAlgorithm);
-  }, [imageData]);
+  }, [imageData, selectedAlgorithm]);
 
   function renderAlgorithm(image, name) {
     if (clear.current) clear.current();
@@ -46,7 +40,6 @@ export function FilterAlgorithm({
 
   function onSelect(value) {
     setSelectedAlgorithm(value);
-    renderAlgorithm(imageData, value);
   }
 
   return (
@@ -59,12 +52,7 @@ export function FilterAlgorithm({
           options={algorithms.map(({ name }) => ({ name, value: name }))}
         />
         <ButtonContainer>
-          <Button
-            type="primary"
-            onClick={onClick}
-            icon={<UndoOutlined />}
-            shape="circle"
-          ></Button>
+          <Button type="primary" onClick={onClick} icon={<UndoOutlined />} shape="circle"></Button>
         </ButtonContainer>
       </Flex>
     </Flex>
