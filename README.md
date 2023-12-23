@@ -1,3 +1,3 @@
 # Hap: Hackers and Painters
 
-Beautify avatar with algorithm visualization and Open AI.
+Turn avatar into artwork with algorithm visualization and AI.
