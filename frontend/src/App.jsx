@@ -12,7 +12,7 @@ const Main = styled.section`
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  width: calc(100% - 20rem);
+  width: 100%;
 `;
 
 const Header = styled.header`
@@ -35,17 +35,6 @@ const Footer = styled.footer`
   padding: 0.8rem 0;
 `;
 
-const Sider = styled.aside`
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100%;
-  z-index: 200;
-  width: 20rem;
-  background-color: #111;
-  padding: 1.8rem 1rem;
-`;
-
 function App() {
   return (
     <Layout>
@@ -54,11 +43,8 @@ function App() {
           <HeaderTitle>Hap</HeaderTitle>
         </Header>
         <Playground />
-        <Footer>Made by MiniPear</Footer>
+        <Footer>Made by MiniPear with Charming.js</Footer>
       </Main>
-      <Sider>
-        <span>Editor</span>
-      </Sider>
     </Layout>
   );
 }
