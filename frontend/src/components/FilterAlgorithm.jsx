@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Flex, Select } from "antd";
 import styled from "styled-components";
 import { UndoOutlined } from "@ant-design/icons";
@@ -15,24 +15,26 @@ export function FilterAlgorithm({ imageData, options = {}, onFinish = () => {} }
   const previewRef = useRef(null);
   const clear = useRef(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(algorithms[defaultIndex].name);
+  const renderAlgorithm = useCallback(
+    (image, name) => {
+      if (clear.current) clear.current();
+      const { render } = algorithms.find((d) => d.name === name);
+      const app = render(image, options);
+      const node = app.node();
+      if (!(node instanceof HTMLElement)) return;
+      const preview = previewRef.current;
+      preview.innerHTML = "";
+      preview.appendChild(node);
+      onFinish(node);
+      clear.current = () => app.dispose();
+    },
+    [onFinish, options],
+  );
 
   useEffect(() => {
     if (!imageData) return;
     renderAlgorithm(imageData, selectedAlgorithm);
-  }, [imageData, selectedAlgorithm]);
-
-  function renderAlgorithm(image, name) {
-    if (clear.current) clear.current();
-    const { render } = algorithms.find((d) => d.name === name);
-    const app = render(image, options);
-    const node = app.node();
-    if (!(node instanceof HTMLElement)) return;
-    const preview = previewRef.current;
-    preview.innerHTML = "";
-    preview.appendChild(node);
-    onFinish(node);
-    clear.current = () => app.dispose();
-  }
+  }, [imageData, selectedAlgorithm, renderAlgorithm]);
 
   function onClick() {
     renderAlgorithm(imageData, selectedAlgorithm);

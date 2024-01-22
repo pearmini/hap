@@ -1,3 +1,5 @@
+import ColorThief from "colorthief";
+
 function context2d(width, height, dpr = null) {
   if (dpr == null) dpr = devicePixelRatio;
   const canvas = document.createElement("canvas");
@@ -10,13 +12,23 @@ function context2d(width, height, dpr = null) {
   return context;
 }
 
-export function loadImageData(image, width, height) {
-  const context = context2d(width, height, 1);
-  context.drawImage(image, 0, 0, width, height);
-  return getImageData(context, width, height);
+export function loadImage(src) {
+  const image = new Image();
+  image.src = src;
+  return new Promise((resolve, reject) => {
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+  });
 }
 
-export function getImageData(context, width, height) {
-  const imageData = context.getImageData(0, 0, width, height).data;
-  return imageData;
+export function getImageData(image, width, height) {
+  const context = context2d(width, height, 1);
+  context.drawImage(image, 0, 0, width, height);
+  return context.getImageData(0, 0, width, height).data;
+}
+
+export function getImageColor(image) {
+  const colorThief = new ColorThief();
+  const [r, g, b] = colorThief.getColor(image);
+  return `rgb(${r}, ${g}, ${b})`;
 }

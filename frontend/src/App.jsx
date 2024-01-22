@@ -18,7 +18,8 @@ const Main = styled.section`
 const Header = styled.header`
   background: black;
   height: 6rem;
-  padding: 1rem 2rem;
+  padding: 0rem 2rem;
+  line-height: 6rem;
 `;
 
 const HeaderTitle = styled.h2`
@@ -35,15 +36,24 @@ const Footer = styled.footer`
   padding: 0.8rem 0;
 `;
 
+const Link = styled.a`
+  color: #3875f6;
+`;
+
 function App() {
   return (
     <Layout>
       <Main>
         <Header>
-          <HeaderTitle>Hap</HeaderTitle>
+          <HeaderTitle>HAP</HeaderTitle>
         </Header>
         <Playground />
-        <Footer>Made by MiniPear with Charming.js</Footer>
+        <Footer>
+          Made by MiniPear with&nbsp;
+          <Link href="https://github.com/charming-art/charming" target="_blank" rel="noreferrer">
+            Charming.js
+          </Link>
+        </Footer>
       </Main>
     </Layout>
   );
