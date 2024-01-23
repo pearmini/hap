@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Flex, Select } from "antd";
 import styled from "styled-components";
-import { UndoOutlined } from "@ant-design/icons";
+import { UndoOutlined, DownloadOutlined } from "@ant-design/icons";
 import { algorithms, defaultIndex } from "../algorithms";
 
 const Preview = styled.div`
-  width: 300px;
-  height: 300px;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
 `;
-
-const ButtonContainer = styled.div``;
 
 export function FilterAlgorithm({ imageData, options = {}, onFinish = () => {} }) {
   const previewRef = useRef(null);
@@ -36,7 +34,7 @@ export function FilterAlgorithm({ imageData, options = {}, onFinish = () => {} }
     renderAlgorithm(imageData, selectedAlgorithm);
   }, [imageData, selectedAlgorithm, renderAlgorithm]);
 
-  function onClick() {
+  function onRefresh() {
     renderAlgorithm(imageData, selectedAlgorithm);
   }
 
@@ -44,18 +42,29 @@ export function FilterAlgorithm({ imageData, options = {}, onFinish = () => {} }
     setSelectedAlgorithm(value);
   }
 
+  function onDownload() {
+    const preview = previewRef.current;
+    const canvas = preview.querySelector("canvas");
+    if (!canvas) return;
+    const link = document.createElement("a");
+    link.download = "hap-avatar.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  }
+
   return (
     <Flex vertical={true} align="center" gap="large">
-      <Preview ref={previewRef} />
+      <Preview ref={previewRef} width={options.width} height={options.height} />
       <Flex gap="small">
         <Select
           defaultValue={algorithms[defaultIndex].name}
           onChange={onSelect}
           options={algorithms.map(({ name }) => ({ name, value: name }))}
         />
-        <ButtonContainer>
-          <Button type="primary" onClick={onClick} icon={<UndoOutlined />} shape="circle"></Button>
-        </ButtonContainer>
+        <Flex gap="small">
+          <Button type="primary" onClick={onRefresh} icon={<UndoOutlined />} shape="circle"></Button>
+          <Button type="primary" onClick={onDownload} icon={<DownloadOutlined />} shape="circle"></Button>
+        </Flex>
       </Flex>
     </Flex>
   );

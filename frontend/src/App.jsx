@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { GithubOutlined } from "@ant-design/icons";
 import { Playground } from "./components/Playground";
 
 const Layout = styled.main`
@@ -20,6 +21,9 @@ const Header = styled.header`
   height: 6rem;
   padding: 0rem 2rem;
   line-height: 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const HeaderTitle = styled.h2`
@@ -36,8 +40,14 @@ const Footer = styled.footer`
   padding: 0.8rem 0;
 `;
 
-const Link = styled.a`
+const CharmingLink = styled.a`
   color: #3875f6;
+`;
+
+const GithubLink = styled.a`
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: white;
 `;
 
 function App() {
@@ -46,13 +56,16 @@ function App() {
       <Main>
         <Header>
           <HeaderTitle>HAP</HeaderTitle>
+          <GithubLink href="https://github.com/pearmini/hap" target="_blank" rel="noreferrer">
+            <GithubOutlined />
+          </GithubLink>
         </Header>
         <Playground />
         <Footer>
           Made by MiniPear with&nbsp;
-          <Link href="https://github.com/charming-art/charming" target="_blank" rel="noreferrer">
+          <CharmingLink href="https://github.com/charming-art/charming" target="_blank" rel="noreferrer">
             Charming.js
-          </Link>
+          </CharmingLink>
         </Footer>
       </Main>
     </Layout>

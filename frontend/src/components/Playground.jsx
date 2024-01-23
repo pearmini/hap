@@ -1,20 +1,30 @@
 import { useEffect, useRef, useState } from "react";
-import { Flex } from "antd";
+import { Flex, Upload, Button } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import bear from "../assets/bear.png";
 import { getImageColor, getImageData, loadImage } from "../utils/image";
 import { FilterAlgorithm } from "./FilterAlgorithm";
 
 const Avatar = styled.img`
-  width: 300px;
-  height: 300px;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
 `;
 
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
 export function Playground() {
-  const width = 300;
-  const height = 300;
+  const width = 320;
+  const height = 320;
   const imageRef = useRef(null);
-  const [src] = useState(bear);
+  const [src, setSrc] = useState(bear);
   const [imageData, setImageData] = useState(null);
   const [background, setBackground] = useState("#000");
 
@@ -36,9 +46,19 @@ export function Playground() {
     prepareImage(src);
   }, [src]);
 
+  async function onUploadImage({ file }) {
+    const base64 = await getBase64(file.originFileObj);
+    setSrc(base64);
+  }
+
   return (
     <Flex justify="center" gap="2.5rem">
-      <Avatar ref={imageRef} src={src} />
+      <Flex vertical gap="large" align="center">
+        <Avatar ref={imageRef} src={src} width={width} height={height} />
+        <Upload showUploadList={false} onChange={onUploadImage}>
+          <Button icon={<UploadOutlined />}>Update Avatar</Button>
+        </Upload>
+      </Flex>
       <FilterAlgorithm imageData={imageData} options={{ width, height, background }} />
     </Flex>
   );
