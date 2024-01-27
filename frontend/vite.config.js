@@ -4,6 +4,7 @@ import { merge } from "lodash-es";
 
 const baseConfig = defineConfig({
   plugins: [react()],
+  base: "/hap/",
 });
 
 const linkConfig = defineConfig({
