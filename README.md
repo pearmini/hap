@@ -4,6 +4,8 @@
 
 Turn your avatar into artwork with algorithm visualization and AI.
 
+![hacker-filters](./img/hacker-filters.png)
+
 ## Inspiration
 
 In the digital world, avatars are our virtual visages. Why not make them stand out and be memorable like works of art?
@@ -13,6 +15,8 @@ Both hackers and painters are artists, capable of creating beautiful artworks. I
 I hope that while users acquire a unique new avatar, they can also appreciate the beauty of algorithms and the charm of world-famous paintings.
 
 ## TODO
+
+HAP is a new project with a lot of features yet to be implemented. If you find the following TODOs interesting, welcome to contribute!
 
 - [ ] Add more hacker filters:
   - [ ] BFS, DFS, Prim
