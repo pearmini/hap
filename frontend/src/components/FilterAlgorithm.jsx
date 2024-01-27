@@ -20,7 +20,7 @@ export function FilterAlgorithm({ imageData, setRendering, disabled = false, opt
     renderAlgorithm(imageData, selectedAlgorithm);
   }, [imageData, selectedAlgorithm]);
 
-  function renderAlgorithm(image, name) {
+  async function renderAlgorithm(image, name) {
     if (clear.current) clear.current();
     const { render } = algorithms.find((d) => d.name === name);
 
@@ -28,7 +28,7 @@ export function FilterAlgorithm({ imageData, setRendering, disabled = false, opt
     finished.then(() => setRendering(false));
     setRendering(true);
 
-    const app = render(image, { ...options, resolve });
+    const app = await render(image, { ...options, resolve });
     const node = app.node();
     if (!(node instanceof HTMLElement)) return;
     const preview = previewRef.current;
@@ -66,18 +66,8 @@ export function FilterAlgorithm({ imageData, setRendering, disabled = false, opt
           disabled={disabled}
         />
         <Flex gap="small">
-          <Button
-            onClick={onRefresh}
-            icon={<UndoOutlined />}
-            shape="circle"
-            disabled={disabled}
-          ></Button>
-          <Button
-            onClick={onDownload}
-            icon={<DownloadOutlined />}
-            shape="circle"
-            disabled={disabled}
-          ></Button>
+          <Button onClick={onRefresh} icon={<UndoOutlined />} shape="circle" disabled={disabled}></Button>
+          <Button onClick={onDownload} icon={<DownloadOutlined />} shape="circle" disabled={disabled}></Button>
         </Flex>
       </Flex>
     </Flex>
