@@ -1,7 +1,7 @@
 {
   "name": "hap",
-  "private": true,
-  "version": "0.0.0",
+  "description": "Turn your avatar into artwork with algorithm visualization and AI.",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
