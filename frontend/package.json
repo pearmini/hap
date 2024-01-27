@@ -8,11 +8,12 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --check",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
-    "@charming-art/charming": "^0.0.8",
+    "@charming-art/charming": "^0.0.9",
     "antd": "^5.12.0",
     "colorthief": "^2.4.0",
     "d3-array": "^3.2.4",
@@ -31,6 +32,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "gh-pages": "^6.1.1",
     "lodash-es": "^4.17.21",
     "prettier": "^3.1.1",
     "vite": "^5.0.0"
