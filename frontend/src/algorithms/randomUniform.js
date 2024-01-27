@@ -1,73 +1,100 @@
-import {
-  app as createApp,
-  clear,
-  range,
-  random,
-  circle,
-  vec,
-  vecDist,
-  mapAttrs,
-  scaleLinear,
-  hsl,
-  derive,
-} from "@charming-art/charming";
-import { hsl as d3HSL } from "d3-color";
+import * as cm from "@charming-art/charming";
+import { hsl as d3HSL, color as d3Color } from "d3-color";
 
 function filterColor(offset) {
-  const scale = scaleLinear([0, 1], [0, 360]);
-  return (color) => {
-    const { s, l } = d3HSL(color);
-    const s1 = (s + offset) % 1;
-    return hsl(scale(s1), 50, l * 100);
+  const scaleH = cm.scaleLinear([0, 1], [0, 360]);
+  const scaleLDark = cm.scaleLinear([0, 1], [0, 0.4]);
+  const scaleLBright = cm.scaleLinear([0, 1], [0.6, 1]);
+  return {
+    darker({ color }) {
+      const { l } = d3HSL(color);
+      const l1 = (l + offset) % 1;
+      return `hsla(${scaleH(l1)}, 50%, ${scaleLDark(l) * 100}%, 0.2)`;
+    },
+    normal({ color }) {
+      const { l } = d3HSL(color);
+      const l1 = (l + offset) % 1;
+      return `hsl(${scaleH(l1)}, 50%, ${l * 100}%)`;
+    },
+    brighter({ color }) {
+      const { l } = d3HSL(color);
+      const l1 = (l + offset) % 1;
+      return `hsla(${scaleH(l1)}, 50%, ${scaleLBright(l) * 100}%, 0.1)`;
+    },
   };
 }
 
 function createColor(imageData, width, height) {
   const { data, width: imageWidth, height: imageHeight } = imageData;
-  const scaleX = scaleLinear([0, width], [0, imageWidth]);
-  const scaleY = scaleLinear([0, height], [0, imageHeight]);
-  return (x0, y0) => {
-    const x = Math.round(scaleX(x0));
-    const y = Math.round(scaleY(y0));
-    const i = x + y * imageWidth;
+  const scaleX = cm.scaleLinear([0, width], [0, imageWidth]);
+  const scaleY = cm.scaleLinear([0, height], [0, imageHeight]);
+  return ({ x, y }) => {
+    const x1 = Math.round(scaleX(x));
+    const y1 = Math.round(scaleY(y));
+    const i = x1 + y1 * imageWidth;
     const r = data[i * 4];
     const g = data[i * 4 + 1];
     const b = data[i * 4 + 2];
     const a = data[i * 4 + 3];
-    return [r, g, b, a];
+    return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
   };
 }
 
-export function randomUniform(imageData, { background, width, height, size = 8, opacity = 0.6 }) {
+function gray(color) {
+  const { r, g, b } = d3Color(color);
+  const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+  return `rgb(${gray}, ${gray}, ${gray})`;
+}
+
+// @see https://openprocessing.org/sketch/520387
+export function randomUniform(imageData, { width, height, resolve }) {
+  const maxFrame = 200;
   const color = createColor(imageData, width, height);
-  const cols = (width / size) | 0;
-  const rows = (height / size) | 0;
-  const point = range(cols * rows).map(() => [random(width) | 0, random(height) | 0]);
-  const filter = filterColor(random());
+  const { normal, darker, brighter } = filterColor(cm.random());
+  const scaleLength = cm.scaleLinear([0, maxFrame], [40, 5]);
+  const scaleWeight = cm.scaleLinear([0, maxFrame], [1, 0.1]);
+  const scaleRotate = cm.scaleLinear([0, 1], [-Math.PI, Math.PI]);
+  const SO = {
+    x: (d) => -d.length / 2,
+    x1: (d) => d.length / 2,
+    strokeWidth: (d) => d.weight,
+    strokeCap: "round",
+  };
 
-  const app = createApp({ width, height });
+  function update(app) {
+    const frameCount = app.prop("frameCount");
 
-  app.append(clear, { fill: filter(background) });
+    const points = cm.range(40).map(() => ({
+      x: cm.randomInt(width),
+      y: cm.randomInt(height),
+    }));
 
-  app
-    .data(point)
-    .process(derive, {
-      color: ([x, y]) => {
-        const [r, g, b, a] = color(x, y);
-        return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
-      },
-    })
-    .append(circle, {
-      x: (d) => d[0],
-      y: (d) => d[1],
-      r: (d) => vecDist(vec(width / 2, height / 2), vec(d[0], d[1])),
-      fill: (d) => d.color,
-      stroke: (d) => d.color,
-      fillOpacity: opacity,
-    })
-    .transform(mapAttrs, {
-      r: { range: [size * 2, size / 2] },
-    });
+    const groups = app
+      .data(points)
+      .process(cm.derive, {
+        color: (d) => gray(color(d)),
+        length: scaleLength(frameCount),
+        weight: scaleWeight(frameCount) * cm.randomInt(2, 8),
+      })
+      .process(cm.derive, {
+        rotate: (d) => scaleRotate(d3HSL(d.color).l),
+      })
+      .append(cm.group, { x: (d) => d.x, y: (d) => d.y, rotate: (d) => d.rotate });
 
-  return app.render();
+    if (frameCount % 3 === 0) {
+      groups.append(cm.link, { ...SO, x: 0, y: 0, x1: 5, y1: 0, stroke: normal });
+    } else {
+      groups
+        .call((d) => d.append(cm.link, { ...SO, y: 1, y1: 1, stroke: darker }))
+        .call((d) => d.append(cm.link, { ...SO, y: 0, y1: 0, stroke: normal }))
+        .call((d) => d.append(cm.link, { ...SO, y: 2, y1: 2, stroke: brighter }));
+    }
+
+    if (frameCount > maxFrame) {
+      app.stop();
+      resolve();
+    }
+  }
+
+  return cm.app({ width, height }).on("update", update).start();
 }

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Flex, Upload, Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import bear from "../assets/bear.png";
+import exampleLink from "../assets/example.png";
 import { getImageColor, getImageData, loadImage } from "../utils/image";
 import { FilterAlgorithm } from "./FilterAlgorithm";
 
@@ -21,12 +21,13 @@ function getBase64(file) {
 }
 
 export function Playground() {
-  const width = 320;
-  const height = 320;
+  const width = 400;
+  const height = 400;
   const imageRef = useRef(null);
-  const [src, setSrc] = useState(bear);
+  const [src, setSrc] = useState(exampleLink);
   const [imageData, setImageData] = useState(null);
   const [background, setBackground] = useState("#000");
+  const [rendering, setRendering] = useState(false);
 
   async function prepareImage(src) {
     const image = await loadImage(src);
@@ -52,14 +53,21 @@ export function Playground() {
   }
 
   return (
-    <Flex justify="center" gap="2.5rem">
+    <Flex justify="center" gap="4rem">
       <Flex vertical gap="large" align="center">
         <Avatar ref={imageRef} src={src} width={width} height={height} />
-        <Upload showUploadList={false} onChange={onUploadImage}>
-          <Button icon={<UploadOutlined />}>Update Avatar</Button>
+        <Upload showUploadList={false} onChange={onUploadImage} disabled={rendering}>
+          <Button icon={<UploadOutlined />} disabled={rendering}>
+            Update Avatar
+          </Button>
         </Upload>
       </Flex>
-      <FilterAlgorithm imageData={imageData} options={{ width, height, background }} />
+      <FilterAlgorithm
+        imageData={imageData}
+        options={{ width, height, background }}
+        disabled={rendering}
+        setRendering={setRendering}
+      />
     </Flex>
   );
 }
