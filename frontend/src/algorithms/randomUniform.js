@@ -1,5 +1,6 @@
 import * as cm from "@charming-art/charming";
 import { hsl as d3HSL, color as d3Color } from "d3-color";
+import { scaleImageColor } from "./utils";
 
 function filterColor(offset) {
   const scaleH = cm.scaleLinear([0, 1], [0, 360]);
@@ -24,22 +25,6 @@ function filterColor(offset) {
   };
 }
 
-function createColor(imageData, width, height) {
-  const { data, width: imageWidth, height: imageHeight } = imageData;
-  const scaleX = cm.scaleLinear([0, width], [0, imageWidth]);
-  const scaleY = cm.scaleLinear([0, height], [0, imageHeight]);
-  return ({ x, y }) => {
-    const x1 = Math.round(scaleX(x));
-    const y1 = Math.round(scaleY(y));
-    const i = x1 + y1 * imageWidth;
-    const r = data[i * 4];
-    const g = data[i * 4 + 1];
-    const b = data[i * 4 + 2];
-    const a = data[i * 4 + 3];
-    return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
-  };
-}
-
 function gray(color) {
   const { r, g, b } = d3Color(color);
   const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
@@ -49,7 +34,7 @@ function gray(color) {
 // @see https://openprocessing.org/sketch/520387
 export function randomUniform(imageData, { width, height, resolve }) {
   const maxFrame = 200;
-  const color = createColor(imageData, width, height);
+  const color = scaleImageColor([width, height], imageData);
   const { normal, darker, brighter } = filterColor(cm.random());
   const scaleLength = cm.scaleLinear([0, maxFrame], [40, 5]);
   const scaleWeight = cm.scaleLinear([0, maxFrame], [1, 0.1]);
@@ -72,9 +57,9 @@ export function randomUniform(imageData, { width, height, resolve }) {
     const groups = app
       .data(points)
       .process(cm.derive, {
-        color: (d) => gray(color(d)),
+        color: (d) => gray(color(d.x, d.y)),
         length: scaleLength(frameCount),
-        weight: scaleWeight(frameCount) * cm.randomInt(2, 8),
+        weight: scaleWeight(frameCount) * cm.randomInt(2, 10),
       })
       .process(cm.derive, {
         rotate: (d) => scaleRotate(d3HSL(d.color).l),
