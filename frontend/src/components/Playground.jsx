@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Flex, Upload, Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import exampleLink from "../assets/example.png";
+import exampleLink from "../assets/example.jpeg";
 import { getImageColor, getImageData, loadImage } from "../utils/image";
 import { FilterAlgorithm } from "./FilterAlgorithm";
 
