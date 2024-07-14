@@ -1,4 +1,4 @@
-# 画家与骇客
+# HAP: Hackers and Painters
 
 Artworks are lofty, and data structures and algorithms are mysterious. The world is so vast. This time, let the painter and the hacker show you around!
 
