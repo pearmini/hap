@@ -1,7 +1,0 @@
-{
-  "usingComponents": {
-    "search-bar": "../../components/search-bar/index",
-    "empty": "../../components/empty/index"
-  },
-  "navigationStyle": "custom"
-}

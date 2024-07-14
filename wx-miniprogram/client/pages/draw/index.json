@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "绘制",
-  "usingComponents": {
-    "wux-segmented-control": "../../lib/wux-weapp/segmented-control/index"
-  }
-}

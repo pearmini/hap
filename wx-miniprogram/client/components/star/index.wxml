@@ -1,4 +1,0 @@
-<view class="container" bindtap="handleTap">
-	<wux-icon type="ios-heart" color="{{isLike ? '#886aea' : '#fff'}}"></wux-icon>
-</view>
-
