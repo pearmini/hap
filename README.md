@@ -1,8 +1,9 @@
 # HAP: Hackers and Painters
 
-> HAP is built on [React.js](https://react.dev/) and [Charming.js](https://github.com/charming-art/charming).
+> [!NOTE]
+> The new version of HAP is currently in development, please refer to the [released version](https://github.com/pearmini/hap/tree/main) for more information.
 
-Turn your avatar into artwork with algorithm visualization and AI.
+**HAP** is a web application built on [React.js](https://react.dev/) and [Charming.js](https://github.com/charming-art/charming), and is going using [M5L](https://github.com/ml5js/ml5-next-gen) for AI. Turn your avatar into artwork with algorithm visualization and AI!
 
 ![hacker-filters](./img/hacker-filters.png)
 
