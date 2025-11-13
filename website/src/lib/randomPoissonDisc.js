@@ -1,8 +1,7 @@
 import {random} from "./random";
-import * as d3 from "d3";
 
 // Based on https://gist.github.com/mbostock/22fd67be72552774736d
-export function* randomPoissonDisc(count, [width, height, radius = 10]) {
+export function* randomPoissonDisc(count, [width, height, radius = 8]) {
   var k = 30, // maximum number of samples before rejection
     radius2 = radius * radius,
     R = 3 * radius2,
