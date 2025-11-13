@@ -1,4 +1,4 @@
-import * as d3 from 'd3-array';
+import * as d3 from 'd3';
 import {map, getImageData} from '../utils/index';
 
 export const configSetup = (sortMethod) => {
