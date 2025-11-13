@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState} from "react";
 
 const ImageUpload = ({onImageUpload}) => {
   const [dragActive, setDragActive] = useState(false);
@@ -6,9 +6,9 @@ const ImageUpload = ({onImageUpload}) => {
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
+    if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
-    } else if (e.type === 'dragleave') {
+    } else if (e.type === "dragleave") {
       setDragActive(false);
     }
   };
@@ -31,7 +31,7 @@ const ImageUpload = ({onImageUpload}) => {
   };
 
   const handleFile = (file) => {
-    if (file.type.startsWith('image/')) {
+    if (file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
         onImageUpload(reader.result);
@@ -44,26 +44,17 @@ const ImageUpload = ({onImageUpload}) => {
     <div
       className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
         dragActive
-          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-          : 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
+          ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+          : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
       }`}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
       onDragOver={handleDrag}
       onDrop={handleDrop}
     >
-      <input
-        type="file"
-        id="file-upload"
-        className="hidden"
-        accept="image/*"
-        onChange={handleChange}
-      />
+      <input type="file" id="file-upload" className="hidden" accept="image/*" onChange={handleChange} />
 
-      <label
-        htmlFor="file-upload"
-        className="cursor-pointer flex flex-col items-center justify-center"
-      >
+      <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center justify-center">
         <svg
           className="w-12 h-12 mb-4 text-gray-400 dark:text-gray-500"
           stroke="currentColor"
@@ -79,8 +70,7 @@ const ImageUpload = ({onImageUpload}) => {
           />
         </svg>
         <p className="mb-2 text-sm text-gray-700 dark:text-gray-300">
-          <span className="font-semibold">Click to upload</span> or drag and
-          drop
+          <span className="font-semibold">Click to upload</span> or drag and drop
         </p>
       </label>
     </div>
