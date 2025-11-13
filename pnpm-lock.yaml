@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      charmingjs:
+        specifier: ^0.0.19
+        version: 0.0.19
+
+packages:
+
+  charmingjs@0.0.19:
+    resolution: {integrity: sha512-jGjGs/hdhSD+n4jq0ab/wexgqvzo3tCINZuM14XI6NKFmvUPrwRONVPbQI4huvOR5EPUgiKrn9J+FQ8KxnbJTg==}
+
+snapshots:
+
+  charmingjs@0.0.19: {}

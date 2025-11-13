@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "d3-array": "^3.2.4",
+    "d3-delaunay": "^6.0.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
