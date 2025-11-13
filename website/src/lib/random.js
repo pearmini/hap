@@ -16,7 +16,7 @@ function scaleImageColor(imageData, [width, height]) {
   };
 }
 
-export function random({canvas, context, imageData, animated = false, generator}) {
+export function random({canvas, context, imageData, animated = true, generator, step = 5}) {
   const _ = {};
   const dpr = window.devicePixelRatio;
   const width = canvas.width / dpr;
@@ -28,9 +28,15 @@ export function random({canvas, context, imageData, animated = false, generator}
   let simpler;
 
   function loop() {
-    const p = simpler.next();
+    // const p = simpler.next();
+    // if (p.done) return stop();
+    // points.push(p.value);
+    let p = simpler.next();
+    for (let i = 0; i < step && !p.done; i++) {
+      points.push(p.value);
+      p = simpler.next();
+    }
     if (p.done) return stop();
-    points.push(p.value);
     draw();
   }
 
@@ -48,7 +54,7 @@ export function random({canvas, context, imageData, animated = false, generator}
     for (let i = 0; i < points.length; i++) {
       const [x, y] = points[i];
       const [r, g, b, a] = color([x, y]);
-      context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+      context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a / 255})`;
       context.strokeStyle = `white`;
       context.lineWidth = 0.5;
       context.beginPath();
