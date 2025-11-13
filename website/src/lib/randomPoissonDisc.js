@@ -14,30 +14,6 @@ export function* randomPoissonDisc(count, [width, height, radius = 10]) {
     queueSize = 0,
     sampleSize = 0;
 
-  // return function () {
-  //   if (!sampleSize) return sample(Math.random() * width, Math.random() * height);
-
-  //   // Pick a random existing sample and remove it from the queue.
-  //   while (queueSize) {
-  //     var i = (Math.random() * queueSize) | 0,
-  //       s = queue[i];
-
-  //     // Make a new candidate between [radius, 2 * radius] from the existing sample.
-  //     for (var j = 0; j < k; ++j) {
-  //       var a = 2 * Math.PI * Math.random(),
-  //         r = Math.sqrt(Math.random() * R + radius2),
-  //         x = s[0] + r * Math.cos(a),
-  //         y = s[1] + r * Math.sin(a);
-
-  //       // Reject candidates that are outside the allowed extent,
-  //       // or closer than 2 * radius to any existing sample.
-  //       if (0 <= x && x < width && 0 <= y && y < height && far(x, y)) return sample(x, y);
-  //     }
-
-  //     queue[i] = queue[--queueSize];
-  //     queue.length = queueSize;
-  //   }
-  // };
   while (!sampleSize) {
     yield sample(Math.random() * width, Math.random() * height);
     // Pick a random existing sample and remove it from the queue.
