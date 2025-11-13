@@ -1,2 +1,2 @@
-export * from "./hacker";
-export * from "./styles";
+export {randomUniform} from "./randomUniform";
+export {randomNormal} from "./randomNormal";

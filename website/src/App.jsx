@@ -2,7 +2,7 @@ import {useState, useRef, useEffect} from "react";
 import ImageUpload from "./components/ImageUpload";
 import Sidebar from "./components/Sidebar";
 import * as cm from "charmingjs";
-import * as ph from "./lib/index";
+import * as Filter from "./lib/index";
 
 function loadImage(src) {
   const image = new Image();
@@ -21,14 +21,12 @@ function App() {
   const [uploadedImage, setUploadedImage] = useState("starry-night.png");
   const [imageData, setImageData] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [algorithms, setAlgorithms] = useState([]);
+  const filterRef = useRef(null);
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    const hacker = ph.hacker();
-    const styles = hacker.styles();
-    setAlgorithms(styles);
+    setAlgorithms(Object.values(Filter).map((filter) => filter.metadata));
   }, []);
 
   useEffect(() => {
@@ -40,6 +38,7 @@ function App() {
         const ctx = cm.context2d({width: width, height: height});
         const canvas = ctx.canvas;
         ctx.drawImage(img, 0, 0, width, height);
+        canvas._context = ctx;
         canvasRef.current.innerHTML = "";
         canvasRef.current.appendChild(canvas);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -49,32 +48,39 @@ function App() {
   }, [uploadedImage]);
 
   const handleSelectAlgorithm = (algo) => {
-    if (!isProcessing) {
-      setSelectedAlgorithm(algo);
-      handlePlay(algo);
+    if (filterRef.current) {
+      filterRef.current.destroy();
     }
+    setSelectedAlgorithm(algo);
+    handlePlay(algo);
   };
 
   const handlePlay = async (selectedAlgorithm) => {
     const canvasElement = canvasRef.current.children[0];
-    if (!uploadedImage || !selectedAlgorithm || isProcessing || !canvasElement) return;
-    setIsProcessing(true);
+    if (!uploadedImage || !selectedAlgorithm || !canvasElement) return;
     try {
-      const hacker = ph.hacker();
-      hacker
-        .canvas(canvasElement)
-        .size([canvasElement.width, canvasElement.height])
-        .imageData(imageData)
-        .style(selectedAlgorithm.name)
-        .end(() => {
-          setIsProcessing(false);
-        });
-      hacker.start();
+      const generator = Filter[selectedAlgorithm.key];
+      const visualizer = selectedAlgorithm.visualizer;
+      filterRef.current = visualizer({
+        canvas: canvasElement,
+        context: canvasElement._context,
+        imageData: imageData,
+        onEnd: () => {},
+        generator: generator,
+      });
+      filterRef.current.start();
     } catch (error) {
       console.error("Error running visualization:", error);
-      setIsProcessing(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (filterRef.current) {
+        filterRef.current.destroy();
+      }
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors flex">

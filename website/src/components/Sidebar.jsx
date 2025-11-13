@@ -18,7 +18,7 @@ const Sidebar = ({algorithms, selectedAlgorithm, onSelect}) => {
               )}
             >
               <div className="font-medium text-sm">{algo.name}</div>
-              {algo.info && <div className="text-xs opacity-80 mt-1">{algo.info}</div>}
+              {algo.description && <div className="text-xs opacity-80 mt-1">{algo.description}</div>}
             </button>
           ))}
         </div>
