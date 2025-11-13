@@ -1,26 +1,11 @@
 import * as d3 from "d3";
-
-function scaleImageColor(imageData, [width, height]) {
-  const {data, width: imageWidth, height: imageHeight} = imageData;
-  const scaleX = d3.scaleLinear([0, width], [0, imageWidth]);
-  const scaleY = d3.scaleLinear([0, height], [0, imageHeight]);
-  return ([x0, y0]) => {
-    const x = Math.round(scaleX(x0));
-    const y = Math.round(scaleY(y0));
-    const i = x + y * imageWidth;
-    const r = data[i * 4];
-    const g = data[i * 4 + 1];
-    const b = data[i * 4 + 2];
-    const a = data[i * 4 + 3];
-    return [r, g, b, a];
-  };
-}
+import {scaleImageColor} from "./helper";
 
 export function random({canvas, context, imageData, animated = true, generator, step = 5}) {
   const _ = {};
   const dpr = window.devicePixelRatio;
-  const width = canvas.width / dpr;
-  const height = canvas.height / dpr;
+  const width = ~~(canvas.width / dpr);
+  const height = ~~(canvas.height / dpr);
   const count = (width * height) / 100;
   const color = scaleImageColor(imageData, [width, height]);
   let timer;
@@ -28,9 +13,6 @@ export function random({canvas, context, imageData, animated = true, generator, 
   let simpler;
 
   function loop() {
-    // const p = simpler.next();
-    // if (p.done) return stop();
-    // points.push(p.value);
     let p = simpler.next();
     for (let i = 0; i < step && !p.done; i++) {
       points.push(p.value);
@@ -75,11 +57,8 @@ export function random({canvas, context, imageData, animated = true, generator, 
     stop();
     simpler = generator(count, [width, height]);
     points = [];
-    if (animated) {
-      timer = d3.interval(loop);
-    } else {
-      once();
-    }
+    if (animated) timer = d3.interval(loop);
+    else once();
   };
 
   _.destroy = function () {
@@ -88,9 +67,3 @@ export function random({canvas, context, imageData, animated = true, generator, 
 
   return _;
 }
-
-random.metadata = {
-  key: "random",
-  name: "Uniform Random",
-  description: "Uniformly distributed random numbers",
-};

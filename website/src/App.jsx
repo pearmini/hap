@@ -42,7 +42,7 @@ function App() {
         canvasRef.current.innerHTML = "";
         canvasRef.current.appendChild(canvas);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        setImageData(imageData);
+        setImageData({img, imageData});
       });
     }
   }, [uploadedImage]);
@@ -58,20 +58,17 @@ function App() {
   const handlePlay = async (selectedAlgorithm) => {
     const canvasElement = canvasRef.current.children[0];
     if (!uploadedImage || !selectedAlgorithm || !canvasElement) return;
-    try {
-      const generator = Filter[selectedAlgorithm.key];
-      const visualizer = selectedAlgorithm.visualizer;
-      filterRef.current = visualizer({
-        canvas: canvasElement,
-        context: canvasElement._context,
-        imageData: imageData,
-        onEnd: () => {},
-        generator: generator,
-      });
-      filterRef.current.start();
-    } catch (error) {
-      console.error("Error running visualization:", error);
-    }
+    const generator = Filter[selectedAlgorithm.key];
+    const visualizer = selectedAlgorithm.visualizer;
+    filterRef.current = visualizer({
+      canvas: canvasElement,
+      context: canvasElement._context,
+      imageData: imageData.imageData,
+      image: imageData.img,
+      onEnd: () => {},
+      generator: generator,
+    });
+    filterRef.current.start();
   };
 
   useEffect(() => {

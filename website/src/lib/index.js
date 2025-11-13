@@ -1,3 +1,6 @@
 export {randomUniform} from "./randomUniform";
-export {randomNormal} from "./randomNormal";
 export {randomPoissonDisc} from "./randomPoissonDisc";
+export {randomNormal} from "./randomNormal";
+export {searchLinear} from "./searchLinear";
+export {searchBinary} from "./searchBinary";
+export {searchGolden} from "./searchGolden";
