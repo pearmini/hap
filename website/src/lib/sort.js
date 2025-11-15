@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import {FilterGL2} from "./filter";
 
-export function sort({parent, image, width, height, animated = true, generator, interpolate = d3.interpolateYlGnBu}) {
+export function sort({parent, image, width, height, animated = true, generator, interpolate = d3.interpolateViridis}) {
   const _ = {};
   const filter = FilterGL2(parent, {image, width, height});
   let timer;
@@ -42,7 +42,7 @@ export function sort({parent, image, width, height, animated = true, generator, 
     const numbers = d3.shuffle(new Array(count).fill(0).map((_, i) => i));
     const sorter = generator(numbers);
     const N = Array.from(sorter);
-    const scaleX = d3.scaleBand(numbers, [0, width]).padding(0.2).paddingOuter(0);
+    const scaleX = d3.scaleBand(numbers, [0, width]).padding(0).paddingOuter(0);
     const scaleY = d3.scaleLinear([0, N.length - 1], [0, height]);
     data = [];
     for (let i = 1; i < N.length; i++) {
@@ -54,8 +54,14 @@ export function sort({parent, image, width, height, animated = true, generator, 
         const bi = map.get(v);
         const p0 = [scaleX(ai), scaleY(j)];
         const p1 = [scaleX(ai) + scaleX.bandwidth(), scaleY(j)];
-        const p2 = [scaleX(bi) + scaleX.bandwidth(), scaleY(i)];
-        const p3 = [scaleX(bi), scaleY(i)];
+        let p2, p3;
+        if (bi < ai) {
+          p2 = [p1[0], scaleY(i)];
+          p3 = [scaleX(bi), scaleY(i)];
+        } else {
+          p2 = [scaleX(bi) + scaleX.bandwidth(), scaleY(i)];
+          p3 = [p0[0], scaleY(i)];
+        }
         const {r, g, b} = d3.rgb(interpolate(v / (numbers.length - 1)));
         const c = [r / 255, g / 255, b / 255, 1];
         return {points: [p0, p1, p2, p3], c};
