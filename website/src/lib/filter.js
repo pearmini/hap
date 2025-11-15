@@ -27,7 +27,13 @@ export function FilterGL2(parent, {image, width, height}) {
   out vec4 outColor;
 
   void main() {
-    outColor = sqrt(texture(u_texture, vUV)) * vColor;
+    vec4 T = texture(u_texture, vUV);
+    if (vColor.a < 0.) {
+      float gray = dot(T.rgb, vec3(0.2126, 0.7152, 0.0722)) * 0.4;
+      outColor = vec4(gray, gray, gray, 1.);
+    } else {
+      outColor = sqrt(T) * vColor;
+    }
   }`;
 
   const gl = contextGL2({parent, width, height, vertexShader, fragmentShader});
@@ -70,5 +76,16 @@ export function FilterGL2(parent, {image, width, height}) {
     gl.drawArrays(gl.TRIANGLES, 0, T.length / 8);
   };
 
+  _.fillRect = (x, y, w, h, c) => {
+    const rect = [
+      [
+        [x, y],
+        [x + w, y],
+        [x + w, y + h],
+        [x, y + h],
+      ],
+    ];
+    _.fillPolygons([0], rect, [c]);
+  };
   return _;
 }
