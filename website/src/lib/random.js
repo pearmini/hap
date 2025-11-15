@@ -1,13 +1,19 @@
 import * as d3 from "d3";
-import {scaleImageColor} from "./helper";
+import {FilterGL2} from "./filter";
 
-export function random({canvas, context, imageData, animated = true, generator, step = 5}) {
+export function random({
+  parent,
+  image,
+  width,
+  height,
+  animated = true,
+  generator,
+  interpolate = d3.interpolateRainbow,
+  step = 5,
+}) {
   const _ = {};
-  const dpr = window.devicePixelRatio;
-  const width = ~~(canvas.width / dpr);
-  const height = ~~(canvas.height / dpr);
   const count = (width * height) / 100;
-  const color = scaleImageColor(imageData, [width, height]);
+  const filter = FilterGL2(parent, {image, width, height});
   let timer;
   let points;
   let simpler;
@@ -23,27 +29,22 @@ export function random({canvas, context, imageData, animated = true, generator, 
   }
 
   function once() {
-    for (const p of simpler) {
-      points.push(p);
-    }
+    for (const p of simpler) points.push(p);
     draw();
   }
 
   function draw() {
     const delaunay = d3.Delaunay.from(points);
     const voronoi = delaunay.voronoi([0, 0, width, height]);
-    context.fillRect(0, 0, width, height);
-    for (let i = 0; i < points.length; i++) {
-      const [x, y] = points[i];
-      const [r, g, b, a] = color([x, y]);
-      context.fillStyle = `rgba(${r}, ${g}, ${b}, ${a / 255})`;
-      context.strokeStyle = `white`;
-      context.lineWidth = 0.5;
-      context.beginPath();
-      voronoi.renderCell(i, context);
-      context.stroke();
-      context.fill();
-    }
+    const P = Array.from(voronoi.cellPolygons());
+    const n = P.length;
+    const I = Array.from({length: n}, (_, i) => i);
+    const C = I.map((i) => {
+      const t = i / n;
+      const {r, g, b} = d3.rgb(interpolate(t));
+      return [r / 255, g / 255, b / 255, 1];
+    });
+    filter.fillPolygons(I, P, C);
   }
 
   function stop() {

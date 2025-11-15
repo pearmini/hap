@@ -1,7 +1,6 @@
 import {useState, useRef, useEffect} from "react";
 import ImageUpload from "./components/ImageUpload";
 import Sidebar from "./components/Sidebar";
-import * as cm from "charmingjs";
 import * as Filter from "./lib/index";
 
 function loadImage(src) {
@@ -35,14 +34,7 @@ function App() {
         const t = img.width / img.height;
         const width = Math.min(800, img.width);
         const height = width / t;
-        const ctx = cm.context2d({width: width, height: height});
-        const canvas = ctx.canvas;
-        ctx.drawImage(img, 0, 0, width, height);
-        canvas._context = ctx;
-        canvasRef.current.innerHTML = "";
-        canvasRef.current.appendChild(canvas);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        setImageData({img, imageData});
+        setImageData({img, width: ~~width, height: ~~height});
       });
     }
   }, [uploadedImage]);
@@ -56,14 +48,14 @@ function App() {
   };
 
   const handlePlay = async (selectedAlgorithm) => {
-    const canvasElement = canvasRef.current.children[0];
-    if (!uploadedImage || !selectedAlgorithm || !canvasElement) return;
+    if (!uploadedImage || !selectedAlgorithm || !canvasRef.current) return;
+    canvasRef.current.innerHTML = "";
     const generator = Filter[selectedAlgorithm.key];
     const visualizer = selectedAlgorithm.visualizer;
     filterRef.current = visualizer({
-      canvas: canvasElement,
-      context: canvasElement._context,
-      imageData: imageData.imageData,
+      parent: canvasRef.current,
+      width: imageData.width,
+      height: imageData.height,
       image: imageData.img,
       onEnd: () => {},
       generator: generator,
