@@ -1,6 +1,6 @@
 import {sort} from "./sort";
 
-export function* sortInsert(array) {
+export function* sortInsertion(array) {
   const n = array.length;
   for (let i = 1; i < n; i++) {
     const current = array[i];
@@ -16,8 +16,8 @@ export function* sortInsert(array) {
   return array;
 }
 
-sortInsert.metadata = {
-  key: "sortInsert",
+sortInsertion.metadata = {
+  key: "sortInsertion",
   name: "Insertion Sort",
   description: "Insertion Sort",
   visualizer: sort,

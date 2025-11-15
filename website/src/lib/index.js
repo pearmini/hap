@@ -1,7 +1,9 @@
 export {randomUniform} from "./randomUniform";
 export {randomPoissonDisc} from "./randomPoissonDisc";
 export {randomNormal} from "./randomNormal";
-// export {searchLinear} from "./searchLinear";
 export {searchBinary} from "./searchBinary";
 export {searchGolden} from "./searchGolden";
-export {sortInsert} from "./sortInsert";
+export {sortInsertion} from "./sortInsertion";
+export {sortBubble} from "./sortBubble";
+export {sortSelection} from "./sortSelection";
+export {sortQuick} from "./sortQuick";

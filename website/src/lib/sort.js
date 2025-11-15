@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import {FilterGL2} from "./filter";
 
-export function sort({parent, image, width, height, animated = true, generator, interpolate = d3.interpolatePuRd}) {
+export function sort({parent, image, width, height, animated = true, generator, interpolate = d3.interpolateYlGnBu}) {
   const _ = {};
   const filter = FilterGL2(parent, {image, width, height});
   let timer;
@@ -42,7 +42,7 @@ export function sort({parent, image, width, height, animated = true, generator, 
     const numbers = d3.shuffle(new Array(count).fill(0).map((_, i) => i));
     const sorter = generator(numbers);
     const N = Array.from(sorter);
-    const scaleX = d3.scaleBand(numbers, [0, width]).padding(0.2);
+    const scaleX = d3.scaleBand(numbers, [0, width]).padding(0.2).paddingOuter(0);
     const scaleY = d3.scaleLinear([0, N.length - 1], [0, height]);
     data = [];
     for (let i = 1; i < N.length; i++) {
