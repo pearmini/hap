@@ -1,65 +1,41 @@
 import * as d3 from "d3";
-import {scaleImageColor} from "./helper";
+import {FilterGL2} from "./filter";
 
-function drawImageWithFilter(context, {x, y, width, height, filter}) {
-  const dpr = window.devicePixelRatio;
-  x *= dpr;
-  y *= dpr;
-  width *= dpr;
-  height *= dpr;
-  const imageData = context.createImageData(width, height);
-  for (let j = 0; j < height; j++) {
-    for (let i = 0; i < width; i++) {
-      const [r, g, b, a] = filter([(i + x) / 2, (j + y) / 2]);
-      const index = (j * width + i) * 4;
-      imageData.data[index] = r;
-      imageData.data[index + 1] = g;
-      imageData.data[index + 2] = b;
-      imageData.data[index + 3] = a;
-    }
-  }
-  context.putImageData(imageData, x, y);
-}
-
-export function search({canvas, context, imageData, interpolate = d3.interpolateRainbow, animated = true, generator}) {
+export function search({
+  parent,
+  image,
+  width,
+  height,
+  animated = true,
+  generator,
+  interpolate = d3.interpolateRainbow,
+}) {
   const _ = {};
-  const dpr = window.devicePixelRatio;
-  const width = ~~(canvas.width / dpr);
-  const height = ~~(canvas.height / dpr);
-  const color = scaleImageColor(imageData, [width, height]);
+  const filter = FilterGL2(parent, {image, width, height});
   let timer;
   let data;
   let index = 0;
-  let wi;
-  let hi;
 
   function loop() {
     if (index >= data.length) return stop();
-    const d = data[index];
-    draw(d);
+    draw(index + 1);
     index++;
   }
 
   function once() {
-    for (const d of data) draw(d);
+    draw(data.length - 1);
   }
 
-  function draw(data) {
-    const {x, y, h, c, w} = data;
-    drawImageWithFilter(context, {
-      x,
-      y,
-      width: w,
-      height: h,
-      filter: ([x, y]) => {
-        const [r, g, b, a] = color([x, y]);
-        const gray = Math.sqrt((r + g + b) / 3 / 255);
-        return [gray * c.r, gray * c.g, gray * c.b, a];
-      },
-    });
-    context.strokeStyle = "white";
-    context.lineWidth = 0.5;
-    context.strokeRect(x, y, w, h);
+  function draw(n) {
+    const I = new Array(n).fill(0).map((_, i) => i);
+    const P = data.slice(0, n + 1).map((d) => [
+      [d.x, d.y],
+      [d.x + d.w, d.y],
+      [d.x + d.w, d.y + d.h],
+      [d.x, d.y + d.h],
+    ]);
+    const C = data.slice(0, n + 1).map((d) => d.c);
+    filter.fillPolygons(I, P, C);
   }
 
   function stop() {
@@ -73,10 +49,10 @@ export function search({canvas, context, imageData, interpolate = d3.interpolate
     stop();
     index = 0;
     const W = new Array(width).fill(0).map((_, i) => i);
-    wi = d3.randomInt(0, W.length)();
+    const wi = d3.randomInt(0, W.length)();
     const searcherW = generator(W, wi);
     const H = new Array(height).fill(0).map((_, i) => i);
-    hi = d3.randomInt(0, H.length)();
+    const hi = d3.randomInt(0, H.length)();
     const searcherH = generator(H, hi);
     const dataW = Array.from(searcherW);
     const dataH = Array.from(searcherH);
@@ -93,16 +69,17 @@ export function search({canvas, context, imageData, interpolate = d3.interpolate
       if (i % 2) [y0, y1] = dataH[Math.min(m, nh - 1)];
       else [x0, x1] = dataW[Math.min(m, nw - 1)];
       const t = 1 - i / (n - 1);
+      const {r, g, b} = d3.rgb(interpolate(t));
       data.push({
         x: x0,
         y: y0,
         h: y1 - y0,
         w: x1 - x0,
-        c: d3.rgb(interpolate(t)),
+        c: [r / 255, g / 255, b / 255, 1],
       });
     }
-    if (animated) timer = d3.interval(loop, 100);
-    else once();
+    if (!animated) once();
+    else (timer = d3.interval(loop, 100)), loop();
   };
 
   _.destroy = function () {
