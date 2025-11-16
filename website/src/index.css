@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
+:root {
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
   font-family: 'Courier New', Courier, monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-  }
+  background-color: #0d1117;
+  color: #c9d1d9;
 }

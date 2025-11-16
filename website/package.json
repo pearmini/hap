@@ -12,6 +12,7 @@
   "dependencies": {
     "charmingjs": "^0.0.19",
     "d3": "^7.9.0",
+    "lucide-react": "^0.553.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
