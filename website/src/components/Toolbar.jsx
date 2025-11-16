@@ -36,9 +36,6 @@ const Toolbar = ({algorithms, selectedAlgorithm, onSelect}) => {
               ))}
             </select>
           </div>
-          {selectedAlgorithm?.description && (
-            <div className="text-sm text-gray-600 dark:text-gray-400">{selectedAlgorithm.description}</div>
-          )}
         </div>
       </div>
     </div>
