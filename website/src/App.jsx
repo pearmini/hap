@@ -1,6 +1,6 @@
 import {useState, useRef, useEffect} from "react";
 import ImageUpload from "./components/ImageUpload";
-import Sidebar from "./components/Sidebar";
+import Toolbar from "./components/Toolbar";
 import * as Filter from "./lib/index";
 
 function loadImage(src) {
@@ -39,7 +39,7 @@ function App() {
     }
   }, [uploadedImage]);
 
-  const handleSelectAlgorithm = (algo) => {
+  const handleSelectAlgorithm = (algo, index) => {
     if (filterRef.current) {
       filterRef.current.destroy();
     }
@@ -72,21 +72,28 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+      {/* Header */}
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="container  px-4 py-2">
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-1">HAP: Hackers and Painters</h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Filter World-famous Paintings or Images by Algorithm Visualizations.
+          </p>
+        </div>
+      </header>
+
+      {/* Toolbar */}
       {uploadedImage && (
-        <Sidebar algorithms={algorithms} selectedAlgorithm={selectedAlgorithm} onSelect={handleSelectAlgorithm} />
+        <Toolbar algorithms={algorithms} selectedAlgorithm={selectedAlgorithm} onSelect={handleSelectAlgorithm} />
       )}
-      <div className={`flex-1 flex items-center justify-center ${uploadedImage ? "ml-72" : ""}`}>
-        <div className="container mx-auto px-4 py-12">
+
+      {/* Main Content */}
+      <div className="flex items-center justify-center pt-12">
+        <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">HAP: Hackers and Painters</h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Filter World-famous Paintings by Algorithm Visualizations.
-              </p>
-            </div>
             {uploadedImage ? (
-              <div className="relative group overflow-hidden  max-w-4xl min-w-[300px] mx-auto">
+              <div className="relative group overflow-hidden max-w-4xl min-w-[300px] mx-auto">
                 <div className="overflow-hidden flex items-center justify-center relative">
                   <div ref={canvasRef} />
                 </div>
