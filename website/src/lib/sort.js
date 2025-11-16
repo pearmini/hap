@@ -40,7 +40,7 @@ export function sort({parent, image, width, height, animated = true, generator, 
     const numbers = d3.shuffle(new Array(count).fill(0).map((_, i) => i));
     const sorter = generator(numbers);
     const N = Array.from(sorter);
-    const scaleX = d3.scaleBand(numbers, [0, width]).padding(0);
+    const scaleX = d3.scaleBand(numbers, [0, width]).padding(0.1);
     const scaleY = d3.scaleLinear([0, N.length - 1], [0, height]);
     data = [];
     for (let i = 1; i < N.length; i++) {
