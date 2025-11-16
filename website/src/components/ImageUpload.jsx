@@ -44,8 +44,8 @@ const ImageUpload = ({onImageUpload}) => {
     <div
       className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
         dragActive
-          ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-          : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
+          ? "border-[#1f6feb] bg-[#1f6feb]/10"
+          : "border-[#30363d] hover:border-[#484f58]"
       }`}
       onDragEnter={handleDrag}
       onDragLeave={handleDrag}
@@ -56,7 +56,7 @@ const ImageUpload = ({onImageUpload}) => {
 
       <label htmlFor="file-upload" className="cursor-pointer flex flex-col items-center justify-center">
         <svg
-          className="w-12 h-12 mb-4 text-gray-400 dark:text-gray-500"
+          className="w-12 h-12 mb-4 text-[#8b949e]"
           stroke="currentColor"
           fill="none"
           viewBox="0 0 48 48"
@@ -69,7 +69,7 @@ const ImageUpload = ({onImageUpload}) => {
             strokeLinejoin="round"
           />
         </svg>
-        <p className="mb-2 text-sm text-gray-700 dark:text-gray-300">
+        <p className="mb-2 text-sm text-[#c9d1d9]">
           <span className="font-semibold">Click to upload</span> or drag and drop
         </p>
       </label>

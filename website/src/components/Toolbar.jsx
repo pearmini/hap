@@ -13,24 +13,24 @@ const Toolbar = ({algorithms, selectedAlgorithm, onSelect}) => {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 border-b border-dashed border-gray-200 dark:border-gray-700 py-2">
+    <div className="bg-[#161b22] border-b border-dashed border-[#30363d] py-2">
       <div className="container px-4 py-1.5">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <label htmlFor="algorithm-select" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="algorithm-select" className="text-sm font-medium text-[#c9d1d9]">
               Algorithm:
             </label>
             <select
               id="algorithm-select"
               value={selectedIndex >= 0 ? selectedIndex : ""}
               onChange={handleChange}
-              className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+              className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
             >
-              <option value="" disabled>
+              <option value="" disabled className="bg-[#0d1117] text-[#c9d1d9]">
                 Select an algorithm...
               </option>
               {algorithms.map((algo, index) => (
-                <option key={index} value={index}>
+                <option key={index} value={index} className="bg-[#0d1117] text-[#c9d1d9]">
                   {algo.name}
                 </option>
               ))}

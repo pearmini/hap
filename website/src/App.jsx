@@ -72,12 +72,12 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen bg-[#0d1117] transition-colors">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-[#161b22] border-b border-[#30363d]">
         <div className="container  px-4 py-2">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-1">HAP: Hackers and Painters</h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <h1 className="text-xl font-bold text-[#c9d1d9] mb-1">HAP: Hackers and Painters</h1>
+          <p className="text-sm text-[#8b949e]">
             Filter World-famous Paintings or Images by Algorithm Visualizations.
           </p>
         </div>
