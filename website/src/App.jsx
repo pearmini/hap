@@ -79,7 +79,7 @@ function App() {
       parent: sphereContainer,
       width: imageData.width,
       height: imageData.width,
-      image: imageData.img,
+      filterFBO: filterRef.current.filter,
     });
     sphereRef.current.start();
   };

@@ -1,4 +1,4 @@
-import {contextGL2, setUniform, drawMesh, M, addTexture, vertexMap} from "./helper";
+import {contextGL2, setUniform, drawMesh, M, createTexture, vertexMap, updateTextureFromFBO} from "./helper";
 import * as d3 from "d3";
 
 function createMesh(nu, nv, p) {
@@ -19,8 +19,7 @@ function sphereMesh(nu, nv) {
       x = Math.cos(phi) * Math.cos(theta),
       y = Math.cos(phi) * Math.sin(theta),
       z = Math.sin(phi);
-    // VERTEX SIZE IS NOW 8, BECAUSE WE ADD U,V
-    return [x, y, z, x, y, z, u, v];
+    return [x, y, z, x, y, z, u, v]; // VERTEX SIZE IS NOW 8, BECAUSE WE ADD U,V
   });
 }
 
@@ -32,10 +31,12 @@ function drawObj(gl, mesh, matrix, vertexSize, color) {
   drawMesh(gl, mesh, vertexSize);
 }
 
-export function sphere({parent, width, height, image}) {
+export function sphere({parent, width, height, image, texture, filterFBO}) {
   let gl;
   let mesh;
   let timer;
+  let sphereTexture;
+  let startTime = Date.now() / 1000;
 
   const _ = {};
 
@@ -79,17 +80,25 @@ export function sphere({parent, width, height, image}) {
   `;
 
   function update() {
+    // Update texture from filter FBO.
+    const fbw = filterFBO.fboWidth || width;
+    const fbh = filterFBO.fboHeight || height;
+    updateTextureFromFBO(filterFBO.gl, filterFBO.fbo, gl, sphereTexture, fbw, fbh);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, sphereTexture);
+
+    // Draw mesh.
     setUniform(gl, "1iv", "uSampler", [0, 1]);
     const vertexSize = vertexMap(gl, ["aPos", 3, "aNor", 3, "aUV", 2]);
-    const time = Date.now() / 1000;
-    const matrix = M.mxm(M.turnY(time / 2), M.mxm(M.turnX(time / 2), M.scale(0.7)));
+    const time = (Date.now() / 1000 - startTime) / 2;
+    const matrix = M.mxm(M.turnY(time), M.mxm(M.turnX(time), M.scale(0.7)));
     drawObj(gl, mesh, matrix, vertexSize, [1, 1, 1]);
   }
 
   _.start = function () {
     mesh = {triangle_strip: true, data: new Float32Array(sphereMesh(40, 20))};
     gl = contextGL2({parent, width, height, vertexShader, fragmentShader});
-    addTexture(gl, 0, image);
+    sphereTexture = createTexture(gl, 0);
     timer = d3.interval(update, 10);
   };
 

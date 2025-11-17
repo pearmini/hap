@@ -166,12 +166,86 @@ export function setUniform(gl, type, name, a, b, c) {
 }
 
 export function addTexture(gl, index, image) {
+  const texture = gl.createTexture();
   gl.activeTexture(gl.TEXTURE0 + index);
-  gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+  gl.bindTexture(gl.TEXTURE_2D, texture);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image); // SPECIFY HOW SRC IMAGE WILL BE LAID OUT
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); // SPECIFY HOW IT'S FILTERED WHEN MAGNIFIED
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST); // SPECIFY HOW IT'S FILTERED WHEN VERY SMALL
   gl.generateMipmap(gl.TEXTURE_2D); // GENERATE THE MIP MAP PYRAMID
+  return texture;
+}
+
+export function createTexture(gl, index) {
+  const texture = gl.createTexture();
+  gl.activeTexture(gl.TEXTURE0 + index);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  return texture;
+}
+
+// Create a Framebuffer Object.
+export function createFBO(gl, index, width, height) {
+  // Create texture for FBO.
+  const texture = createTexture(gl, index);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+  // Create FBO.
+  const fbo = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+
+  // Check if FBO is complete.
+  if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
+    console.error("FBO is not complete!");
+  }
+
+  // Unbind for safety.
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  gl.bindTexture(gl.TEXTURE_2D, null);
+
+  return {fbo, texture};
+}
+
+export function bindFBO(gl, fbo, width, height) {
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  gl.viewport(0, 0, width, height);
+}
+
+export function unbindFBO(gl, canvasWidth, canvasHeight) {
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  gl.viewport(0, 0, canvasWidth, canvasHeight);
+}
+
+export function addTextureFromFBO(gl, index, texture) {
+  gl.activeTexture(gl.TEXTURE0 + index);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+}
+
+export function updateTextureFromFBO(sourceGl, sourceFBO, targetGl, targetTexture, width, height) {
+  // Bind source FBO and read pixels
+  sourceGl.bindFramebuffer(sourceGl.FRAMEBUFFER, sourceFBO);
+  const pixels = new Uint8Array(width * height * 4);
+  sourceGl.readPixels(0, 0, width, height, sourceGl.RGBA, sourceGl.UNSIGNED_BYTE, pixels);
+  sourceGl.bindFramebuffer(sourceGl.FRAMEBUFFER, null);
+
+  // Upload to target texture
+  targetGl.activeTexture(targetGl.TEXTURE0);
+  targetGl.bindTexture(targetGl.TEXTURE_2D, targetTexture);
+  targetGl.texImage2D(
+    targetGl.TEXTURE_2D,
+    0,
+    targetGl.RGBA,
+    width,
+    height,
+    0,
+    targetGl.RGBA,
+    targetGl.UNSIGNED_BYTE,
+    pixels
+  );
 }
 
 export function vertexMap(gl, map) {

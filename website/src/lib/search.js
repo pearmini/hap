@@ -11,7 +11,7 @@ export function search({
   interpolate = d3.interpolateRainbow,
 }) {
   const _ = {};
-  const filter = FilterGL2(parent, {image, width, height});
+  const filter = (_.filter = FilterGL2(parent, {image, width, height}));
   let timer;
   let data;
   let index = 0;
