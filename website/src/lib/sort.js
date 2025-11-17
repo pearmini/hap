@@ -3,7 +3,7 @@ import {FilterGL2} from "./filter";
 
 export function sort({parent, image, width, height, animated = true, generator, interpolate = d3.interpolateViridis}) {
   const _ = {};
-  const filter = FilterGL2(parent, {image, width, height});
+  const filter = (_.filter = FilterGL2(parent, {image, width, height}));
   const step = 20;
   let timer;
   let data;

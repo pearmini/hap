@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import {contextGL2, addTexture, vertexMap} from "./helper";
+import {contextGL2, addTexture, vertexMap, createFBO, bindFBO, unbindFBO} from "./helper";
 
 export function FilterGL2(parent, {image, width, height}) {
   const _ = {};
@@ -40,6 +40,16 @@ export function FilterGL2(parent, {image, width, height}) {
   addTexture(gl, 0, image);
   vertexMap(gl, ["aPos", 2, "aUV", 2, "aColor", 4]);
 
+  // Create FBO for rendering
+  const canvasWidth = gl.width || width;
+  const canvasHeight = gl.height || height;
+  const fboData = createFBO(gl, 1, width, height);
+  _.fboTexture = fboData.texture;
+  _.fbo = fboData.fbo;
+  _.gl = gl;
+  _.fboWidth = width;
+  _.fboHeight = height;
+
   const scaleX = d3.scaleLinear().domain([0, width]).range([-1, 1]);
   const scaleY = d3.scaleLinear().domain([0, height]).range([1, -1]);
   const scaleUVX = d3.scaleLinear().domain([-1, 1]).range([0, 1]);
@@ -73,6 +83,17 @@ export function FilterGL2(parent, {image, width, height}) {
     });
     const T = triangles.flat(Infinity);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(T), gl.STATIC_DRAW);
+
+    // Render to FBO first
+    bindFBO(gl, fboData.fbo, width, height);
+    // gl.clearColor(0, 0, 0, 1);
+    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, T.length / 8);
+
+    // Then render to screen
+    unbindFBO(gl, canvasWidth, canvasHeight);
+    // gl.clearColor(0, 0, 0, 1);
+    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, T.length / 8);
   };
 

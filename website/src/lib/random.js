@@ -9,11 +9,11 @@ export function random({
   animated = true,
   generator,
   interpolate = d3.interpolateRainbow,
-  step = 5,
+  step = 4,
 }) {
   const _ = {};
   const count = (width * height) / 100;
-  const filter = FilterGL2(parent, {image, width, height});
+  const filter = (_.filter = FilterGL2(parent, {image, width, height}));
   let timer;
   let points;
   let simpler;
