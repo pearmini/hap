@@ -141,7 +141,7 @@ vec3 phong(vec3 N, vec3 L, vec3 W, vec3 diffuse, vec4 specular) {
   };
 })();
 
-export function drawMesh(gl, mesh, vertexSize = 6) {
+export function drawMesh(gl, mesh, vertexSize) {
   gl.bufferData(gl.ARRAY_BUFFER, mesh.data, gl.STATIC_DRAW);
   gl.drawArrays(mesh.triangle_strip ? gl.TRIANGLE_STRIP : gl.TRIANGLES, 0, mesh.data.length / vertexSize);
 }
@@ -187,4 +187,5 @@ export function vertexMap(gl, map) {
     vertexAttribute(map[n], map[n + 1], index);
     index += map[n + 1];
   }
+  return vertexSize;
 }

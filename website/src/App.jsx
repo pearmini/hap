@@ -2,6 +2,7 @@ import {useState, useRef, useEffect} from "react";
 import ImageUpload from "./components/ImageUpload";
 import Toolbar from "./components/Toolbar";
 import * as Filter from "./lib/index";
+import {sphere} from "./lib/sphere";
 
 function loadImage(src) {
   const image = new Image();
@@ -23,6 +24,7 @@ function App() {
   const [algorithms, setAlgorithms] = useState([]);
   const filterRef = useRef(null);
   const canvasRef = useRef(null);
+  const sphereRef = useRef(null);
 
   useEffect(() => {
     setAlgorithms(Object.values(Filter).map((filter) => filter.metadata));
@@ -32,7 +34,7 @@ function App() {
     if (canvasRef.current) {
       loadImage(uploadedImage).then((img) => {
         const t = img.width / img.height;
-        const width = Math.min(800, img.width);
+        const width = Math.min(600, img.width);
         const height = width / t;
         setImageData({img, width: ~~width, height: ~~height});
       });
@@ -50,10 +52,21 @@ function App() {
   const handlePlay = async (selectedAlgorithm) => {
     if (!uploadedImage || !selectedAlgorithm || !canvasRef.current) return;
     canvasRef.current.innerHTML = "";
+    if (sphereRef.current) sphereRef.current.destroy();
+    if (filterRef.current) filterRef.current.destroy();
+
+    const container = document.createElement("div");
+    const planeContainer = document.createElement("div");
+    const sphereContainer = document.createElement("div");
+    container.appendChild(planeContainer);
+    container.appendChild(sphereContainer);
+    container.classList.add("flex", "items-center", "gap-12");
+    canvasRef.current.appendChild(container);
+
     const generator = Filter[selectedAlgorithm.key];
     const visualizer = selectedAlgorithm.visualizer;
     filterRef.current = visualizer({
-      parent: canvasRef.current,
+      parent: planeContainer,
       width: imageData.width,
       height: imageData.height,
       image: imageData.img,
@@ -61,23 +74,30 @@ function App() {
       generator: generator,
     });
     filterRef.current.start();
+
+    sphereRef.current = sphere({
+      parent: sphereContainer,
+      width: imageData.width,
+      height: imageData.width,
+      image: imageData.img,
+    });
+    sphereRef.current.start();
   };
 
   useEffect(() => {
     return () => {
-      if (filterRef.current) {
-        filterRef.current.destroy();
-      }
+      if (filterRef.current) filterRef.current.destroy();
+      if (sphereRef.current) sphereRef.current.destroy();
     };
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0d1117] transition-colors">
+    <div className="min-h-screen bg-[#0d1117] transition-colors" style={{background: "black"}}>
       {/* Header */}
       <header className="bg-[#161b22] border-b border-[#30363d]">
         <div className="container  px-4 py-2">
           <h1 className="text-xl font-bold text-[#c9d1d9] mb-1">HAP: Hackers and Painters</h1>
-          <p className="text-sm text-[#8b949e]">Filter Paintings or Images by Algorithm Visualizations.</p>
+          <p className="text-sm text-[#8b949e]">Filter Paintings or Images by Algorithm Visualizations with WebGL.</p>
         </div>
       </header>
 
@@ -87,20 +107,8 @@ function App() {
       )}
 
       {/* Main Content */}
-      <div className="flex items-center justify-center pt-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            {uploadedImage ? (
-              <div className="relative group overflow-hidden max-w-4xl min-w-[300px] mx-auto">
-                <div className="overflow-hidden flex items-center justify-center relative">
-                  <div ref={canvasRef} />
-                </div>
-              </div>
-            ) : (
-              <ImageUpload onImageUpload={setUploadedImage} />
-            )}
-          </div>
-        </div>
+      <div className="container mx-auto h-full flex items-center justify-center my-12">
+        {uploadedImage ? <div ref={canvasRef} /> : <ImageUpload onImageUpload={setUploadedImage} />}
       </div>
     </div>
   );
