@@ -5,6 +5,7 @@ import * as Filter from "./lib/index";
 import {sphere} from "./lib/sphere";
 import {paintings} from "./paintings";
 import {defaultScheme, allSchemes} from "./schemes";
+import {defaultAlgorithm, allAlgorithms, algorithms} from "./algorithms";
 
 function loadImage(src) {
   const image = new Image();
@@ -23,23 +24,12 @@ function App() {
   const [selectedPainting, setSelectedPainting] = useState(paintings[0]);
   const [uploadedImage, setUploadedImage] = useState(paintings[0].image);
   const [imageData, setImageData] = useState(null);
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState(defaultAlgorithm);
   const [selectedColorScheme, setSelectedColorScheme] = useState(defaultScheme);
-  const [algorithms, setAlgorithms] = useState([]);
   const filterRef = useRef(null);
   const canvasRef = useRef(null);
   const sphereRef = useRef(null);
   const shouldAutoPlayRef = useRef(false);
-
-  useEffect(() => {
-    const algoList = Object.values(Filter).map((filter) => filter.metadata);
-    setAlgorithms(algoList);
-    // Set default algorithm to randomPoissonDisc
-    const defaultAlgo = algoList.find((algo) => algo.key === "randomPoissonDisc");
-    if (defaultAlgo) {
-      setSelectedAlgorithm(defaultAlgo);
-    }
-  }, []);
 
   const displayRawImage = (img, width, height) => {
     if (!canvasRef.current) return;
@@ -78,7 +68,7 @@ function App() {
     }
   }, [selectedPainting]);
 
-  const handleSelectAlgorithm = (algo, index) => {
+  const handleSelectAlgorithm = (algo) => {
     if (filterRef.current) {
       filterRef.current.destroy();
     }
@@ -102,7 +92,7 @@ function App() {
     container.classList.add("flex", "items-center", "gap-12");
     canvasRef.current.appendChild(container);
 
-    const generator = Filter[selectedAlgorithm.key];
+    const generator = selectedAlgorithm.filter;
     const visualizer = selectedAlgorithm.visualizer;
     filterRef.current = visualizer({
       parent: planeContainer,
@@ -162,6 +152,7 @@ function App() {
             shouldAutoPlayRef.current = false;
           }}
           algorithms={algorithms}
+          allAlgorithms={allAlgorithms}
           selectedAlgorithm={selectedAlgorithm}
           onSelect={handleSelectAlgorithm}
           colorSchemes={allSchemes}

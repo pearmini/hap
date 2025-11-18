@@ -1,10 +1,13 @@
 import {schemes} from "../schemes";
 
-const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
+const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, allAlgorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
   const handleAlgorithmChange = (e) => {
-    const selectedIndex = parseInt(e.target.value);
-    if (selectedIndex >= 0 && selectedIndex < algorithms.length) {
-      onSelect(algorithms[selectedIndex], selectedIndex);
+    const selectedKey = e.target.value;
+    if (allAlgorithms && onSelect) {
+      const algo = allAlgorithms.find((a) => a.key === selectedKey);
+      if (algo) {
+        onSelect(algo);
+      }
     }
   };
 
@@ -31,7 +34,7 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, sel
     }
   };
 
-  const selectedIndex = selectedAlgorithm ? algorithms.findIndex((algo) => algo.name === selectedAlgorithm.name) : -1;
+  const selectedAlgorithmKey = selectedAlgorithm ? selectedAlgorithm.key : "";
   const selectedPaintingIndex =
     selectedPainting && paintings ? paintings.findIndex((p) => p.name === selectedPainting.name) : -1;
   const selectedColorSchemeName = selectedColorScheme ? selectedColorScheme.name : "";
@@ -80,17 +83,18 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, sel
             </label>
             <select
               id="algorithm-select"
-              value={selectedIndex >= 0 ? selectedIndex : ""}
+              value={selectedAlgorithmKey}
               onChange={handleAlgorithmChange}
               className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
             >
-              <option value="" disabled className="bg-[#0d1117] text-[#c9d1d9]">
-                Select an algorithm...
-              </option>
-              {algorithms.map((algo, index) => (
-                <option key={index} value={index} className="bg-[#0d1117] text-[#c9d1d9]">
-                  {algo.name}
-                </option>
+              {algorithms.map((category) => (
+                <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
+                  {category.algorithms.map((algo) => (
+                    <option key={algo.metadata.key} value={algo.metadata.key} className="bg-[#0d1117] text-[#c9d1d9]">
+                      {algo.metadata.name}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </div>
