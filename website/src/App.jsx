@@ -4,6 +4,7 @@ import Toolbar from "./components/Toolbar";
 import * as Filter from "./lib/index";
 import {sphere} from "./lib/sphere";
 import {paintings} from "./paintings";
+import {defaultScheme, allSchemes} from "./schemes";
 
 function loadImage(src) {
   const image = new Image();
@@ -23,6 +24,7 @@ function App() {
   const [uploadedImage, setUploadedImage] = useState(paintings[0].image);
   const [imageData, setImageData] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
+  const [selectedColorScheme, setSelectedColorScheme] = useState(defaultScheme);
   const [algorithms, setAlgorithms] = useState([]);
   const filterRef = useRef(null);
   const canvasRef = useRef(null);
@@ -109,6 +111,7 @@ function App() {
       image: imageData.img,
       onEnd: () => {},
       generator: generator,
+      interpolate: selectedColorScheme.value,
     });
     filterRef.current.start();
 
@@ -122,6 +125,14 @@ function App() {
     });
     sphereRef.current.start();
   };
+
+  // Restart animation when color scheme changes (if animation is already running)
+  useEffect(() => {
+    if (filterRef.current && selectedAlgorithm && imageData) {
+      // Restart with new color scheme
+      handlePlay(selectedAlgorithm);
+    }
+  }, [selectedColorScheme]);
 
   useEffect(() => {
     return () => {
@@ -153,6 +164,9 @@ function App() {
           algorithms={algorithms}
           selectedAlgorithm={selectedAlgorithm}
           onSelect={handleSelectAlgorithm}
+          colorSchemes={allSchemes}
+          selectedColorScheme={selectedColorScheme}
+          onColorSchemeSelect={setSelectedColorScheme}
           onPlay={(algo) => {
             shouldAutoPlayRef.current = true;
             handlePlay(algo || selectedAlgorithm);

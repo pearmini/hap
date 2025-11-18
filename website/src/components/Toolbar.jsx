@@ -1,4 +1,6 @@
-const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, selectedAlgorithm, onSelect, onPlay}) => {
+import {schemes} from "../schemes";
+
+const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
   const handleAlgorithmChange = (e) => {
     const selectedIndex = parseInt(e.target.value);
     if (selectedIndex >= 0 && selectedIndex < algorithms.length) {
@@ -13,6 +15,16 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, sel
     }
   };
 
+  const handleColorSchemeChange = (e) => {
+    const selectedName = e.target.value;
+    if (schemesProp && onColorSchemeSelect) {
+      const scheme = schemesProp.find((s) => s.name === selectedName);
+      if (scheme) {
+        onColorSchemeSelect(scheme);
+      }
+    }
+  };
+
   const handlePlay = () => {
     if (selectedAlgorithm && onPlay) {
       onPlay(selectedAlgorithm);
@@ -22,6 +34,7 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, sel
   const selectedIndex = selectedAlgorithm ? algorithms.findIndex((algo) => algo.name === selectedAlgorithm.name) : -1;
   const selectedPaintingIndex =
     selectedPainting && paintings ? paintings.findIndex((p) => p.name === selectedPainting.name) : -1;
+  const selectedColorSchemeName = selectedColorScheme ? selectedColorScheme.name : "";
 
   if (!algorithms || algorithms.length === 0 || !paintings || paintings.length === 0) {
     return null;
@@ -78,6 +91,27 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, sel
                 <option key={index} value={index} className="bg-[#0d1117] text-[#c9d1d9]">
                   {algo.name}
                 </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <label htmlFor="color-select" className="text-sm font-medium text-[#c9d1d9]">
+              Palette:
+            </label>
+            <select
+              id="color-select"
+              value={selectedColorSchemeName}
+              onChange={handleColorSchemeChange}
+              className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+            >
+              {schemes.map((category) => (
+                <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
+                  {category.schemes.map((scheme) => (
+                    <option key={scheme.name} value={scheme.name} className="bg-[#0d1117] text-[#c9d1d9]">
+                      {scheme.name}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </div>
