@@ -17,6 +17,11 @@ function loadImage(src) {
   });
 }
 
+function toBumps(name) {
+  const [n, ext] = name.split(".");
+  return `${n}_bumps.${ext}`;
+}
+
 function App() {
   const [uploadedImage, setUploadedImage] = useState("starry-night.png");
   const [imageData, setImageData] = useState(null);
@@ -32,11 +37,11 @@ function App() {
 
   useEffect(() => {
     if (canvasRef.current) {
-      loadImage(uploadedImage).then((img) => {
+      Promise.all([loadImage(uploadedImage), loadImage(toBumps(uploadedImage))]).then(([img, bumps]) => {
         const t = img.width / img.height;
         const width = Math.min(600, img.width);
         const height = width / t;
-        setImageData({img, width: ~~width, height: ~~height});
+        setImageData({img, width: ~~width, height: ~~height, bumps});
       });
     }
   }, [uploadedImage]);
@@ -80,6 +85,7 @@ function App() {
       width: imageData.width,
       height: imageData.width,
       filterFBO: filterRef.current.filter,
+      bumps: imageData.bumps,
     });
     sphereRef.current.start();
   };
