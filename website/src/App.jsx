@@ -21,7 +21,8 @@ function loadImage(src) {
 }
 
 function App() {
-  const [selectedPainting, setSelectedPainting] = useState(paintings[0]);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState({type: "painting", item: paintings[0]});
   const [uploadedImage, setUploadedImage] = useState(paintings[0].image);
   const [imageData, setImageData] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(defaultAlgorithm);
@@ -49,8 +50,12 @@ function App() {
   };
 
   useEffect(() => {
-    if (canvasRef.current && selectedPainting) {
-      Promise.all([loadImage(selectedPainting.image), loadImage(selectedPainting.bumps)]).then(([img, bumps]) => {
+    if (canvasRef.current && selectedImage) {
+      const loadPromises = selectedImage.type === "painting"
+        ? [loadImage(selectedImage.item.image), loadImage(selectedImage.item.bumps)]
+        : [loadImage(selectedImage.item.image), Promise.resolve(null)];
+
+      Promise.all(loadPromises).then(([img, bumps]) => {
         const t = img.width / img.height;
         let width = Math.min(600, img.width);
         let height = width / t;
@@ -59,14 +64,14 @@ function App() {
           width = height * t;
         }
         setImageData({img, width: ~~width, height: ~~height, bumps});
-        setUploadedImage(selectedPainting.image);
-        // Display the raw image when painting changes
+        setUploadedImage(selectedImage.item.image);
+        // Display the raw image when image changes
         displayRawImage(img, ~~width, ~~height);
-        // Don't auto-play when painting changes - user needs to click play
+        // Don't auto-play when image changes - user needs to click play
         shouldAutoPlayRef.current = false;
       });
     }
-  }, [selectedPainting]);
+  }, [selectedImage]);
 
   const handleSelectAlgorithm = (algo) => {
     if (filterRef.current) {
@@ -111,7 +116,7 @@ function App() {
       width: size,
       height: size,
       filterFBO: filterRef.current.filter,
-      bumps: imageData.bumps,
+      bumps: imageData.bumps || null,
     });
     sphereRef.current.start();
   };
@@ -145,11 +150,21 @@ function App() {
       {uploadedImage && (
         <Toolbar
           paintings={paintings}
-          selectedPainting={selectedPainting}
-          onPaintingSelect={(painting) => {
-            setSelectedPainting(painting);
+          uploadedImages={uploadedImages}
+          selectedImage={selectedImage}
+          onImageSelect={(image) => {
+            setSelectedImage(image);
             // Reset to show raw image, require play button click
             shouldAutoPlayRef.current = false;
+          }}
+          onImageUpload={(imageDataUrl) => {
+            const newImage = {
+              name: `Uploaded ${uploadedImages.length + 1}`,
+              image: imageDataUrl,
+              bumps: null,
+            };
+            setUploadedImages([...uploadedImages, newImage]);
+            setSelectedImage({type: "uploaded", item: newImage});
           }}
           algorithms={algorithms}
           allAlgorithms={allAlgorithms}

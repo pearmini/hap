@@ -123,7 +123,23 @@ export function sphere({parent, width, height, bumps, filterFBO}) {
     mesh = {triangle_strip: true, data: new Float32Array(sphereMesh(40, 20))};
     gl = contextGL2({parent, width, height, vertexShader, fragmentShader});
     sphereTexture = createTexture(gl, 0);
-    addTexture(gl, 1, bumps);
+    if (bumps) {
+      addTexture(gl, 1, bumps);
+    } else {
+      // Create a default flat texture (no bumps) - 1x1 gray image (0.5, 0.5, 0.5) for no bump effect
+      const canvas = document.createElement("canvas");
+      canvas.width = 1;
+      canvas.height = 1;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#808080"; // Gray (0.5, 0.5, 0.5) for no bump effect
+      ctx.fillRect(0, 0, 1, 1);
+      const defaultBumps = new Image();
+      defaultBumps.src = canvas.toDataURL();
+      // Wait for image to load before adding texture
+      defaultBumps.onload = () => {
+        addTexture(gl, 1, defaultBumps);
+      };
+    }
     timer = d3.interval(update, 10);
   };
 

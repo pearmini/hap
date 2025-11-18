@@ -1,6 +1,6 @@
 import {schemes} from "../schemes";
 
-const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, allAlgorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
+const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onImageUpload, algorithms, allAlgorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
   const handleAlgorithmChange = (e) => {
     const selectedKey = e.target.value;
     if (allAlgorithms && onSelect) {
@@ -11,11 +11,32 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, all
     }
   };
 
-  const handlePaintingChange = (e) => {
-    const selectedIndex = parseInt(e.target.value);
-    if (selectedIndex >= 0 && selectedIndex < paintings.length && onPaintingSelect) {
-      onPaintingSelect(paintings[selectedIndex]);
+  const handleImageChange = (e) => {
+    const value = e.target.value;
+    if (value.startsWith("painting-")) {
+      const index = parseInt(value.replace("painting-", ""));
+      if (index >= 0 && index < paintings.length && onImageSelect) {
+        onImageSelect({type: "painting", item: paintings[index]});
+      }
+    } else if (value.startsWith("uploaded-")) {
+      const index = parseInt(value.replace("uploaded-", ""));
+      if (index >= 0 && index < uploadedImages.length && onImageSelect) {
+        onImageSelect({type: "uploaded", item: uploadedImages[index]});
+      }
     }
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith("image/") && onImageUpload) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onImageUpload(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+    // Reset input so same file can be selected again
+    e.target.value = "";
   };
 
   const handleColorSchemeChange = (e) => {
@@ -35,8 +56,11 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, all
   };
 
   const selectedAlgorithmKey = selectedAlgorithm ? selectedAlgorithm.key : "";
-  const selectedPaintingIndex =
-    selectedPainting && paintings ? paintings.findIndex((p) => p.name === selectedPainting.name) : -1;
+  const selectedImageValue = selectedImage
+    ? selectedImage.type === "painting"
+      ? `painting-${paintings.findIndex((p) => p.name === selectedImage.item.name)}`
+      : `uploaded-${uploadedImages.findIndex((u) => u.name === selectedImage.item.name)}`
+    : "";
   const selectedColorSchemeName = selectedColorScheme ? selectedColorScheme.name : "";
 
   if (!algorithms || algorithms.length === 0 || !paintings || paintings.length === 0) {
@@ -61,21 +85,61 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, all
           </button>
           <div className="h-6 w-px bg-[#30363d]"></div>
           <div className="flex items-center gap-2">
-            <label htmlFor="painting-select" className="text-sm font-medium text-[#c9d1d9]">
-              Painting:
+            <label htmlFor="image-select" className="text-sm font-medium text-[#c9d1d9]">
+              Image:
             </label>
-            <select
-              id="painting-select"
-              value={selectedPaintingIndex >= 0 ? selectedPaintingIndex : ""}
-              onChange={handlePaintingChange}
-              className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
-            >
-              {paintings.map((painting, index) => (
-                <option key={index} value={index} className="bg-[#0d1117] text-[#c9d1d9]">
-                  {painting.name}
-                </option>
-              ))}
-            </select>
+            <div className="flex items-center gap-1">
+              <select
+                id="image-select"
+                value={selectedImageValue}
+                onChange={handleImageChange}
+                className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+              >
+                {uploadedImages.length > 0 && (
+                  <optgroup label="Uploaded" className="bg-[#0d1117] text-[#c9d1d9]">
+                    {uploadedImages.map((img, index) => (
+                      <option key={`uploaded-${index}`} value={`uploaded-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
+                        {img.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                <optgroup label="Paintings" className="bg-[#0d1117] text-[#c9d1d9]">
+                  {paintings.map((painting, index) => (
+                    <option key={`painting-${index}`} value={`painting-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
+                      {painting.name}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+              <input
+                type="file"
+                id="image-upload-input"
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <label
+                htmlFor="image-upload-input"
+                className="px-2 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer hover:bg-[#161b22] hover:border-[#484f58] focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb] transition-colors flex items-center"
+                title="Upload image"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </label>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <label htmlFor="algorithm-select" className="text-sm font-medium text-[#c9d1d9]">
