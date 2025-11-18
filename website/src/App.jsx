@@ -3,6 +3,7 @@ import ImageUpload from "./components/ImageUpload";
 import Toolbar from "./components/Toolbar";
 import * as Filter from "./lib/index";
 import {sphere} from "./lib/sphere";
+import {paintings} from "./paintings";
 
 function loadImage(src) {
   const image = new Image();
@@ -17,13 +18,9 @@ function loadImage(src) {
   });
 }
 
-function toBumps(name) {
-  const [n, ext] = name.split(".");
-  return `${n}_bumps.${ext}`;
-}
-
 function App() {
-  const [uploadedImage, setUploadedImage] = useState("starry-night.png");
+  const [selectedPainting, setSelectedPainting] = useState(paintings[0]);
+  const [uploadedImage, setUploadedImage] = useState(paintings[0].image);
   const [imageData, setImageData] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
   const [algorithms, setAlgorithms] = useState([]);
@@ -36,15 +33,20 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (canvasRef.current) {
-      Promise.all([loadImage(uploadedImage), loadImage(toBumps(uploadedImage))]).then(([img, bumps]) => {
+    if (canvasRef.current && selectedPainting) {
+      Promise.all([loadImage(selectedPainting.image), loadImage(selectedPainting.bumps)]).then(([img, bumps]) => {
         const t = img.width / img.height;
-        const width = Math.min(600, img.width);
-        const height = width / t;
+        let width = Math.min(600, img.width);
+        let height = width / t;
+        if (t < 1) {
+          height = Math.min(600, img.height);
+          width = height * t;
+        }
         setImageData({img, width: ~~width, height: ~~height, bumps});
+        setUploadedImage(selectedPainting.image);
       });
     }
-  }, [uploadedImage]);
+  }, [selectedPainting]);
 
   const handleSelectAlgorithm = (algo, index) => {
     if (filterRef.current) {
@@ -80,10 +82,11 @@ function App() {
     });
     filterRef.current.start();
 
+    const size = Math.max(imageData.width, imageData.height);
     sphereRef.current = sphere({
       parent: sphereContainer,
-      width: imageData.width,
-      height: imageData.width,
+      width: size,
+      height: size,
       filterFBO: filterRef.current.filter,
       bumps: imageData.bumps,
     });
@@ -110,6 +113,9 @@ function App() {
       {/* Toolbar */}
       {uploadedImage && (
         <Toolbar
+          paintings={paintings}
+          selectedPainting={selectedPainting}
+          onPaintingSelect={setSelectedPainting}
           algorithms={algorithms}
           selectedAlgorithm={selectedAlgorithm}
           onSelect={handleSelectAlgorithm}

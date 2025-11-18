@@ -1,8 +1,15 @@
-const Toolbar = ({algorithms, selectedAlgorithm, onSelect, onPlay}) => {
-  const handleChange = (e) => {
+const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, selectedAlgorithm, onSelect, onPlay}) => {
+  const handleAlgorithmChange = (e) => {
     const selectedIndex = parseInt(e.target.value);
     if (selectedIndex >= 0 && selectedIndex < algorithms.length) {
       onSelect(algorithms[selectedIndex], selectedIndex);
+    }
+  };
+
+  const handlePaintingChange = (e) => {
+    const selectedIndex = parseInt(e.target.value);
+    if (selectedIndex >= 0 && selectedIndex < paintings.length && onPaintingSelect) {
+      onPaintingSelect(paintings[selectedIndex]);
     }
   };
 
@@ -13,8 +20,9 @@ const Toolbar = ({algorithms, selectedAlgorithm, onSelect, onPlay}) => {
   };
 
   const selectedIndex = selectedAlgorithm ? algorithms.findIndex((algo) => algo.name === selectedAlgorithm.name) : -1;
+  const selectedPaintingIndex = selectedPainting && paintings ? paintings.findIndex((p) => p.name === selectedPainting.name) : -1;
 
-  if (!algorithms || algorithms.length === 0) {
+  if (!algorithms || algorithms.length === 0 || !paintings || paintings.length === 0) {
     return null;
   }
 
@@ -39,13 +47,30 @@ const Toolbar = ({algorithms, selectedAlgorithm, onSelect, onPlay}) => {
             Play
           </button>
           <div className="flex items-center gap-2">
+            <label htmlFor="painting-select" className="text-sm font-medium text-[#c9d1d9]">
+              Painting:
+            </label>
+            <select
+              id="painting-select"
+              value={selectedPaintingIndex >= 0 ? selectedPaintingIndex : ""}
+              onChange={handlePaintingChange}
+              className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+            >
+              {paintings.map((painting, index) => (
+                <option key={index} value={index} className="bg-[#0d1117] text-[#c9d1d9]">
+                  {painting.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
             <label htmlFor="algorithm-select" className="text-sm font-medium text-[#c9d1d9]">
               Algorithm:
             </label>
             <select
               id="algorithm-select"
               value={selectedIndex >= 0 ? selectedIndex : ""}
-              onChange={handleChange}
+              onChange={handleAlgorithmChange}
               className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
             >
               <option value="" disabled className="bg-[#0d1117] text-[#c9d1d9]">
