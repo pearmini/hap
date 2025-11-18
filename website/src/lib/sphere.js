@@ -128,7 +128,7 @@ export function sphere({parent, width, height, bumps, filterFBO}) {
   };
 
   _.destroy = function () {
-    timer.stop();
+    timer?.stop();
     timer = null;
   };
 

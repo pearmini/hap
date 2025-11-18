@@ -27,10 +27,34 @@ function App() {
   const filterRef = useRef(null);
   const canvasRef = useRef(null);
   const sphereRef = useRef(null);
+  const shouldAutoPlayRef = useRef(false);
 
   useEffect(() => {
-    setAlgorithms(Object.values(Filter).map((filter) => filter.metadata));
+    const algoList = Object.values(Filter).map((filter) => filter.metadata);
+    setAlgorithms(algoList);
+    // Set default algorithm to randomPoissonDisc
+    const defaultAlgo = algoList.find((algo) => algo.key === "randomPoissonDisc");
+    if (defaultAlgo) {
+      setSelectedAlgorithm(defaultAlgo);
+    }
   }, []);
+
+  const displayRawImage = (img, width, height) => {
+    if (!canvasRef.current) return;
+    canvasRef.current.innerHTML = "";
+    if (sphereRef.current) sphereRef.current.destroy();
+    if (filterRef.current) filterRef.current.destroy();
+
+    const container = document.createElement("div");
+    container.classList.add("flex", "items-center", "justify-center", "pt-6");
+    const imgElement = document.createElement("img");
+    imgElement.src = img.src;
+    imgElement.style.width = `${width}px`;
+    imgElement.style.height = `${height}px`;
+    imgElement.style.objectFit = "contain";
+    container.appendChild(imgElement);
+    canvasRef.current.appendChild(container);
+  };
 
   useEffect(() => {
     if (canvasRef.current && selectedPainting) {
@@ -44,6 +68,10 @@ function App() {
         }
         setImageData({img, width: ~~width, height: ~~height, bumps});
         setUploadedImage(selectedPainting.image);
+        // Display the raw image when painting changes
+        displayRawImage(img, ~~width, ~~height);
+        // Don't auto-play when painting changes - user needs to click play
+        shouldAutoPlayRef.current = false;
       });
     }
   }, [selectedPainting]);
@@ -53,6 +81,8 @@ function App() {
       filterRef.current.destroy();
     }
     setSelectedAlgorithm(algo);
+    // Auto-play when algorithm changes
+    shouldAutoPlayRef.current = true;
     handlePlay(algo);
   };
 
@@ -115,11 +145,18 @@ function App() {
         <Toolbar
           paintings={paintings}
           selectedPainting={selectedPainting}
-          onPaintingSelect={setSelectedPainting}
+          onPaintingSelect={(painting) => {
+            setSelectedPainting(painting);
+            // Reset to show raw image, require play button click
+            shouldAutoPlayRef.current = false;
+          }}
           algorithms={algorithms}
           selectedAlgorithm={selectedAlgorithm}
           onSelect={handleSelectAlgorithm}
-          onPlay={handlePlay}
+          onPlay={(algo) => {
+            shouldAutoPlayRef.current = true;
+            handlePlay(algo || selectedAlgorithm);
+          }}
         />
       )}
 
