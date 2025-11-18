@@ -106,7 +106,7 @@ function App() {
       <header className="bg-[#161b22] border-b border-[#30363d]">
         <div className="container  px-4 py-2">
           <h1 className="text-xl font-bold text-[#c9d1d9] mb-1">HAP: Hackers and Painters</h1>
-          <p className="text-sm text-[#8b949e]">Filter Paintings or Images by Algorithm Visualizations with WebGL.</p>
+          <p className="text-sm text-[#8b949e]">Filter Paintings by Algorithm Visualizations with WebGL.</p>
         </div>
       </header>
 
