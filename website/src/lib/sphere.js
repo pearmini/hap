@@ -39,6 +39,19 @@ function drawObj(gl, mesh, matrix, vertexSize, bumps, color) {
   drawMesh(gl, mesh, vertexSize);
 }
 
+function addDefaultBumps(gl, index) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1;
+  canvas.height = 1;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#808080"; // Gray (0.5, 0.5, 0.5) for no bump effect
+  ctx.fillRect(0, 0, 1, 1);
+  const defaultBumps = new Image();
+  defaultBumps.src = canvas.toDataURL();
+  addTexture(gl, index, defaultBumps);
+  return defaultBumps;
+}
+
 export function sphere({parent, width, height, bumps, filterFBO}) {
   let gl;
   let mesh;
@@ -154,23 +167,9 @@ export function sphere({parent, width, height, bumps, filterFBO}) {
 
     sphereTexture = createTexture(gl, 0);
 
-    if (bumps) {
-      addTexture(gl, 1, bumps);
-    } else {
-      // Create a default flat texture (no bumps) - 1x1 gray image (0.5, 0.5, 0.5) for no bump effect
-      const canvas = document.createElement("canvas");
-      canvas.width = 1;
-      canvas.height = 1;
-      const ctx = canvas.getContext("2d");
-      ctx.fillStyle = "#808080"; // Gray (0.5, 0.5, 0.5) for no bump effect
-      ctx.fillRect(0, 0, 1, 1);
-      const defaultBumps = new Image();
-      defaultBumps.src = canvas.toDataURL();
-      // Wait for image to load before adding texture
-      defaultBumps.onload = () => {
-        addTexture(gl, 1, defaultBumps);
-      };
-    }
+    if (bumps) addTexture(gl, 1, bumps);
+    else addDefaultBumps(gl, 1);
+
     timer = d3.interval(update, 10);
   };
 
