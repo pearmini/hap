@@ -20,7 +20,8 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, sel
   };
 
   const selectedIndex = selectedAlgorithm ? algorithms.findIndex((algo) => algo.name === selectedAlgorithm.name) : -1;
-  const selectedPaintingIndex = selectedPainting && paintings ? paintings.findIndex((p) => p.name === selectedPainting.name) : -1;
+  const selectedPaintingIndex =
+    selectedPainting && paintings ? paintings.findIndex((p) => p.name === selectedPainting.name) : -1;
 
   if (!algorithms || algorithms.length === 0 || !paintings || paintings.length === 0) {
     return null;
@@ -29,23 +30,20 @@ const Toolbar = ({paintings, selectedPainting, onPaintingSelect, algorithms, sel
   return (
     <div className="bg-[#161b22] border-b border-dashed border-[#30363d] py-2">
       <div className="container px-4 py-1.5">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <button
             onClick={handlePlay}
             disabled={!selectedAlgorithm}
-            className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer hover:bg-[#161b22] hover:border-[#1f6feb] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0d1117] disabled:hover:border-[#30363d] focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb] transition-colors flex items-center gap-1.5"
-            title="Restart animation"
+            className="px-5 py-2.5 text-base  rounded-md text-white bg-black cursor-pointer hover:bg-[#1a1a1a] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-black focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:ring-offset-2 focus:ring-offset-[#161b22] transition-all flex items-center gap-2 shadow-lg shadow-black/30"
+            style={{border: '1px solid #30363d'}}
+            title="Start/Restart animation"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="w-4 h-4"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
               <path d="M8 5v14l11-7z" />
             </svg>
             Play
           </button>
+          <div className="h-6 w-px bg-[#30363d]"></div>
           <div className="flex items-center gap-2">
             <label htmlFor="painting-select" className="text-sm font-medium text-[#c9d1d9]">
               Painting:
