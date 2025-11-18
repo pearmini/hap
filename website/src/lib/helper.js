@@ -272,3 +272,36 @@ export function vertexMap(gl, map) {
   }
   return vertexSize;
 }
+
+export function useMouse(gl, parent, mouse = {}) {
+  Object.assign(mouse, {isDown: false, x: 0, y: 0});
+  const node = parent ?? document;
+  const down = (e) => {
+    mouse.isDown = true;
+    mouse.x = (e.x - gl.width / 2) / (gl.width / 2);
+    mouse.y = (gl.height / 2 - e.y) / (gl.width / 2);
+    if (mouse.down) mouse.down();
+  };
+  const move = (e) => {
+    if (mouse.isDown) {
+      let x = (e.x - gl.width / 2) / (gl.width / 2);
+      let y = (gl.height / 2 - e.y) / (gl.width / 2);
+      if (mouse.drag) mouse.drag(x - mouse.x, y - mouse.y);
+      mouse.x = x;
+      mouse.y = y;
+    }
+  };
+  const up = (e) => {
+    if (mouse.up) mouse.up();
+    mouse.isDown = false;
+  };
+  node.addEventListener("mousedown", down);
+  node.addEventListener("mousemove", move);
+  node.addEventListener("mouseup", up);
+  mouse.destroy = () => {
+    node.removeEventListener("mousedown", down);
+    node.removeEventListener("mousemove", move);
+    node.removeEventListener("mouseup", up);
+  };
+  return mouse;
+}

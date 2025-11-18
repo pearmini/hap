@@ -7,6 +7,7 @@ import {
   vertexMap,
   updateTextureFromFBO,
   addTexture,
+  useMouse,
 } from "./helper";
 import * as d3 from "d3";
 
@@ -38,11 +39,28 @@ function drawObj(gl, mesh, matrix, vertexSize, bumps, color) {
   drawMesh(gl, mesh, vertexSize);
 }
 
+function addDefaultBumps(gl, index) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1;
+  canvas.height = 1;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#808080"; // Gray (0.5, 0.5, 0.5) for no bump effect
+  ctx.fillRect(0, 0, 1, 1);
+  const defaultBumps = new Image();
+  defaultBumps.src = canvas.toDataURL();
+  addTexture(gl, index, defaultBumps);
+  return defaultBumps;
+}
+
 export function sphere({parent, width, height, bumps, filterFBO}) {
   let gl;
   let mesh;
   let timer;
   let sphereTexture;
+  let spinX;
+  let spinY;
+  let mouse;
+  let isDragging = false;
 
   const _ = {};
 
@@ -114,22 +132,52 @@ export function sphere({parent, width, height, bumps, filterFBO}) {
     // Draw mesh.
     setUniform(gl, "1iv", "uSampler", [0, 1]);
     const vertexSize = vertexMap(gl, ["aPos", 3, "aNor", 3, "aTan", 3, "aUV", 2]);
-    let time = Date.now() / 1000;
-    const matrix = M.mxm(M.turnY(time / 2), M.mxm(M.turnX(time / 2), M.scale(0.7)));
+    if (!isDragging) {
+      spinX += 1 / 100;
+      spinY += 1 / 100;
+    }
+    const matrix = M.mxm(M.turnY(spinX), M.mxm(M.turnX(spinY), M.scale(0.7)));
     drawObj(gl, mesh, matrix, vertexSize, [1, 1, 1]);
   }
 
   _.start = function () {
+    spinX = 0;
+    spinY = 0;
+    isDragging = false;
     mesh = {triangle_strip: true, data: new Float32Array(sphereMesh(40, 20))};
     gl = contextGL2({parent, width, height, vertexShader, fragmentShader});
+
+    let delay;
+    mouse = useMouse(gl, parent, {
+      drag: (dx, dy) => {
+        spinX += dx;
+        spinY -= dy;
+      },
+      down: () => {
+        isDragging = true;
+        if (delay) clearTimeout(delay);
+      },
+      up: () => {
+        if (delay) clearTimeout(delay);
+        delay = setTimeout(() => {
+          isDragging = false;
+        }, 2000);
+      },
+    });
+
     sphereTexture = createTexture(gl, 0);
-    addTexture(gl, 1, bumps);
+
+    if (bumps) addTexture(gl, 1, bumps);
+    else addDefaultBumps(gl, 1);
+
     timer = d3.interval(update, 10);
   };
 
   _.destroy = function () {
-    timer.stop();
+    timer?.stop();
     timer = null;
+    mouse?.destroy();
+    mouse = null;
   };
 
   return _;
