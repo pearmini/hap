@@ -97,8 +97,13 @@ vec3 phong(vec3 N, vec3 L, vec3 W, vec3 diffuse, vec4 specular) {
   return (scene) => {
     const canvas = document.createElement("canvas");
     scene.parent.appendChild(canvas);
-    canvas.width = scene.width ?? 640;
-    canvas.height = scene.height ?? 640;
+    const dpr = window.devicePixelRatio || 1;
+    const width = scene.width ?? 640;
+    const height = scene.height ?? 640;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
     const gl = canvas.getContext("webgl2");
     canvas.setShaders = function (vertexShader, fragmentShader) {
       gl.program = gl.createProgram();
@@ -122,7 +127,8 @@ vec3 phong(vec3 N, vec3 L, vec3 W, vec3 diffuse, vec4 specular) {
       gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
       gl.enable(gl.DEPTH_TEST);
       gl.depthFunc(gl.LEQUAL);
-      // vertexMap(gl, ["aPos", 3, "aNor", 3]);
+      // Set viewport to match the scaled resolution
+      gl.viewport(0, 0, canvas.width, canvas.height);
     };
     canvas.setShaders(scene.vertexShader.trim(), scene.fragmentShader.trim());
     const timer = setInterval(function () {
@@ -130,8 +136,9 @@ vec3 phong(vec3 N, vec3 L, vec3 W, vec3 diffuse, vec4 specular) {
       if (scene.mesh) drawMesh(gl, scene.mesh);
     }, 30);
     canvas.gl = gl;
-    canvas.gl.width = canvas.width;
-    canvas.gl.height = canvas.height;
+    gl.width = width;
+    gl.height = height;
+    gl.dpr = dpr;
     canvas.remove = () => clearInterval(timer);
     const style = scene.style ?? {};
     style.background ??= "black";
@@ -215,9 +222,11 @@ export function bindFBO(gl, fbo, width, height) {
   gl.viewport(0, 0, width, height);
 }
 
-export function unbindFBO(gl, canvasWidth, canvasHeight) {
+export function unbindFBO(gl) {
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-  gl.viewport(0, 0, canvasWidth, canvasHeight);
+  // Use actual canvas dimensions (scaled by DPR) for viewport.
+  const canvas = gl.canvas;
+  gl.viewport(0, 0, canvas.width, canvas.height);
 }
 
 export function addTextureFromFBO(gl, index, texture) {

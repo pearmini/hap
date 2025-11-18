@@ -41,8 +41,6 @@ export function FilterGL2(parent, {image, width, height}) {
   vertexMap(gl, ["aPos", 2, "aUV", 2, "aColor", 4]);
 
   // Create FBO for rendering
-  const canvasWidth = gl.width || width;
-  const canvasHeight = gl.height || height;
   const fboData = createFBO(gl, 1, width, height);
   _.fboTexture = fboData.texture;
   _.fbo = fboData.fbo;
@@ -86,14 +84,10 @@ export function FilterGL2(parent, {image, width, height}) {
 
     // Render to FBO first
     bindFBO(gl, fboData.fbo, width, height);
-    // gl.clearColor(0, 0, 0, 1);
-    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, T.length / 8);
 
     // Then render to screen
-    unbindFBO(gl, canvasWidth, canvasHeight);
-    // gl.clearColor(0, 0, 0, 1);
-    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    unbindFBO(gl);
     gl.drawArrays(gl.TRIANGLES, 0, T.length / 8);
   };
 
