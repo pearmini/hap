@@ -37,12 +37,19 @@ function App() {
     if (filterRef.current) filterRef.current.destroy();
 
     const container = document.createElement("div");
-    container.classList.add("flex", "items-center", "justify-center", "pt-6");
+    container.classList.add("flex", "items-center", "justify-center", "pt-6", "w-full");
     const imgElement = document.createElement("img");
     imgElement.src = img.src;
-    imgElement.style.width = `${width}px`;
-    imgElement.style.height = `${height}px`;
     imgElement.style.objectFit = "contain";
+    // Use CSS classes for responsive sizing, only set explicit size on larger screens
+    const isSmallScreen = window.innerWidth < 768;
+    if (isSmallScreen) {
+      imgElement.classList.add("w-full", "h-auto");
+    } else {
+      imgElement.style.width = `${width}px`;
+      imgElement.style.height = `${height}px`;
+      imgElement.classList.add("h-auto");
+    }
     container.appendChild(imgElement);
     canvasRef.current.appendChild(container);
   };
@@ -56,10 +63,15 @@ function App() {
 
       Promise.all(loadPromises).then(([img, bumps]) => {
         const t = img.width / img.height;
-        let width = Math.min(600, img.width);
+        // Calculate responsive sizes
+        const isSmallScreen = window.innerWidth < 768; // md breakpoint
+        const maxWidth = isSmallScreen ? window.innerWidth - 32 : 600; // Account for padding
+        const maxHeight = isSmallScreen ? window.innerHeight * 0.4 : 600;
+
+        let width = Math.min(maxWidth, img.width);
         let height = width / t;
         if (t < 1) {
-          height = Math.min(600, img.height);
+          height = Math.min(maxHeight, img.height);
           width = height * t;
         }
         setImageData({img, width: ~~width, height: ~~height, bumps});
@@ -93,15 +105,30 @@ function App() {
     const sphereContainer = document.createElement("div");
     container.appendChild(planeContainer);
     container.appendChild(sphereContainer);
-    container.classList.add("flex", "items-center", "gap-12");
+    container.classList.add("flex", "flex-col", "md:flex-row", "items-center", "justify-center", "gap-6", "md:gap-12", "w-full");
+
+    // Make containers full width on small screens
+    planeContainer.classList.add("w-full", "md:w-auto");
+    sphereContainer.classList.add("w-full", "md:w-auto");
+
     canvasRef.current.appendChild(container);
+
+    // Calculate responsive sizes
+    const isSmallScreen = window.innerWidth < 768; // md breakpoint
+    const screenWidth = window.innerWidth - 32; // Account for padding
+    const screenHeight = window.innerHeight * 0.4;
+
+    const filterWidth = isSmallScreen ? screenWidth : imageData.width;
+    const filterHeight = isSmallScreen
+      ? Math.min(screenHeight, (filterWidth / imageData.width) * imageData.height)
+      : imageData.height;
 
     const generator = selectedAlgorithm.filter;
     const visualizer = selectedAlgorithm.visualizer;
     filterRef.current = visualizer({
       parent: planeContainer,
-      width: imageData.width,
-      height: imageData.height,
+      width: ~~filterWidth,
+      height: ~~filterHeight,
       image: imageData.img,
       onEnd: () => {},
       generator: generator,
@@ -109,11 +136,13 @@ function App() {
     });
     filterRef.current.start();
 
-    const size = Math.max(imageData.width, imageData.height);
+    const sphereSize = isSmallScreen
+      ? Math.min(screenWidth, screenHeight)
+      : Math.max(imageData.width, imageData.height);
     sphereRef.current = sphere({
       parent: sphereContainer,
-      width: size,
-      height: size,
+      width: ~~sphereSize,
+      height: ~~sphereSize,
       filterFBO: filterRef.current.filter,
       bumps: imageData.bumps || null,
     });
@@ -180,8 +209,8 @@ function App() {
       )}
 
       {/* Main Content */}
-      <div className="container mx-auto h-full flex items-center justify-center my-12">
-        <div ref={canvasRef} />
+      <div className="container mx-auto h-full flex items-center justify-center my-6 md:my-12 px-4 max-w-full">
+        <div ref={canvasRef} className="w-full max-w-full" />
       </div>
     </div>
   );

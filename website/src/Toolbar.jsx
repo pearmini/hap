@@ -1,6 +1,8 @@
 import {schemes} from "./schemes";
+import {useState} from "react";
 
 const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onImageUpload, algorithms, allAlgorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const handleAlgorithmChange = (e) => {
     const selectedKey = e.target.value;
     if (allAlgorithms && onSelect) {
@@ -71,119 +73,246 @@ const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onIma
     <div className="bg-[#161b22] border-b border-dashed border-[#30363d] py-2">
       <div className="container px-4 py-1.5">
         <div className="flex items-center gap-4">
+          {/* Play Button - Always Visible */}
           <button
             onClick={handlePlay}
             disabled={!selectedAlgorithm}
-            className="px-5 py-2.5 text-base  rounded-md text-white bg-black cursor-pointer hover:bg-[#1a1a1a] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-black focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:ring-offset-2 focus:ring-offset-[#161b22] transition-all flex items-center gap-2 shadow-lg shadow-black/30"
+            className="px-5 py-2.5 text-base rounded-md text-white bg-black cursor-pointer hover:bg-[#1a1a1a] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-black focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:ring-offset-2 focus:ring-offset-[#161b22] transition-all flex items-center gap-2 shadow-lg shadow-black/30"
             style={{border: '1px solid #30363d'}}
             title="Start/Restart animation"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
               <path d="M8 5v14l11-7z" />
             </svg>
-            Play
+            <span className="hidden sm:inline">Play</span>
           </button>
-          <div className="h-6 w-px bg-[#30363d]"></div>
-          <div className="flex items-center gap-2">
-            <label htmlFor="image-select" className="text-sm font-medium text-[#c9d1d9]">
-              Image:
-            </label>
-            <div className="flex items-center gap-1">
-              <select
-                id="image-select"
-                value={selectedImageValue}
-                onChange={handleImageChange}
-                className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
-              >
-                {uploadedImages.length > 0 && (
-                  <optgroup label="Uploaded" className="bg-[#0d1117] text-[#c9d1d9]">
-                    {uploadedImages.map((img, index) => (
-                      <option key={`uploaded-${index}`} value={`uploaded-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
-                        {img.name}
+
+          {/* Hamburger Menu Button - Visible on small screens */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden px-3 py-2 text-white bg-black border border-[#30363d] rounded-md hover:bg-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#1f6feb] transition-all"
+            title="Menu"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+              {isMenuOpen ? (
+                <path d="M18 6L6 18M6 6l12 12" />
+              ) : (
+                <path d="M3 12h18M3 6h18M3 18h18" />
+              )}
+            </svg>
+          </button>
+
+          {/* Desktop Menu Items - Hidden on small screens */}
+          <div className="hidden md:flex items-center gap-4 flex-1">
+            <div className="h-6 w-px bg-[#30363d]"></div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="image-select" className="text-sm font-medium text-[#c9d1d9]">
+                Image:
+              </label>
+              <div className="flex items-center gap-1">
+                <select
+                  id="image-select"
+                  value={selectedImageValue}
+                  onChange={handleImageChange}
+                  className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+                >
+                  {uploadedImages.length > 0 && (
+                    <optgroup label="Uploaded" className="bg-[#0d1117] text-[#c9d1d9]">
+                      {uploadedImages.map((img, index) => (
+                        <option key={`uploaded-${index}`} value={`uploaded-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
+                          {img.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  )}
+                  <optgroup label="Paintings" className="bg-[#0d1117] text-[#c9d1d9]">
+                    {paintings.map((painting, index) => (
+                      <option key={`painting-${index}`} value={`painting-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
+                        {painting.name}
                       </option>
                     ))}
                   </optgroup>
-                )}
-                <optgroup label="Paintings" className="bg-[#0d1117] text-[#c9d1d9]">
-                  {paintings.map((painting, index) => (
-                    <option key={`painting-${index}`} value={`painting-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
-                      {painting.name}
-                    </option>
-                  ))}
-                </optgroup>
-              </select>
-              <input
-                type="file"
-                id="image-upload-input"
-                accept="image/*"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
-              <label
-                htmlFor="image-upload-input"
-                className="px-2 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer hover:bg-[#161b22] hover:border-[#484f58] focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb] transition-colors flex items-center"
-                title="Upload image"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-4 h-4"
+                </select>
+                <input
+                  type="file"
+                  id="image-upload-input"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="image-upload-input"
+                  className="px-2 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer hover:bg-[#161b22] hover:border-[#484f58] focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb] transition-colors flex items-center"
+                  title="Upload image"
                 >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="17 8 12 3 7 8" />
-                  <line x1="12" y1="3" x2="12" y2="15" />
-                </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-4 h-4"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                </label>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="algorithm-select" className="text-sm font-medium text-[#c9d1d9]">
+                Algorithm:
               </label>
+              <select
+                id="algorithm-select"
+                value={selectedAlgorithmKey}
+                onChange={handleAlgorithmChange}
+                className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+              >
+                {algorithms.map((category) => (
+                  <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
+                    {category.algorithms.map((algo) => (
+                      <option key={algo.metadata.key} value={algo.metadata.key} className="bg-[#0d1117] text-[#c9d1d9]">
+                        {algo.metadata.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="color-select" className="text-sm font-medium text-[#c9d1d9]">
+                Palette:
+              </label>
+              <select
+                id="color-select"
+                value={selectedColorSchemeName}
+                onChange={handleColorSchemeChange}
+                className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+              >
+                {schemes.map((category) => (
+                  <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
+                    {category.schemes.map((scheme) => (
+                      <option key={scheme.name} value={scheme.name} className="bg-[#0d1117] text-[#c9d1d9]">
+                        {scheme.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <label htmlFor="algorithm-select" className="text-sm font-medium text-[#c9d1d9]">
-              Algorithm:
-            </label>
-            <select
-              id="algorithm-select"
-              value={selectedAlgorithmKey}
-              onChange={handleAlgorithmChange}
-              className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
-            >
-              {algorithms.map((category) => (
-                <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
-                  {category.algorithms.map((algo) => (
-                    <option key={algo.metadata.key} value={algo.metadata.key} className="bg-[#0d1117] text-[#c9d1d9]">
-                      {algo.metadata.name}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
-            </select>
-          </div>
-          <div className="flex items-center gap-2">
-            <label htmlFor="color-select" className="text-sm font-medium text-[#c9d1d9]">
-              Palette:
-            </label>
-            <select
-              id="color-select"
-              value={selectedColorSchemeName}
-              onChange={handleColorSchemeChange}
-              className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
-            >
-              {schemes.map((category) => (
-                <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
-                  {category.schemes.map((scheme) => (
-                    <option key={scheme.name} value={scheme.name} className="bg-[#0d1117] text-[#c9d1d9]">
-                      {scheme.name}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
-            </select>
-          </div>
         </div>
+
+        {/* Mobile Menu Dropdown - Visible on small screens when open */}
+        {isMenuOpen && (
+          <div className="md:hidden mt-4 pt-4 border-t border-[#30363d] space-y-4">
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="image-select-mobile" className="text-sm font-medium text-[#c9d1d9]">
+                  Image:
+                </label>
+                <div className="flex items-center gap-1">
+                  <select
+                    id="image-select-mobile"
+                    value={selectedImageValue}
+                    onChange={handleImageChange}
+                    className="flex-1 px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+                  >
+                    {uploadedImages.length > 0 && (
+                      <optgroup label="Uploaded" className="bg-[#0d1117] text-[#c9d1d9]">
+                        {uploadedImages.map((img, index) => (
+                          <option key={`uploaded-${index}`} value={`uploaded-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
+                            {img.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )}
+                    <optgroup label="Paintings" className="bg-[#0d1117] text-[#c9d1d9]">
+                      {paintings.map((painting, index) => (
+                        <option key={`painting-${index}`} value={`painting-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
+                          {painting.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </select>
+                  <input
+                    type="file"
+                    id="image-upload-input-mobile"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="image-upload-input-mobile"
+                    className="px-2 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer hover:bg-[#161b22] hover:border-[#484f58] focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb] transition-colors flex items-center"
+                    title="Upload image"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-4 h-4"
+                    >
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1="12" y1="3" x2="12" y2="15" />
+                    </svg>
+                  </label>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="algorithm-select-mobile" className="text-sm font-medium text-[#c9d1d9]">
+                  Algorithm:
+                </label>
+                <select
+                  id="algorithm-select-mobile"
+                  value={selectedAlgorithmKey}
+                  onChange={handleAlgorithmChange}
+                  className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+                >
+                  {algorithms.map((category) => (
+                    <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
+                      {category.algorithms.map((algo) => (
+                        <option key={algo.metadata.key} value={algo.metadata.key} className="bg-[#0d1117] text-[#c9d1d9]">
+                          {algo.metadata.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="color-select-mobile" className="text-sm font-medium text-[#c9d1d9]">
+                  Palette:
+                </label>
+                <select
+                  id="color-select-mobile"
+                  value={selectedColorSchemeName}
+                  onChange={handleColorSchemeChange}
+                  className="px-3 py-1 text-sm border border-[#30363d] rounded-sm text-[#c9d1d9] bg-[#0d1117] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#1f6feb] focus:border-[#1f6feb]"
+                >
+                  {schemes.map((category) => (
+                    <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
+                      {category.schemes.map((scheme) => (
+                        <option key={scheme.name} value={scheme.name} className="bg-[#0d1117] text-[#c9d1d9]">
+                          {scheme.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
