@@ -109,7 +109,12 @@ function App() {
 
       {/* Toolbar */}
       {uploadedImage && (
-        <Toolbar algorithms={algorithms} selectedAlgorithm={selectedAlgorithm} onSelect={handleSelectAlgorithm} />
+        <Toolbar
+          algorithms={algorithms}
+          selectedAlgorithm={selectedAlgorithm}
+          onSelect={handleSelectAlgorithm}
+          onPlay={handlePlay}
+        />
       )}
 
       {/* Main Content */}
