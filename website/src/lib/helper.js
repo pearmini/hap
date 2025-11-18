@@ -276,16 +276,25 @@ export function vertexMap(gl, map) {
 export function useMouse(gl, parent, mouse = {}) {
   Object.assign(mouse, {isDown: false, x: 0, y: 0});
   const node = parent ?? document;
+  const canvas = gl.canvas;
+  const getCanvasCoords = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    return {x, y};
+  };
   const down = (e) => {
     mouse.isDown = true;
-    mouse.x = (e.x - gl.width / 2) / (gl.width / 2);
-    mouse.y = (gl.height / 2 - e.y) / (gl.width / 2);
+    const coords = getCanvasCoords(e);
+    mouse.x = (coords.x - gl.width / 2) / (gl.width / 2);
+    mouse.y = (gl.height / 2 - coords.y) / (gl.height / 2);
     if (mouse.down) mouse.down();
   };
   const move = (e) => {
     if (mouse.isDown) {
-      let x = (e.x - gl.width / 2) / (gl.width / 2);
-      let y = (gl.height / 2 - e.y) / (gl.width / 2);
+      const coords = getCanvasCoords(e);
+      let x = (coords.x - gl.width / 2) / (gl.width / 2);
+      let y = (gl.height / 2 - coords.y) / (gl.height / 2);
       if (mouse.drag) mouse.drag(x - mouse.x, y - mouse.y);
       mouse.x = x;
       mouse.y = y;
