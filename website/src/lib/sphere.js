@@ -148,7 +148,7 @@ export function sphere({parent, width, height, bumps, filterFBO}) {
     gl = contextGL2({parent, width, height, vertexShader, fragmentShader});
 
     let delay;
-    mouse = useMouse(gl, {
+    mouse = useMouse(gl, parent, {
       drag: (dx, dy) => {
         spinX += dx;
         spinY += dy;
