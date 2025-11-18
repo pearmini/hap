@@ -1,4 +1,4 @@
-import {schemes} from "../schemes";
+import {schemes} from "./schemes";
 
 const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onImageUpload, algorithms, allAlgorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
   const handleAlgorithmChange = (e) => {

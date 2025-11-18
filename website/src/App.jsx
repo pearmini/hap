@@ -1,7 +1,5 @@
 import {useState, useRef, useEffect} from "react";
-import ImageUpload from "./components/ImageUpload";
-import Toolbar from "./components/Toolbar";
-import * as Filter from "./lib/index";
+import Toolbar from "./Toolbar";
 import {sphere} from "./lib/sphere";
 import {paintings} from "./paintings";
 import {defaultScheme, allSchemes} from "./schemes";
@@ -51,9 +49,10 @@ function App() {
 
   useEffect(() => {
     if (canvasRef.current && selectedImage) {
-      const loadPromises = selectedImage.type === "painting"
-        ? [loadImage(selectedImage.item.image), loadImage(selectedImage.item.bumps)]
-        : [loadImage(selectedImage.item.image), Promise.resolve(null)];
+      const loadPromises =
+        selectedImage.type === "painting"
+          ? [loadImage(selectedImage.item.image), loadImage(selectedImage.item.bumps)]
+          : [loadImage(selectedImage.item.image), Promise.resolve(null)];
 
       Promise.all(loadPromises).then(([img, bumps]) => {
         const t = img.width / img.height;
@@ -182,7 +181,7 @@ function App() {
 
       {/* Main Content */}
       <div className="container mx-auto h-full flex items-center justify-center my-12">
-        {uploadedImage ? <div ref={canvasRef} /> : <ImageUpload onImageUpload={setUploadedImage} />}
+        <div ref={canvasRef} />
       </div>
     </div>
   );
