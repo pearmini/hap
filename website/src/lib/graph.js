@@ -13,8 +13,10 @@ export function graph({
 }) {
   const _ = {};
   const filter = (_.filter = FilterGL2(parent, {image, width, height}));
+  const randomMaxDepth = d3.randomInt(800, 1200);
   let timer;
   let graph;
+  let maxDepth;
 
   function loop() {
     let p;
@@ -37,7 +39,9 @@ export function graph({
     const X = points.map((p) => p[0]);
     const Y = points.map((p) => p[1]);
     const C = points.map((p) => {
-      let t = p[2] / 500;
+      // Uncomment to add some noise, which is very cool!
+      // let t = p[2] / randomMaxDepth();
+      let t = p[2] / maxDepth;
       t = t - Math.floor(t);
       let {r, g, b} = d3.rgb(interpolate(t));
       return [r / 255, g / 255, b / 255, 1];
@@ -54,6 +58,7 @@ export function graph({
 
   _.start = function () {
     stop();
+    maxDepth = randomMaxDepth();
     filter.fillRect(0, 0, width, height, [0, 0, 0, -1]);
     graph = generator(width, height);
     if (animated) timer = d3.interval(loop, 0);

@@ -3,6 +3,21 @@ import * as d3 from "d3";
 
 const max = 2000 * 2000;
 
+function swap(array, i, j) {
+  const tmp = array[i];
+  array[i] = array[j];
+  array[j] = tmp;
+}
+
+function popRandom(array) {
+  const n = array.length;
+  const i = Math.floor(Math.random() * n);
+  const t = array[i];
+  swap(array, n - 1, i);
+  array.pop();
+  return t;
+}
+
 export function* graphBfs(width, height) {
   const visited = new Array(width * height).fill(0);
   const depth = new Array(width * height).fill(0);
@@ -16,7 +31,7 @@ export function* graphBfs(width, height) {
   let k = 0;
 
   while (++k < max && frontier.length > 0) {
-    const node = frontier.pop();
+    const node = popRandom(frontier);
     if (visited[node] == 1) continue;
 
     const x = Math.floor(node % width);
@@ -40,8 +55,6 @@ export function* graphBfs(width, height) {
     }
 
     visited[node] = 1;
-
-    d3.shuffle(frontier);
   }
 }
 

@@ -3,6 +3,20 @@ import * as d3 from "d3";
 
 const max = 2000 * 2000;
 
+function swap(array, i, j) {
+  const tmp = array[i];
+  array[i] = array[j];
+  array[j] = tmp;
+}
+
+function shuffle(array, left, right) {
+  let m = right - left;
+  while (m > 0) {
+    const i = Math.floor(Math.random() * m--);
+    swap(array, left + i, left + m);
+  }
+}
+
 export function* graphDfs(width, height) {
   const visited = new Array(width * height).fill(0);
   const depth = new Array(width * height).fill(0);
@@ -31,17 +45,19 @@ export function* graphDfs(width, height) {
       [x, y + 1],
     ];
 
+    let m = 0;
     for (const neighbor of neighbors) {
       const [nx, ny] = neighbor;
       if (nx >= 0 && nx < width && ny >= 0 && ny < height && visited[nx + ny * width] == 0) {
         frontier.push(nx + ny * width);
         depth[nx + ny * width] = depth[node] + 1;
+        m++;
       }
     }
 
     visited[node] = 1;
 
-    d3.shuffle(frontier);
+    shuffle(frontier, frontier.length - m, frontier.length);
   }
 }
 
