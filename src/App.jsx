@@ -270,25 +270,29 @@ function App() {
       {examples.length > 0 && (
         <div className="container mx-auto px-4 py-8 md:py-12 max-w-7xl">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {examples.map((example, index) => (
-              <button
-                key={index}
-                onClick={() => handleExampleClick(example)}
-                className="group relative overflow-hidden rounded-lg border border-[#30363d] hover:border-[#58a6ff] transition-all duration-200 bg-[#161b22] hover:bg-[#1c2128] cursor-pointer"
-              >
-                <img
-                  src={example.image}
-                  alt={`Example: ${example.algorithmKey} with ${example.paletteName}`}
-                  className="w-full h-auto object-cover group-hover:opacity-90 transition-opacity"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="absolute bottom-0 left-0 right-0 p-2 text-left">
-                    <p className="text-xs text-white font-medium truncate">{example.algorithmKey}</p>
-                    <p className="text-xs text-white/80 truncate">{example.paletteName}</p>
+            {examples.map((example, index) => {
+              const algorithm = allAlgorithms.find((algo) => algo.key === example.algorithmKey);
+              const algorithmName = algorithm?.name || example.algorithmKey;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleExampleClick(example)}
+                  className="group relative overflow-hidden rounded-lg border border-[#30363d] hover:border-[#58a6ff] transition-all duration-200 bg-[#161b22] hover:bg-[#1c2128] cursor-pointer"
+                >
+                  <img
+                    src={example.image}
+                    alt={`Example: ${algorithmName} with ${example.paletteName}`}
+                    className="w-full h-auto object-cover group-hover:opacity-90 transition-opacity"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute bottom-0 left-0 right-0 p-2 text-left">
+                      <p className="text-xs text-white font-medium truncate">{algorithmName}</p>
+                      <p className="text-xs text-white/80 truncate">{example.paletteName}</p>
+                    </div>
                   </div>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
