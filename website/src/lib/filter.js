@@ -15,6 +15,7 @@ export function FilterGL2(parent, {image, width, height}) {
       gl_Position = vec4(aPos, 0.0, 1.0);
       vUV = aUV;
       vColor = aColor;
+      gl_PointSize = 2.0;
   }`;
 
   const fragmentShader = `\
@@ -102,5 +103,25 @@ export function FilterGL2(parent, {image, width, height}) {
     ];
     _.fillPolygons([0], rect, [c]);
   };
+
+  _.fillPoints = (I, X, Y, C) => {
+    const points = I.map((i) => {
+      const sx = scaleX(X[i]);
+      const sy = scaleY(Y[i]);
+      return [sx, sy, scaleUVX(sx), scaleUVY(sy), ...C[i]];
+    });
+    const T = points.flat(Infinity);
+
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(T), gl.STATIC_DRAW);
+
+    // Render to FBO first
+    bindFBO(gl, fboData.fbo, width, height);
+    gl.drawArrays(gl.POINTS, 0, T.length / 8);
+
+    // Then render to screen
+    unbindFBO(gl);
+    gl.drawArrays(gl.POINTS, 0, T.length / 8);
+  };
+
   return _;
 }

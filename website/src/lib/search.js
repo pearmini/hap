@@ -40,7 +40,7 @@ export function search({
 
   function stop() {
     if (timer) {
-      clearInterval(timer);
+      timer.stop();
       timer = null;
     }
   }

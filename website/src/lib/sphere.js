@@ -145,7 +145,7 @@ export function sphere({parent, width, height, bumps, filterFBO}) {
     spinY = 0;
     isDragging = false;
     mesh = {triangle_strip: true, data: new Float32Array(sphereMesh(40, 20))};
-    gl = contextGL2({parent, width, height, vertexShader, fragmentShader});
+    gl = contextGL2({parent, width, height, vertexShader, fragmentShader, preserveDrawingBuffer: false});
 
     let delay;
     mouse = useMouse(gl, parent, {

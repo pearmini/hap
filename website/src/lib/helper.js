@@ -104,7 +104,7 @@ vec3 phong(vec3 N, vec3 L, vec3 W, vec3 diffuse, vec4 specular) {
     canvas.height = height * dpr;
     canvas.style.width = width + "px";
     canvas.style.height = height + "px";
-    const gl = canvas.getContext("webgl2");
+    const gl = canvas.getContext("webgl2", {preserveDrawingBuffer: scene.preserveDrawingBuffer ?? true});
     canvas.setShaders = function (vertexShader, fragmentShader) {
       gl.program = gl.createProgram();
       function addshader(type, src) {

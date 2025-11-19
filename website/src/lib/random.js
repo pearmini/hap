@@ -49,7 +49,7 @@ export function random({
 
   function stop() {
     if (timer) {
-      clearInterval(timer);
+      timer.stop();
       timer = null;
     }
   }
