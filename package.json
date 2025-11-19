@@ -1,7 +1,6 @@
 {
-  "name": "website",
-  "private": true,
-  "version": "0.0.0",
+  "name": "hap",
+  "version": "3.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "charmingjs": "^0.0.19",
     "d3": "^7.9.0",
     "lucide-react": "^0.553.0",
     "react": "^19.2.0",
