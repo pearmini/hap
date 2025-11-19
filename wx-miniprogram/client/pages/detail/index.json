@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "towxml":"/towxml/towxml",
-    "star": "../../components/star/index"
-  }
-}
