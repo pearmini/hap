@@ -15,6 +15,21 @@ export const paintings = [
     ],
   },
   {
+    category: "Photographs",
+    items: [
+      {
+        name: "Audrey Hepburn",
+        image: "audrey-hepburn.jpg",
+        bumps: "audrey-hepburn_bumps.png",
+      },
+      {
+        name: "Obama",
+        image: "obama.png",
+        bumps: "obama_bumps.png",
+      },
+    ],
+  },
+  {
     category: "Textures",
     items: [
       {

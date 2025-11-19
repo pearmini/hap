@@ -105,7 +105,16 @@ function App() {
     const sphereContainer = document.createElement("div");
     container.appendChild(planeContainer);
     container.appendChild(sphereContainer);
-    container.classList.add("flex", "flex-col", "md:flex-row", "items-center", "justify-center", "gap-6", "md:gap-12", "w-full");
+    container.classList.add(
+      "flex",
+      "flex-col",
+      "md:flex-row",
+      "items-center",
+      "justify-center",
+      "gap-6",
+      "md:gap-12",
+      "w-full"
+    );
 
     // Make containers full width on small screens
     planeContainer.classList.add("w-full", "md:w-auto");
@@ -170,7 +179,7 @@ function App() {
       <header className="bg-[#161b22] border-b border-[#30363d]">
         <div className="container  px-4 py-2">
           <h1 className="text-xl font-bold text-[#c9d1d9] mb-1">HAP: Hackers and Painters</h1>
-          <p className="text-sm text-[#8b949e]">Filter Paintings by Algorithm Visualizations with WebGL.</p>
+          <p className="text-sm text-[#8b949e]">Filter Images by Algorithm Visualizations with WebGL.</p>
         </div>
       </header>
 
