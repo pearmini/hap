@@ -7,3 +7,6 @@ export {sortInsertion} from "./sortInsertion";
 export {sortBubble} from "./sortBubble";
 export {sortSelection} from "./sortSelection";
 export {sortQuick} from "./sortQuick";
+export {graphBfs} from "./graphBfs";
+export {graphDfs} from "./graphDfs";
+export {graphPrim} from "./graphPrim";

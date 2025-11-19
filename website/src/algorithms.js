@@ -8,6 +8,10 @@ export const algorithms = [
         filter: Filter.randomPoissonDisc,
         metadata: Filter.randomPoissonDisc.metadata,
       },
+      {
+        filter: Filter.graphPrim,
+        metadata: Filter.graphPrim.metadata,
+      },
     ],
   },
   {
@@ -51,6 +55,19 @@ export const algorithms = [
       {
         filter: Filter.sortSelection,
         metadata: Filter.sortSelection.metadata,
+      },
+    ],
+  },
+  {
+    category: "Graph",
+    algorithms: [
+      {
+        filter: Filter.graphBfs,
+        metadata: Filter.graphBfs.metadata,
+      },
+      {
+        filter: Filter.graphDfs,
+        metadata: Filter.graphDfs.metadata,
       },
     ],
   },

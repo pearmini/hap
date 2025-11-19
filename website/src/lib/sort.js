@@ -30,7 +30,7 @@ export function sort({parent, image, width, height, animated = true, generator, 
 
   function stop() {
     if (timer) {
-      clearInterval(timer);
+      timer.stop();
       timer = null;
     }
   }
