@@ -1,9 +1,0 @@
-{
-    "components": [
-        "button",
-        "icon",
-        "segmented-control",
-        "dialog"
-    ],
-    "themes": {}
-}

@@ -1,9 +1,0 @@
-<view class="container">
-	<image
-	 class="image"
-	 src="{{imageURL}}"
-	 mode="widthFix"
-	></image>
-	<view class="text">{{text}}</view>
-</view>
-
