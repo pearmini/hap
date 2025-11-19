@@ -13,6 +13,8 @@ I implemented a WebGL-powered [filter API](https://github.com/pearmini/hap/blob/
 - Sorting: [Bubble Sort](https://github.com/pearmini/hap/blob/main/src/lib/sortBubble.js), [Insertion Sort](https://github.com/pearmini/hap/blob/main/src/lib/sortInsertion.js), [Quick Sort](https://github.com/pearmini/hap/blob/main/src/lib/sortQuick.js) and [Selection Sort](https://github.com/pearmini/hap/blob/main/src/lib/sortSelection.js).
 - Graph: [BFS](https://github.com/pearmini/hap/blob/main/src/lib/graphBfs.js), [DFS](https://github.com/pearmini/hap/blob/main/src/lib/graphDfs.js) and [Prim's Algorithm](https://github.com/pearmini/hap/blob/main/src/lib/graphPrim.js).
 
+![examples](/img/examples.png)
+
 I may add more algorithms, and you’re welcome to do the same! Also, I’d love to see what you’ve created with HAP. For my previous exploration on this topic, please refer to [v1](https://github.com/pearmini/hap/tree/v1) and [v2](https://github.com/pearmini/hap/tree/v2) branches.
 
 Let’s hack, painters!
