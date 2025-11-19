@@ -5,6 +5,7 @@ import {sphere} from "./lib/sphere";
 import {paintings, allPaintings} from "./paintings";
 import {defaultScheme, allSchemes} from "./schemes";
 import {defaultAlgorithm, allAlgorithms, algorithms} from "./algorithms";
+import {examples} from "./examples";
 
 function loadImage(src) {
   const image = new Image();
@@ -30,6 +31,7 @@ function App() {
   const canvasRef = useRef(null);
   const sphereRef = useRef(null);
   const shouldAutoPlayRef = useRef(false);
+  const drawingAreaRef = useRef(null);
 
   const displayRawImage = (img, width, height) => {
     if (!canvasRef.current) return;
@@ -95,7 +97,7 @@ function App() {
     handlePlay(algo);
   };
 
-  const handlePlay = async (selectedAlgorithm) => {
+  const handlePlay = async (selectedAlgorithm, colorSchemeOverride = null) => {
     if (!uploadedImage || !selectedAlgorithm || !canvasRef.current) return;
     canvasRef.current.innerHTML = "";
     if (sphereRef.current) sphereRef.current.destroy();
@@ -135,6 +137,7 @@ function App() {
 
     const generator = selectedAlgorithm.filter;
     const visualizer = selectedAlgorithm.visualizer;
+    const colorSchemeToUse = colorSchemeOverride || selectedColorScheme;
     filterRef.current = visualizer({
       parent: planeContainer,
       width: ~~filterWidth,
@@ -142,7 +145,7 @@ function App() {
       image: imageData.img,
       onEnd: () => {},
       generator: generator,
-      interpolate: selectedColorScheme.value,
+      interpolate: colorSchemeToUse.value,
     });
     filterRef.current.start();
 
@@ -173,6 +176,34 @@ function App() {
       if (sphereRef.current) sphereRef.current.destroy();
     };
   }, []);
+
+  const handleExampleClick = (example) => {
+    // Find the algorithm by key
+    const algorithm = allAlgorithms.find((algo) => algo.key === example.algorithmKey);
+    if (!algorithm) return;
+
+    // Find the color scheme by name
+    const colorScheme = allSchemes.find((scheme) => scheme.name === example.paletteName);
+    
+    // Set both algorithm and color scheme
+    setSelectedAlgorithm(algorithm);
+    if (colorScheme) {
+      setSelectedColorScheme(colorScheme);
+    }
+
+    // Scroll back to drawing area
+    if (drawingAreaRef.current) {
+      drawingAreaRef.current.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    // Auto-play when example is clicked (if imageData exists)
+    if (imageData) {
+      shouldAutoPlayRef.current = true;
+      // Use the color scheme if found, otherwise use current one
+      const schemeToUse = colorScheme || selectedColorScheme;
+      handlePlay(algorithm, schemeToUse);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0d1117] transition-colors" style={{background: "black"}}>
@@ -231,9 +262,40 @@ function App() {
       )}
 
       {/* Main Content */}
-      <div className="container mx-auto h-full flex items-center justify-center my-6 md:my-12 px-4 max-w-full">
+      <div ref={drawingAreaRef} className="container mx-auto h-full flex items-center justify-center my-6 md:my-12 px-4 max-w-full">
         <div ref={canvasRef} className="w-full max-w-full" />
       </div>
+
+      {/* Examples Grid */}
+      {examples.length > 0 && (
+        <div className="container mx-auto px-4 pt-8 md:pt-12 pb-20 md:pb-32 max-w-7xl">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {examples.map((example, index) => {
+              const algorithm = allAlgorithms.find((algo) => algo.key === example.algorithmKey);
+              const algorithmName = algorithm?.name || example.algorithmKey;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleExampleClick(example)}
+                  className="group relative overflow-hidden rounded-lg border border-[#30363d] hover:border-[#58a6ff] transition-all duration-200 bg-[#161b22] hover:bg-[#1c2128] cursor-pointer"
+                >
+                  <img
+                    src={example.image}
+                    alt={`Example: ${algorithmName} with ${example.paletteName}`}
+                    className="w-full h-auto object-cover group-hover:opacity-90 transition-opacity"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute bottom-0 left-0 right-0 p-2 text-left">
+                      <p className="text-xs text-white font-medium truncate">{algorithmName}</p>
+                      <p className="text-xs text-white/80 truncate">{example.paletteName}</p>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

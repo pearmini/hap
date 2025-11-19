@@ -56,6 +56,10 @@ export const algorithms = [
         filter: Filter.sortSelection,
         metadata: Filter.sortSelection.metadata,
       },
+      {
+        filter: Filter.sortQuick,
+        metadata: Filter.sortQuick.metadata,
+      },
     ],
   },
   {
