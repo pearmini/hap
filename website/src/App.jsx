@@ -1,7 +1,7 @@
 import {useState, useRef, useEffect} from "react";
 import Toolbar from "./Toolbar";
 import {sphere} from "./lib/sphere";
-import {paintings} from "./paintings";
+import {paintings, allPaintings} from "./paintings";
 import {defaultScheme, allSchemes} from "./schemes";
 import {defaultAlgorithm, allAlgorithms, algorithms} from "./algorithms";
 
@@ -20,8 +20,8 @@ function loadImage(src) {
 
 function App() {
   const [uploadedImages, setUploadedImages] = useState([]);
-  const [selectedImage, setSelectedImage] = useState({type: "painting", item: paintings[0]});
-  const [uploadedImage, setUploadedImage] = useState(paintings[0].image);
+  const [selectedImage, setSelectedImage] = useState({type: "painting", item: allPaintings[0]});
+  const [uploadedImage, setUploadedImage] = useState(allPaintings[0].image);
   const [imageData, setImageData] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(defaultAlgorithm);
   const [selectedColorScheme, setSelectedColorScheme] = useState(defaultScheme);
@@ -178,6 +178,7 @@ function App() {
       {uploadedImage && (
         <Toolbar
           paintings={paintings}
+          allPaintings={allPaintings}
           uploadedImages={uploadedImages}
           selectedImage={selectedImage}
           onImageSelect={(image) => {
