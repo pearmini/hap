@@ -1,7 +1,7 @@
 import {schemes} from "./schemes";
 import {useState} from "react";
 
-const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onImageUpload, algorithms, allAlgorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
+const Toolbar = ({paintings, allPaintings, uploadedImages, selectedImage, onImageSelect, onImageUpload, algorithms, allAlgorithms, selectedAlgorithm, onSelect, colorSchemes: schemesProp, selectedColorScheme, onColorSchemeSelect, onPlay}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const handleAlgorithmChange = (e) => {
     const selectedKey = e.target.value;
@@ -17,8 +17,8 @@ const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onIma
     const value = e.target.value;
     if (value.startsWith("painting-")) {
       const index = parseInt(value.replace("painting-", ""));
-      if (index >= 0 && index < paintings.length && onImageSelect) {
-        onImageSelect({type: "painting", item: paintings[index]});
+      if (index >= 0 && index < allPaintings.length && onImageSelect) {
+        onImageSelect({type: "painting", item: allPaintings[index]});
       }
     } else if (value.startsWith("uploaded-")) {
       const index = parseInt(value.replace("uploaded-", ""));
@@ -60,12 +60,12 @@ const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onIma
   const selectedAlgorithmKey = selectedAlgorithm ? selectedAlgorithm.key : "";
   const selectedImageValue = selectedImage
     ? selectedImage.type === "painting"
-      ? `painting-${paintings.findIndex((p) => p.name === selectedImage.item.name)}`
+      ? `painting-${allPaintings.findIndex((p) => p.name === selectedImage.item.name)}`
       : `uploaded-${uploadedImages.findIndex((u) => u.name === selectedImage.item.name)}`
     : "";
   const selectedColorSchemeName = selectedColorScheme ? selectedColorScheme.name : "";
 
-  if (!algorithms || algorithms.length === 0 || !paintings || paintings.length === 0) {
+  if (!algorithms || algorithms.length === 0 || !paintings || paintings.length === 0 || !allPaintings || allPaintings.length === 0) {
     return null;
   }
 
@@ -125,13 +125,18 @@ const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onIma
                       ))}
                     </optgroup>
                   )}
-                  <optgroup label="Paintings" className="bg-[#0d1117] text-[#c9d1d9]">
-                    {paintings.map((painting, index) => (
-                      <option key={`painting-${index}`} value={`painting-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
-                        {painting.name}
-                      </option>
-                    ))}
-                  </optgroup>
+                  {paintings.map((category) => (
+                    <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
+                      {category.items.map((item, itemIndex) => {
+                        const globalIndex = allPaintings.findIndex((p) => p.name === item.name);
+                        return (
+                          <option key={`painting-${globalIndex}`} value={`painting-${globalIndex}`} className="bg-[#0d1117] text-[#c9d1d9]">
+                            {item.name}
+                          </option>
+                        );
+                      })}
+                    </optgroup>
+                  ))}
                 </select>
                 <input
                   type="file"
@@ -231,13 +236,18 @@ const Toolbar = ({paintings, uploadedImages, selectedImage, onImageSelect, onIma
                         ))}
                       </optgroup>
                     )}
-                    <optgroup label="Paintings" className="bg-[#0d1117] text-[#c9d1d9]">
-                      {paintings.map((painting, index) => (
-                        <option key={`painting-${index}`} value={`painting-${index}`} className="bg-[#0d1117] text-[#c9d1d9]">
-                          {painting.name}
-                        </option>
-                      ))}
-                    </optgroup>
+                    {paintings.map((category) => (
+                      <optgroup key={category.category} label={category.category} className="bg-[#0d1117] text-[#c9d1d9]">
+                        {category.items.map((item, itemIndex) => {
+                          const globalIndex = allPaintings.findIndex((p) => p.name === item.name);
+                          return (
+                            <option key={`painting-${globalIndex}`} value={`painting-${globalIndex}`} className="bg-[#0d1117] text-[#c9d1d9]">
+                              {item.name}
+                            </option>
+                          );
+                        })}
+                      </optgroup>
+                    ))}
                   </select>
                   <input
                     type="file"

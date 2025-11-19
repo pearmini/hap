@@ -1,7 +1,8 @@
 import {useState, useRef, useEffect} from "react";
+import {Github} from "lucide-react";
 import Toolbar from "./Toolbar";
 import {sphere} from "./lib/sphere";
-import {paintings} from "./paintings";
+import {paintings, allPaintings} from "./paintings";
 import {defaultScheme, allSchemes} from "./schemes";
 import {defaultAlgorithm, allAlgorithms, algorithms} from "./algorithms";
 
@@ -20,8 +21,8 @@ function loadImage(src) {
 
 function App() {
   const [uploadedImages, setUploadedImages] = useState([]);
-  const [selectedImage, setSelectedImage] = useState({type: "painting", item: paintings[0]});
-  const [uploadedImage, setUploadedImage] = useState(paintings[0].image);
+  const [selectedImage, setSelectedImage] = useState({type: "painting", item: allPaintings[0]});
+  const [uploadedImage, setUploadedImage] = useState(allPaintings[0].image);
   const [imageData, setImageData] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(defaultAlgorithm);
   const [selectedColorScheme, setSelectedColorScheme] = useState(defaultScheme);
@@ -105,7 +106,16 @@ function App() {
     const sphereContainer = document.createElement("div");
     container.appendChild(planeContainer);
     container.appendChild(sphereContainer);
-    container.classList.add("flex", "flex-col", "md:flex-row", "items-center", "justify-center", "gap-6", "md:gap-12", "w-full");
+    container.classList.add(
+      "flex",
+      "flex-col",
+      "md:flex-row",
+      "items-center",
+      "justify-center",
+      "gap-6",
+      "md:gap-12",
+      "w-full"
+    );
 
     // Make containers full width on small screens
     planeContainer.classList.add("w-full", "md:w-auto");
@@ -168,9 +178,20 @@ function App() {
     <div className="min-h-screen bg-[#0d1117] transition-colors" style={{background: "black"}}>
       {/* Header */}
       <header className="bg-[#161b22] border-b border-[#30363d]">
-        <div className="container  px-4 py-2">
-          <h1 className="text-xl font-bold text-[#c9d1d9] mb-1">HAP: Hackers and Painters</h1>
-          <p className="text-sm text-[#8b949e]">Filter Paintings by Algorithm Visualizations with WebGL.</p>
+        <div className="w-full px-4 py-2 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-[#c9d1d9] mb-1">HAP: Hackers and Painters</h1>
+            <p className="text-sm text-[#8b949e]">Filter Images by Algorithm Visualizations with WebGL.</p>
+          </div>
+          <a
+            href="https://github.com/pearmini/hap"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#8b949e] hover:text-[#c9d1d9] transition-colors"
+            aria-label="GitHub repository"
+          >
+            <Github size={24} />
+          </a>
         </div>
       </header>
 
@@ -178,6 +199,7 @@ function App() {
       {uploadedImage && (
         <Toolbar
           paintings={paintings}
+          allPaintings={allPaintings}
           uploadedImages={uploadedImages}
           selectedImage={selectedImage}
           onImageSelect={(image) => {
