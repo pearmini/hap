@@ -4,7 +4,7 @@ I've been always interested in artistic image processing, such as [Jason Labbe](
 
 These works made me wonder: can we apply such beautiful patterns to images? To explore this idea, I created [HAP](https://hap.bairui.dev/), an online platform that filters images using algorithm visualizations powered by WebGL. The core concept is that color encoding is not only determined by the processing data structures—it also takes into account the original pixel color at each position.
 
-![preview](img/preview.png)
+![platform.png](img/platform.png)
 
 I implemented a WebGL-powered [filter API](https://github.com/pearmini/hap/blob/main/src/lib/filter.js) that blends colors into [polygons](https://github.com/pearmini/hap/blob/main/src/lib/filter.js#L57) or [points](https://github.com/pearmini/hap/blob/main/src/lib/filter.js#L107) areas of the source image, which can also be mapped onto a [sphere](https://github.com/pearmini/hap/blob/main/src/lib/sphere.js) as well. Areas are computed by the following algorithms:
 
