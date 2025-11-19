@@ -63,7 +63,7 @@ export function* graphDfs(width, height) {
 
 graphDfs.metadata = {
   key: "graphDfs",
-  name: "Depth-First Search",
-  description: "Depth-First Search pixel-by-pixel",
+  name: "Depth-First Traversal",
+  description: "Depth-First Traversal pixel-by-pixel",
   visualizer: graph,
 };

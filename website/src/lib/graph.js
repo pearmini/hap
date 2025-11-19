@@ -9,11 +9,11 @@ export function graph({
   animated = true,
   generator,
   interpolate = d3.interpolateRainbow,
-  step = 1000,
+  step = 300,
 }) {
   const _ = {};
   const filter = (_.filter = FilterGL2(parent, {image, width, height}));
-  const randomMaxDepth = d3.randomInt(800, 1200);
+  const randomMaxDepth = d3.randomInt(500, 1000);
   let timer;
   let graph;
   let maxDepth;

@@ -60,7 +60,7 @@ export function* graphBfs(width, height) {
 
 graphBfs.metadata = {
   key: "graphBfs",
-  name: "Breadth-First Search",
-  description: "Breadth-First Search pixel-by-pixel",
+  name: "Breadth-First Traversal",
+  description: "Breadth-First Traversal pixel-by-pixel",
   visualizer: graph,
 };

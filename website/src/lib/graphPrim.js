@@ -1,4 +1,5 @@
 import {graph} from "./graph";
+import * as d3 from "d3";
 
 function minHeap(compare) {
   var heap = {},
@@ -65,7 +66,40 @@ function prim(graph, v, options = {}) {
   }
 }
 
-export function* graphPrim(graph, startV) {}
+export function* graphPrim(width, height) {
+  const randomWeights = d3.randomUniform();
+  const n = width * height;
+  const visited = new Array(n).fill(0);
+  const depth = new Array(n).fill(0);
+  const weights = new Array(n).fill(0).map(() => randomWeights());
+  const edges = minHeap((i, j) => weights[i] - weights[j]);
+  const startV = d3.randomInt(0, n)();
+  const vertices = new Set();
+
+  while (vertices.size < n) {
+    const to = vertices.size ? edges.pop() : startV;
+    const x = Math.floor(to % width);
+    const y = Math.floor(to / width);
+    const neighbors = [
+      [x - 1, y],
+      [x + 1, y],
+      [x, y - 1],
+      [x, y + 1],
+    ];
+    if (!vertices.has(to)) {
+      vertices.add(to);
+      yield [x, y, depth[to]];
+      for (const neighbor of neighbors) {
+        const [nx, ny] = neighbor;
+        if (nx >= 0 && nx < width && ny >= 0 && ny < height && visited[nx + ny * width] == 0) {
+          const index = nx + ny * width;
+          edges.push(index);
+          depth[index] = depth[to] + 1;
+        }
+      }
+    }
+  }
+}
 
 graphPrim.metadata = {
   key: "graphPrim",
