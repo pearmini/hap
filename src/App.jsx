@@ -1,5 +1,5 @@
 import {useState, useRef, useEffect} from "react";
-import {Github} from "lucide-react";
+import {Github, Loader2} from "lucide-react";
 import Toolbar from "./Toolbar";
 import {sphere} from "./lib/sphere";
 import {paintings, allPaintings} from "./paintings";
@@ -25,6 +25,7 @@ function App() {
   const [selectedImage, setSelectedImage] = useState({type: "painting", item: allPaintings[0]});
   const [uploadedImage, setUploadedImage] = useState(allPaintings[0].image);
   const [imageData, setImageData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(defaultAlgorithm);
   const [selectedColorScheme, setSelectedColorScheme] = useState(defaultScheme);
   const filterRef = useRef(null);
@@ -59,6 +60,12 @@ function App() {
 
   useEffect(() => {
     if (canvasRef.current && selectedImage) {
+      setIsLoading(true);
+      // Clear canvas while loading
+      canvasRef.current.innerHTML = "";
+      if (sphereRef.current) sphereRef.current.destroy();
+      if (filterRef.current) filterRef.current.destroy();
+      
       const loadPromises =
         selectedImage.type === "painting"
           ? [loadImage(selectedImage.item.image), loadImage(selectedImage.item.bumps)]
@@ -83,6 +90,10 @@ function App() {
         displayRawImage(img, ~~width, ~~height);
         // Don't auto-play when image changes - user needs to click play
         shouldAutoPlayRef.current = false;
+        setIsLoading(false);
+      }).catch((error) => {
+        console.error("Error loading image:", error);
+        setIsLoading(false);
       });
     }
   }, [selectedImage]);
@@ -262,8 +273,14 @@ function App() {
       )}
 
       {/* Main Content */}
-      <div ref={drawingAreaRef} className="container mx-auto h-full flex items-center justify-center my-6 md:my-12 px-4 max-w-full">
+      <div ref={drawingAreaRef} className="container mx-auto h-full flex items-center justify-center my-6 md:my-12 px-4 max-w-full relative">
         <div ref={canvasRef} className="w-full max-w-full" />
+        {isLoading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0d1117]/80 z-10">
+            <Loader2 className="w-8 h-8 text-[#58a6ff] animate-spin mb-4" />
+            <p className="text-[#8b949e] text-sm">Loading image...</p>
+          </div>
+        )}
       </div>
 
       {/* Examples Grid */}
